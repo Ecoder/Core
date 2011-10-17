@@ -15,6 +15,7 @@ echo '<!--[if IE]><?xml version="1.0" encoding="UTF-8"?><![endif]-->
         <meta http-equiv="content-language" content="en" />
         <meta name="robots" content="noindex,nofollow" />
         <meta name="author" content="GMEditor.com" />
+				<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"; type="text/javascript"></script>
         <link rel="stylesheet" type="text/css" media="screen" href="'.$code['skin_path'].'base.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="'.$code['skin_path'].'tabs.css" />';
         include "code/base/css.php"; // browser specific base css ## 

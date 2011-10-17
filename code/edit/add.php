@@ -17,9 +17,3 @@ if ( $main['type'] == 'file' ) { // add file ##
 
 // include save script ##
 $save['target'] = 'code/save/add.php';
-if ( $main['nav']['save'] == 1 ) { // save active ## 
-    include "save.php"; 
-}
-
-
-?>

@@ -20,7 +20,7 @@ if ( $_SESSION['editor'] == "delux" ) { // rich version ##
 	    ,language: "en"
 	    ,gecko_spellcheck: true
 	    ,change_callback: "ecoder_changed"
-	    '.$editarea['options'].' // read-only or editable ##
+	    ,is_editable: '.$editarea['editable'].' // read-only or editable ##
 	    ,syntax: "'.$main['type'].'"	
 	    ,syntax_selection_allow: "css,html,js,perl,php,python,ruby,robotstxt,sql,vb,xml"
 	    ,EA_load_callback: "ealoaded" 
@@ -46,7 +46,7 @@ if ( $_SESSION['editor'] == "delux" ) { // rich version ##
 	    ,language: "en"
 	    ,gecko_spellcheck: false
 	    ,change_callback: "ecoder_changed"
-	    '.$editarea['options'].' // read-only or editable ##
+	    ,is_editable: '.$editarea['editable'].' // read-only or editable ##
 	    ,syntax: "'.$main['type'].'"	
 	    ,syntax_selection_allow: "css,html,js,perl,php,python,ruby,robotstxt,sql,vb,xml"
 	    ,EA_load_callback: "ealoaded" 

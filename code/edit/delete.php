@@ -30,10 +30,3 @@ echo '
     echo '           
     </form> 
 </div>';
-
-// include save script ##
-if ( $main['nav']['save'] == 1 ) { // save active ## 
-    include "save.php"; 
-}
-
-?>

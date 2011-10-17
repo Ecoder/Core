@@ -9,7 +9,7 @@ echo '
             if ( $main['nav']['save'] == 1 ) { // file loaded ##
             echo '
             <a href="javascript:void(0);" 
-            onclick="'.$main['nav']['save_function'].'" 
+            onclick="ecoder_save();" 
             title="save '.$html['title'].'">SAVE</a>';
             } else { // no file loaded ##
             echo '<span title="file cannot be saved">SAVE</span>';
@@ -46,16 +46,17 @@ echo '
         
         <div class="details">
             '.$main['path'].'<strong>'.$html['title'].'</strong>'.$html['title_note'].'
+        </div>
+				
+				<div id="save">'.$main['nav']['save_note'].'</div>
+					
+				<div id="save_changes"></div>
+				
+				<div class="logo">
+            <a href="javascript:void(0);" onclick="top.ecoder_loaded_base( \'block\' );" title="'.$code['name'].' instructions">
+                <img src="'.$code['skin_path'].'design/icon_ecoder.png" alt="'.$code['name'].' instructions" />
+            </a>
         </div>';
-                
-        // save reports ##
-        include "nav.save.php";
-
-        // unsaved changes ##
-        include "nav.changes.php";
-
-        // credits & help ##
-        include "nav.logo.php";
                 
         // editor swapper ##
         include "nav.editor.php";

@@ -14,6 +14,7 @@ $browser_IP = 'UNKNOWN'; if ( isset ( $_SERVER['REMOTE_ADDR'] ) ) { $browser_IP 
 $browser_referer = 'UNKNOWN'; if ( isset ( $_SERVER['HTTP_REFERER'] ) ) { $browser_referer = $_SERVER['HTTP_REFERER']; } // referer ##
 $browser_agent = 'UNKNOWN'; if ( isset ( $_SERVER['HTTP_USER_AGENT'] ) ) { $browser_agent = $_SERVER['HTTP_USER_AGENT']; } // user agent ##
 
+$code=array("domain_cookie"=>""); //Fix notice. Crappy code(tm)
 // local / live checker ##
 if ( strstr ( $gm_server_http_host, "localhost" ) == TRUE ) { // localhost settings  
     

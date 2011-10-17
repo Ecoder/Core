@@ -4,9 +4,9 @@
 include "code/base/server.php";
 
 // MOST IMPORTANT SETTING -- path to editable files ##
-$code['root'] = 'D:/webdev/ecoder/testingdata/'; // full path, with trailing slash ##
+$code['root'] = 'D:/dev/ecoder/testingdata/'; // full path, with trailing slash ##
 if ( $_SESSION['live'] == 0 ) { // running locally ##
-    $code['root'] = 'D:/webdev/ecoder/testingdata/'; // local path -- for testing ##     
+    $code['root'] = 'D:/dev/ecoder/testingdata/'; // local path -- for testing ##     
 } 
 $code['domain_cookie'] = ".gmeditor.com"; // domain name ##
 

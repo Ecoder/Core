@@ -12,22 +12,26 @@ sort out all the possible options for the main area
 @ecoder_request( $_GET['report_code'], $main['report_code'], '' ); // report / confirm ##
 @ecoder_request( $_GET['shut'], $main['shut'], 1 ); // close override ##
 
+//For codemirror (TODO) cleanup later
+$convertFileTypes=array("file"=>"file","folder"=>"folder","php"=>"application/x-httpd-php-open","js"=>"text/javascript","html"=>"text/html","css"=>"text/css","text"=>"text/plain");
+$main["cmMime"]=$convertFileTypes[$main['type']];
+$main["isReadOnly"]=false;
+
 // defaults ##
 $main['lock'] = 0; // editable ##
 $main['active'] = 0; // inactive ##
 $main['save'] = 0; // no save script ##
 $main['save_type'] = $main['mode']; // type of save action for javascript ##
-$main['nav']['save_function'] = 'ecoder_save();'; // generic save function ##
 $main['auto_save'] = 0; // auto save button ##
 $main['editor_swap'] = 0; // editor swap button ##
 $save['contents'] = ''; // save content from file ##
 $save['file_loaded'] = 0; // file loaded ##
+$save['target']="";
 $html['title'] = 'no file loaded';
 $html['title_note'] = ''; // notes about file ##
 $main['frame_clean'] = ''; // nada ##
 $main['tabs'] = 0; // not yet ##
-$codepress['options'] = ''; // nada - pass to codepress textarea ##
-$editarea['options'] = ',is_editable: true'; // nada - pass to editarea textarea ##
+$editarea['editable'] = 'true';
 
 // buttons ##
 $main['nav']['save'] = 0; // save ## 
@@ -93,9 +97,10 @@ if ( $main['mode'] == 'home' ) { // home ##
 
         if ( $main['mode'] == 'read' ) { // read-only ##       
             $html['title'] = $main['file']; 
-            $html['title_note'] = ' [READ ONLY]'; 
-            $codepress['options'] = 'readonly-on'; // read only ##
-            $editarea['options'] = ',is_editable: false'; // pass to editarea textarea ##
+            $html['title_note'] = ' [READ ONLY]';
+            $editarea['editable'] = 'false'; // pass to editarea textarea ##
+						
+						$main["isReadOnly"]=true;
             
         } else { // editable ##
             $main['save'] = 1; // save script ##
@@ -110,5 +115,3 @@ if ( $main['mode'] == 'home' ) { // home ##
     }
 
 } // modes ##
-
-?>

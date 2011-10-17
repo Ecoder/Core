@@ -21,7 +21,7 @@ include "code/edit/header.php"; // main header ##
     
     echo '
     </head>
-    <body>';
+    <body data-mime="'.$main["cmMime"].'" data-ro="'.(int)$main["isReadOnly"].'">';
 
     // loader & javascript test ## 
     include "code/edit/loader.php"; 
@@ -30,6 +30,7 @@ include "code/edit/header.php"; // main header ##
     include "code/edit/nav.php";
 
     echo '
+			<div class="content_wrapper">
     <div class="edit_area">';
     
         // action area ##
@@ -51,9 +52,13 @@ include "code/edit/header.php"; // main header ##
             include "code/edit/upload.php";
 
         } // main options ##
+				
+				if ( $main['nav']['save'] == 1 ) { // save active ## 
+					include "save.php"; 
+				}
         
     echo '
-    </div>';
+    </div></div>';
 
     // save report ##
     include "code/edit/report.php";
