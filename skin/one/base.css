@@ -27,7 +27,7 @@ body {
 #content {
 	overflow: hidden; /* add scroll bars as necessary */
 	position: absolute; /* position absolutely */
-	z-index: 3; /* If required to cover any other divs */
+	/*z-index: 3;*/ /* If required to cover any other divs */
 	left: 251px; /* a value to miss any navigation div */
 	right: 0; /* this will put the scroll bar at the right of the page */
 	background: #f2f2f2; /* set the background color */
@@ -48,7 +48,7 @@ body {
     overflow: auto;
     position: absolute;
     width: 251px;
-    z-index: 4;
+   /* z-index: 4;*/
 }
 
 /* links */

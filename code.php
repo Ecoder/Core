@@ -20,7 +20,7 @@ $code['backup'] = 1; // 1 = on || 0 = off -- create backup copy of files opened 
 /* system settings, changeable, but will not change how the system works */
 #$code['domain'] = "http://www.gmeditor.com/"; // domain name ##
 $code['name'] = "ecoder"; // system name ##
-$code['version'] = "v 0.4.9"; // system version ##
+$code['version'] = "v 0.5.0m1"; // system version ##
 
 // security settings ##
 $code['secure'] = 0; // 0 = not secured || 1 = secured, uses settings below ##
