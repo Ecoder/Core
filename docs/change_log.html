@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+<head>
+	<title>ecoder change log</title>
+	<meta name="description" content="ecoder is a simple, web-based code editor, which includes a file browser, file uploader, and tabbed system to allow multiple files to be edited at the same time.">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class='header'>
+		<h1>ecoder change log</h1>
+	</div>
+	<div class='content'>
+	    <div class="side">
+		    <ul>
+		        <li><a href='index.html'>about</a></li>
+			    <li><a href='installation.html'>installation</a></li>
+			    <li><a href='change_log.html'>change log</a></li>
+			    <li><a href='credits.html'>credits</a></li>
+			    <li><a href='license.html'>licenses</a></li>
+		    </ul>
+		</div>   
+        <div class="main">
+            Updated: 13/09/2009<br /><br />
+            Key: <br /><br />
+                # done<br />
+                + todo<br />
+                > future plan<br />
+                ! bug<br />
+                ~ started<br /><br />
+                
+            	+ save - feedback, if file not saved ok -- rework ajax feedback..<br />	
+	            ~ change tracker, teething issues, needs to move within edited document....<br /><br />	
+
+	            ! javascipt drift -- when tab looses focus, also seems to loose ID..?<br />
+	            ! Save deleted file - needs to make file if not exists ?<br />
+	            ! IE7 sub menu disabled, due to css bug ##<br /><br />
+
+	            > use ajax saves to build history - files open - changes to each file - tab order....<br />
+	            > http://code.google.com/p/dshistory/ - handle JS history better ###<br />
+	            > WYSIWYG for html pages ( fckeditor ) -- html would also have preview option<br /><br />
+
+	            # fixed issue with saving files containing special or non-english characters.<br />		
+	            # notify of root folder location somewhere<br />
+	            # alt + 1 focus home tab ( could add other numbers for other tabs... )<br />
+	            # autosave.. stop timeout directly -- ( timeout ID )<br />
+	            # save backup copy - options ( on | off -- extension -- .file.ext )<br />
+	            # added simple error catching system<br />
+	            # remade delete and rename functionality<br />
+	            # tested on Mac Safari and FF -- pretty good.<br />
+	            # chrome do not delete file -- undefined script error?<br />
+	            # basic version just edit_area with most functions turned off<br />
+	            # test in opera -- why does it not save ( reports no bugs... ) ??<br />
+	            # file upload<br />
+	            # 2nd click on open tab from tree removes highlight.<br />
+	            # reduce top right icons in size.. free up space.<br />
+	            # add extra shortcut commands to help file<br />
+	            # apple + shortcut.. add<br />
+	            # tree & panel loading screen - #f2f2f2 + spinnner ????<br />
+	            # check for javascript -- warn if not present<br />
+	            # correct double save with -- control + s from textarea<br />
+	            # if tree iframe viewed out of main frame.. pop back in..<br />
+	            # if edit iframe viewed out of main frame.. pop back in..<br />
+	            # reset change counter on save<br />
+	            # swap autosave without reload ( call autosave function )<br />
+	            # javascript check if changes made - before closing file ( available in edit_area )<br />
+	
+            
+        </div>
+	</div>
+	<div class='footer'>
+		<div class="indexlink"><a href="index.html">index</a></div>	
+		<div class='copyright'>
+		    <a href="http://sourceforge.net/projects/ecoder/" title="ecoder | web-based code editor">ecoder</a> - &copy; <a href="http://www.gmeditor.com/" title="visit gmeditor.com">gmeditor.com</a> 2009
+		</div>
+		<br style="clear: both" />
+	</div>
+</body>
+</html>

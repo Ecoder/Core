@@ -1,0 +1,99 @@
+
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" > 
+<head> 
+	<title>how to install ecoder</title> 
+	<meta name="description" content="ecoder is a simple, web-based code editor, which includes a file browser, file uploader, and tabbed system to allow multiple files to be edited at the same time."> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+	<link href="style.css" rel="stylesheet" type="text/css" /> 
+</head> 
+<body> 
+    <div class='header'> 
+		<h1>ecoder installation guide</h1> 
+	</div> 
+	<div class='content'> 
+	    <div class="side"> 
+		    <ul> 
+		        <li><a href='index.html'>about</a></li> 
+			    <li><a href='installation.html'>installation</a></li> 
+			    <li><a href='change_log.html'>change log</a></li> 
+			    <li><a href='credits.html'>credits</a></li> 
+			    <li><a href='license.html'>licenses</a></li> 
+		    </ul> 
+		</div>   
+        <div class="main"> 
+            to install ecoder on a server ( local or remote ), you normally only need to change code in the file code.php ( found in the root folder ).<br /><br /> 
+        
+            <span style="color: #58792A;"> 
+            <strong>basics: ------------------------------------------------------------------------</strong><br /><br /> 
+            </span> 
+ 
+            <strong>$code['root']</strong> - the full path to an editable ( readable & writeable ) folder, which can contain unlimited sub-folders.<br /> 
+            <ul> 
+                <li>if possible place the folder containing the ecoder application above your editable files, if not change the folder permissions to hide the application and avoid changes to the code base by the editor itself.</li> 
+                <li>this option can be set both for remote ( production ) and local ( development ) server environments - note that it appears twice.</li> 
+            </ul> 
+            <br /> 
+ 
+            <strong>$code['domain_cookie']</strong> - if using a sub domain or root domain you should use only the domain part - ( for example .domain.com ) - note the dot before the domain name.<br /><br /> 
+            
+            <span style="color: red;"> 
+            <strong>security: ------------------------------------------------------------------------</strong><br /><br />    
+            </span> 
+            
+            <strong>play it safe!</strong> - ecoder edits files directly on the server - while it can be configured to create backups of files that are changed, it can and does edit files that might be being served as part of a live website of application - you've been warned!<br /><br /> 
+            
+            Here are some basic security tips, which if used in combination with the security features built into ecoder, should close most of the security vunerabilities.<br /><br /> 
+            
+            <ul> 
+                <li>keep the data directory outside of the web folder, maybe even at /home/USERNAME/DOMAIN.COM_ecoder, for example.</li> 
+                <li>consider setting up some sort of password protection on the application directory.</li> 
+            </ul> 
+            <br /> 
+            
+            <span style="color: #58792A;"> 
+            <strong>advanced settings: --------------------------------------------------------------</strong><br /><br /> 
+            </span> 
+            
+            <strong>$code['name']</strong> - call it what you want, but you'll need to change more than this to really rename it ( branding images, code functions... )<br /><br /> 
+            
+            <strong>$code['editor']</strong> - basic ( quicker loading, but less features ). delux ( syntax highlighting and other plugins ). this option set's the default, but each file open can use a different setting ( set in the top right hand corner ).<br /><br /> 
+            
+            <strong>$code['autosave']</strong> - 1 or 0 - enable autosave by default on all documents opened.<br /><br /> 
+ 
+            <strong>$code['autosave_time']</strong> - time in seconds betweeen AJAX saves.<br /><br />             
+ 
+            <strong>$code['skin']</strong> - name of css style sheet to use, as present there is only one ( called one! ).<br /><br /> 
+            
+            <strong>$code['backup']</strong> - 1 or 0. create a backup ( set as a hidden file, but could be changed to other prefered method ) of all files opened.<br /><br /> 
+            
+            <strong>$code['secure']</strong> - 1 or 0. if true checks for valid session, based on the value of $code['secure_variable'].<br /><br /> 
+            
+            <strong>$code['secure_variable']</strong> - the name of the session variable to check against, see above.<br /><br /> 
+            
+            <strong>$code['secure_url']</strong> - the url to redirect to if secure is true and the secure_variable is false.<br /><br /> 
+            
+            <strong>$code['secure_root']</strong> - if true, $code['root'] value passed in session variable - $_SESSION['tree_root'].<br /><br /> 
+            
+            there are a number of other settings which control files types to display or block, but these are pretty self-explanatory. <br /><br /> 
+            
+            <span style="color: #58792A;"> 
+            <strong>notes: --------------------------------------------------------------</strong><br /><br /> 
+            </span> 
+            
+            <ul> 
+                <li>there is a .htaccess file in the root directory which includes a hardcoded path to a cron based error log script ( code/logs/cron.php ) - you will need to edit this path and set-up a cron tab to enable this feature - it might also require a few further tweaks, but is a good way to get automatic feedback about hidden errors in PHP scripts in the application itself - not in files that are being edited.</li> 
+                <li>ecoder was developed on apache on a linux server - it will work on IIS on windows, however some of the above instructions may not be exactly correct or relevant.</li> 
+            </ul> 
+        </div> 
+	</div> 
+	<div class='footer'> 
+		<div class="indexlink"><a href="index.html">index</a></div>	
+		<div class='copyright'> 
+		    <a href="http://sourceforge.net/projects/ecoder/" title="ecoder | web-based code editor">ecoder</a> - &copy; <a href="http://studio.quintalinda.com" title="Website Design Portugal">QL Studio</a> 2010
+		</div> 
+		<br style="clear: both" /> 
+	</div> 
+</body> 
+</html> 

@@ -1,0 +1,8 @@
+.tabControl { width: 100%; height:97%; /* tab control width */ }
+.lowTab, .highTab { cursor: pointer; padding: 1px 8px 1px 8px; border-right: 1px solid #dddddd; }
+.lowTab { background: #f2f2f2; }
+.lowTab:hover { background: #C0B66E; color: #FFFFFF; }
+.highTab { background: #5A7C2D; color: #fff; }
+.tabHolder { height: 27px; -moz-user-select: none; font-size:9pt; }
+.tabPanel { width:99%; height:97%; border:0px solid #3c597b; background: #fff; }
+

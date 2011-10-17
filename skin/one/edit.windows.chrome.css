@@ -1,0 +1,15 @@
+.edit_nav .options { height: 20px; }
+.edit_nav .options #save_0, 
+.edit_nav .options #close_0, 
+.edit_nav .options #reload_0 { padding: 7px 8px 1px 29px; }
+.edit_nav .options #save_1 a, 
+.edit_nav .options #reload_1 a, 
+.edit_nav .options #close_1 a { padding:7px 8px 6px 29px; }
+.edit_nav .options .details { padding-top: 6px; }
+.autosave .disabled { height: 16px; padding-top: 6px; }
+.editor .disabled { height: 27px; background: #f2f2f2; }
+.autosave .swap_off a { padding: 7px 8px 6px 29px; }
+.editor .swap_off a, .editor .swap_delux a { padding: 7px 8px 6px 29px; }
+.editor .swap_basic a, .editor .swap_delux a { padding: 7px 8px 6px 29px; }
+#save, #save_report { padding: 6px 10px 2px 10px; }
+#save_changes { padding: 5px 10px 3px; }

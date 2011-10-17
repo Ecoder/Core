@@ -1,0 +1,89 @@
+/* ecoder main stylesheet */
+
+html, body, div, iframe { margin:0; padding:0; height: 100%; font-size: 9pt; font-family: arial, helvetica, sans-serif; }
+
+html {
+	max-height:100%; /* fix height for other browsers */
+	padding:0; /*remove padding */
+	margin:0; /* remove margins */
+	border:0; /* remove borders */
+	background: #f2f2f2; /*color background - only works in IE */
+	font-size: 76%; /*set default font size */
+	font-family: verdana, helvetica, sans-serif; /* set default font */
+	/* hide overflow:hidden from IE5/Mac */ 
+	/* \*/ 
+	overflow:hidden; /*get rid of scroll bars in IE */
+	/* */ 
+}
+
+body {
+	max-height: 100%; /* fix height for other browsers */
+	overflow: hidden; /*get rid of scroll bars in IE */
+	padding: 0; /*remove padding */
+	margin: 0; /* remove margins */
+	border: 0; /* remove borders */
+}
+
+#content {
+	overflow: hidden; /* add scroll bars as necessary */
+	position: absolute; /* position absolutely */
+	z-index: 3; /* If required to cover any other divs */
+	left: 251px; /* a value to miss any navigation div */
+	right: 0; /* this will put the scroll bar at the right of the page */
+	background: #f2f2f2; /* set the background color */
+	height: 100%;
+}
+
+* html #content {
+	height:100%; /* full screen height */
+	width:100%; /* full screen width */
+	top:0; /* place the content at the top */
+	left:0; /* and left of the body */
+	border-left:251px solid #f2f2f2; /*add a left border to miss any navigation div (this is SUBTRACTED from the 100% width on quirks mode) */
+}
+	
+#left {
+    font-size: 1.2em;
+    left: 0pt;
+    overflow: auto;
+    position: absolute;
+    width: 251px;
+    z-index: 4;
+}
+
+/* links */
+a:link, a:hover, a:visited { text-decoration: none; color: #525252; }
+
+/* iframes */
+iframe { display:block; width:100%; border:none; }
+#iframe_tree { width: 251px; height: 100%; border: 0px solid #dddddd; border-right: 0px solid #f2f2f2; background: #f2f2f2; padding: 0px; margin: 0px 0 20px 0; }
+#iframe_main { width: 100%; border: 0px solid #dddddd; background: #f2f2f2; padding: 0px; margin: 0; }
+
+/* javascript test & loader */
+#load_base { position: absolute; top: 0; bottom: 0%; left: 0; right: 0%; background: url(design/bg_white_90.png); z-index: 100; text-align: center; width: 100%; height: 100%; } 
+#load_base a { color: #342F2F; } 
+#load_base h1 { padding: 2px 0 0 0; font-size: 14pt; font-weight: bold; margin: 0px; color: #01622E; }
+#load_base p { margin: 0px; padding: 0px; line-height: 1.3em; }
+#load_base .loading { height: 350px; background-color: transparent; color: #7D7D7D; width: 700px; margin: 0 auto; padding-top: 10px; }
+#load_base .loading a { font-weight: bold; color: orange; }
+#load_base .loading .ads { float: left; height: 100px; background-color: transparent; color: #7D7D7D; width: 728px; margin: 0 0 10px 0; padding: 0; }
+#load_base .loading .one { float: left; height: 350px; background-color: transparent; color: #7D7D7D; width: 300px; margin: 0; padding: 0; }
+#load_base .loading .one .logo { background-color: transparent; height: 266px; margin: 8px 0 0 0; }
+#load_base .loading .one .about { background-color: transparent; padding: 0px 0 0 0px; text-align: center; height: 42px; }
+#load_base .loading .one .enter { font-size: 16pt; text-align: center; padding: 5px 0 0 15px; }
+#load_base .loading .two { float: left; height: 350px; background-color: transparent; color: #7D7D7D; width: 400px; margin: 0; padding: 0; text-align: left; }
+#load_base .loading .two .how { background-color: transparent; padding: 10px 0 0 0px; height: 108px; }
+#load_base .loading .two .shortcuts { background-color: transparent; padding: 0px 0 0 0px; height: 160px; }
+#load_base .loading .two .shortcuts h2 { background: #95BE0D; color: #fff; font-size: 12pt; padding: 2px 0 2px 4px; margin: 0px; }
+#load_base .loading .two .shortcuts p { border-bottom: 1px solid #dddddd; padding: 2px 0 1px 4px; }
+#load_base .loading .two .shortcuts .one, #load_base .loading .two .shortcuts .two { float: left; background-color: transparent; padding: 8px 10px 0 0px; width: 180px; height: 160px; }
+#load_base .loading .two .requires { background-color: transparent; padding: 0px 0 0 0px; height: 75px; }
+#load_base .loading .two .how p, #load_base .loading .shortcuts .requires p, #load_base .loading .two .requires p { margin: 0px; padding: 4px 0 0 1px; }
+
+/* advice and warnings */
+#note { background: url(design/note.png); display: none; position: fixed; top: 200px; bottom: 0%; left: 40%; right: 40%; z-index: 101; width: 290px; height: 100px; padding: 30px 24px 30px 36px; font-size: 10.5pt; line-height: 1.3em; }
+#note p { padding: 0px 0 6px 0; margin: 0px; }
+#note_close { float: right; height: 100px; width: 25px; padding: 0 0 0 8px; }
+#note_x { width: 20px; height: 18px; text-align: center; }
+#note_clock { width: 19px; height: 18px; text-align: center; color: #CFB8B8; }
+

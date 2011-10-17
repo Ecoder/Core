@@ -1,0 +1,51 @@
+/* ecoder tree stylesheet */
+
+/* generic */
+html, body, div, iframe { margin:0; padding:0; font-size: 9pt; font-family: verdana, helvetica, sans-serif; }
+body { background: #f2f2f2; }
+a:link, a:hover, a:visited { text-decoration: none; color: #525252; }
+
+/* javascript test & loader */
+#load_tree { position: absolute; top: 0; bottom: 0%; left: 0; right: 0%; background: url(design/bg_white_80.png); z-index: 100; text-align: center; width: 100%; height: 100%; margin: 0 auto; } 
+#load_tree .spin { background-color: transparent; float: left; width: 250px; padding-top: 250px; }
+
+/* tree */
+.tree_nav { z-index: 2; position: fixed; width: 235px; height: 55px; padding: 0px; background: #f2f2f2; border-bottom: 1px solid #dddddd; }
+.tree_nav .trail { height: 21px; padding: 4px 0 2px 7px; background: #58792A; color: #fff; width: 228px; }
+.tree_nav .click { height: 26px; padding: 0px; margin: 0 0 0 3px; }
+.tree_nav .click .icon { float: left; border-right:1px solid #DDDDDD;  margin: 2pt 0px; height: 22px; }
+.tree_nav .click .icon img { margin: 0px; padding: 2pt 6px 1pt 5px; }
+.tree_nav .click .icon img:hover { background-color: #CDDEEE; }
+.tree { float: left; width: 235px; margin: 0px 2px 0px 0px; padding: 0px; }
+.tree a img.link { border: none !important; }
+.tree ul { margin: 0; list-style-type: none; padding: 0; font-family: Verdana, Helvetica, sans-serif; }
+.tree ul li { width: 235px; float: left; position: relative; border-bottom: 1px solid #dddddd; }
+.tree ul li.read { background-color: #dddddd; }
+.tree ul li.no-read { background-color: #ABA6A6; color: #000; }
+.tree ul li a, .tree ul li a:visited { display: block; color: #525252; line-height: 20px; padding: 2px 10px 3px 10px; font-weight: normal; background-repeat: no-repeat; background-position: 5px 5px; }
+.tree ul li:hover { width: 235px; }
+.tree ul li:hover a, .tree ul li.active, .tree ul li.active a { border-color: #fff; color: #4C4C4C; background-color: #CDDEEE; }
+.tree ul.ul_tree { margin: 56px 0 0 0; }
+.tree ul.ul_tree li a { padding: 2px 0px 4px 28px; width: 207px; }
+
+/* context links */
+.tree ul li .file { width: 210px; float: left; padding: 0px; margin: 0px; }
+.tree ul li .menu { background: transparent; width: 24px; float: right; }
+.tree ul li .menu a { width: 0px; padding: 5px 5px 0 2px; height: 20px; }
+
+/* context menu */
+.tree ul li .menu #item { width: 10px; }
+.tree ul li .menu #item, .tree ul li .menu #item ul { padding: 0; margin: 0; list-style: none; font-family: Verdana, Helvetica, sans-serif; }
+.tree ul li .menu #item a { display: block; text-decoration: none; padding: 5px 10px 5px 10px; font-size: .85em; color: #7A7A7A; }
+.tree ul li .menu #item a.trigger { padding: 4px 5px 0 2px; }
+.tree ul li .menu #item li { float: left; position: relative; width: auto; border: 0px; }
+.tree ul li .menu #item ul li { width: 210px; height: 28px; border-bottom: 1px solid #B2A4A4; }
+.tree ul li .menu #item ul li a { color: #565656; padding: 0px 6px 0px 28px; width: 176px; height: 28px; }
+.tree ul li .menu #item li ul { width: 210px; z-index: 100; position: absolute; margin: 0px; padding: 0px; margin-left: -200px; top: 10px; display: none; border: 1px solid #B2A4A4; border-bottom: 0px solid #B2A4A4; }
+.tree ul li .menu #item li:hover a { color: #525252; }
+.tree ul li .menu #item li:hover ul { display: block;  } 
+.tree ul li .menu #item li:hover ul a { color: #525252; background: #ffffff; background-repeat: no-repeat; background-position: 5px 5px; }
+.tree ul li .menu #item li:hover ul a.disabled { color: #888383; background: #f2f2f2; background-repeat: no-repeat; background-position: 5px 5px; }
+.tree ul li .menu #item ul a:hover { background-color: #B2A4A4!important; color: #FFFFFF!important; }
+
+

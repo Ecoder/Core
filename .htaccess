@@ -1,0 +1,44 @@
+# CACHING ##
+# YEAR
+<FilesMatch "\.(flv|gif|jpg|jpeg|png|ico)$">
+   Header set Cache-Control "max-age=2592000"
+</FilesMatch>
+# WEEK
+<FilesMatch "\.(js|css|pdf|swf)$">
+   Header set Cache-Control "max-age=604800"
+</FilesMatch>
+# 10 minutes
+<FilesMatch "\.(html|htm|txt)$">
+   Header set Cache-Control "max-age=600"
+</FilesMatch>
+# DONT CACHE
+<FilesMatch "\.(pl|php|cgi|spl|scgi|fcgi)$">
+   Header unset Cache-Control
+</FilesMatch>
+
+# block certain requests ##
+<Files .htaccess>
+    order allow,deny
+    deny from all
+</Files>
+
+<Files /home/ecoder/code/logs/error.log>
+    Order allow,deny
+    Deny from all
+    Satisfy All
+</Files>
+
+# PHP error handling for production servers
+php_flag display_startup_errors off
+php_flag display_errors off
+php_flag html_errors off
+php_flag log_errors on
+php_flag ignore_repeated_errors off
+php_flag ignore_repeated_source off
+php_flag report_memleaks on
+php_flag track_errors on
+php_value docref_root 0
+php_value docref_ext 0
+php_value error_log /home/ecoder/code/logs/error.log
+php_value error_reporting E_ALL
+php_value log_errors_max_len 0
