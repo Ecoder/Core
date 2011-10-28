@@ -10,7 +10,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <head>
     <title>e'.$html['title'].'</title>
     <meta http-equiv="content-Type" content="text/html; charset=UTF-8" />
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"; type="text/javascript"></script>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
     ';
     include "css.php"; // browser specific css ##         
     

@@ -28,7 +28,7 @@ myCodemirror met node.data() attachen aan htmlnode.
 Value via ajaxcall die content v file teruggeeft krijgen.
 OF misschien volledigere call die json teruggeeft met type en (escaped) content.
 
-/edit.php
+/editor.php
 	/code.php
 		$code['editor']
 		/code/base/editor.php
@@ -36,11 +36,11 @@ OF misschien volledigere call die json teruggeeft met type en (escaped) content.
 			$_SESSION['editor']
 			$_SESSION['editor_name']
 			$_SESSION['editor_file']
-	/code/edit/logic.php
+	/code/editor/logic.php
 		$main[X]
 		$editarea['editable']
 		$html[X]
-		$main["cmMime"]
+		$file
 	/code/edit/header.php
 		layout
 		js & css load

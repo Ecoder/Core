@@ -14,7 +14,7 @@ CodeMirrorUI.prototype = {
     var defaultOptions = {
       searchMode: 'popup', // other options are 'inline' and 'dialog'.  The 'dialog' option needs work.
       path: 'js',
-      buttons: ['search', 'undo', 'redo', 'jump', 'reindentSelection', 'reindent','about']
+      buttons: ['search']
     }
     this.textarea = textarea
     this.options = options;
@@ -24,23 +24,12 @@ CodeMirrorUI.prototype = {
       'search': ["Search/Replace", "find_replace_popup", this.options.path + "../images/silk/find.png", this.find_replace_popup],
       'searchClose': ["Close", "find_replace_popup_close", this.options.path + "../images/silk/cancel.png", this.find_replace_popup_close],
       'searchDialog': ["Search/Replace", "find_replace_window", this.options.path + "../images/silk/find.png", this.find_replace_window],
-      'undo': ["Undo", "undo", this.options.path + "../images/silk/arrow_undo.png", this.undo],
-      'redo': ["Redo", "redo", this.options.path + "../images/silk/arrow_redo.png", this.redo],
-      'jump': ["Jump to line #", "jump", this.options.path + "../images/silk/page_go.png", this.jump],
-      'reindentSelection': ["Reformat selection", "reindentSelect", this.options.path + "../images/silk/text_indent.png", this.reindentSelection],
-      'reindent': ["Reformat whole document", "reindent", this.options.path + "../images/silk/page_refresh.png", this.reindent],
-      'about': ["About CodeMirror-UI", "about", this.options.path + "../images/silk/help.png", this.about]
     };
 
     //place = CodeMirror.replace(place)
 
     this.home = document.createElement("div");
     this.textarea.parentNode.insertBefore(this.home, this.textarea);
-    /*if (place.appendChild)
-     place.appendChild(this.home);
-     else
-     place(this.home);
-     */
     this.self = this;
 
     var onChange = this.editorChanged.bind(this);
@@ -90,28 +79,8 @@ CodeMirrorUI.prototype = {
       this.addButton(buttonDef[0], buttonDef[1], buttonDef[2], buttonDef[3], this.buttonFrame);
     }
 
-    //this.makeButton("Search", "search");
-    //this.makeButton("Replace", "replace");
-    //this.makeButton("Current line", "line");
-    //this.makeButton("Jump to line", "jump");
-    //this.makeButton("Insert constructor", "macro");
-    //this.makeButton("Indent all", "reindent");
   },
-  /*
-   * This is left over from the MirrorFrame demo.
-   * Get rid of it quick.
-   */
-  /*
-   makeButton : function(name, action){
-   var button = document.createElement("input");
-   button.type = "button";
-   button.value = name;
-   this.home.appendChild(button);
-   button.onclick = function(){
-   self[action].call(self);
-   };
-   },
-   */
+
   createFindBar: function() {
     var findBar = document.createElement("div");
     findBar.className = "codemirror-ui-find-bar";
@@ -223,14 +192,12 @@ CodeMirrorUI.prototype = {
     var found = this.cursor.findNext();
     if (found) {
       this.mirror.setSelection(this.cursor.from(),this.cursor.to())
-      //this.cursor.select();
     } else {
       if (confirm("No more matches.  Should we start from the top?")) {
         this.cursor = this.mirror.getSearchCursor(findString, 0, !this.caseSensitive.checked);
         found = this.cursor.findNext();
         if (found) {
           this.mirror.setSelection(this.cursor.from(),this.cursor.to())
-          //this.cursor.select();
         } else {
           alert("No matches found.");
         }
@@ -242,10 +209,8 @@ CodeMirrorUI.prototype = {
       var cursor = this.mirror.getSearchCursor(this.findString.value, this.mirror.getCursor(), !this.caseSensitive.checked);
       while (cursor.findNext())
         this.mirror.replaceRange(this.replaceString.value,cursor.from(),cursor.to())
-        //cursor.replace(this.replaceString.value);
     } else {
       this.mirror.replaceRange(this.replaceString.value,this.cursor.from(),this.cursor.to())
-      //this.cursor.replace(this.replaceString.value);
       this.find();
     }
   },
@@ -328,20 +293,12 @@ CodeMirrorUI.prototype = {
     } else {
       this.addClass(this.redoButton, 'inactive');
     }
-    //alert("undo size = " + his['undo'] + " and redo size = " + his['redo']);
-  },
-  undo: function() {
-    this.mirror.undo();
-  },
-  redo: function() {
-    this.mirror.redo();
   },
   replaceSelection: function(newVal) {
     this.mirror.replaceSelection(newVal);
     this.searchWindow.focus();
   },
   raise_search_window: function() {
-    //alert('raising window!');
     this.searchWindow.focus();
   },
   find_replace_window: function() {
@@ -360,97 +317,10 @@ CodeMirrorUI.prototype = {
     //alert('Hello!');
     this.popupFindWrap.className = "codemirror-ui-popup-find-wrap";
   },
-  /*
-   find_replace: function(){
-   this.find_replace = document.createElement("div");
-   this.find_replace.className = "codemirror-search-replace";
-   this.find_replace.innerHTML = "Just a test!";
-   this.home.appendChild(this.find_replace);
-   },
-
-   search: function(){
-   var text = prompt("Enter search term:", "");
-   if (!text)
-   return;
-
-   var first = true;
-   do {
-   var cursor = this.mirror.getSearchCursor(text, first);
-   first = false;
-   while (cursor.findNext()) {
-   cursor.select();
-   if (!confirm("Search again?"))
-   return;
-   }
-   }
-   while (confirm("End of document reached. Start over?"));
-   },
-
-   replace: function(){
-   // This is a replace-all, but it is possible to implement a
-   // prompting replace.
-   var from = prompt("Enter search string:", ""), to;
-   if (from)
-   to = prompt("What should it be replaced with?", "");
-   if (to == null)
-   return;
-
-   var cursor = this.mirror.getSearchCursor(from, false);
-   while (cursor.findNext())
-   cursor.replace(to);
-   },
-   */
-  jump: function() {
-    var line = prompt("Jump to line:", "");
-    if (line && !isNaN(Number(line))) {
-      this.mirror.setCursor(Number(line),0);
-      this.mirror.setSelection({line:Number(line),ch:0},{line:Number(line)+1,ch:0});
-      this.mirror.focus();
-    }
-  },
-  /*
-   line: function(){
-   alert("The cursor is currently at line " + this.mirror.currentLine());
-   this.mirror.focus();
-   },
-
-   macro: function(){
-   var name = prompt("Name your constructor:", "");
-   if (name)
-   this.mirror.replaceSelection("function " + name + "() {\n  \n}\n\n" + name + ".prototype = {\n  \n};\n");
-   },
-   */
-  reindent: function() {
-    var lineCount = this.mirror.lineCount();
-    for(var line = 0; line < lineCount; line++) {
-      this.mirror.indentLine(line);
-    }
-  },
-  about : function() {
-    string = "CodeMirror-UI was written by Jeremy Green (http://www.octolabs.com/) as a light interface around CodeMirror by Marijn Haverbeke (http://codemirror.net)."
-    string += "\n\n"
-    string += "Documentation and the code can be found at https://github.com/jagthedrummer/codemirror-ui/."
-    alert(string);
-  },
-  reindentSelection: function() {
-    var cur = this.mirror.getCursor()
-    //console.log(cur)
-    var start = this.mirror.getCursor(true)["line"]
-    var end = this.mirror.getCursor(false)["line"]
-    for(var line = start; line <= end; line++) {
-      this.mirror.indentLine(line);
-    }
-    //this.mirror.reindentSelection();
-
-  },
   // Event handler registration. If disconnect is true, it'll return a
   // function that unregisters the handler.
   // Borrowed from CodeMirror + modified
   connect: function (node, type, handler, disconnect) {
-    /*function wrapHandler(event) {
-      handler(new Event(event || window.event));
-    }*/
-
     if (typeof node.addEventListener == "function") {
       node.addEventListener(type, handler, false);
       if (disconnect)
