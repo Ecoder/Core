@@ -1,64 +1,34 @@
 <?php
+include "../../code.php";
 
-/*
-save file ##
-*/
-
-include "../../code.php"; // single included settings file ##
-
-// trim details ##
-@ecoder_request( $_POST['ecoder_path'], $save['path'], '' ); // path ##
-@ecoder_request( $_POST['ecoder_file'], $save['file'], '' ); // file ##
-@ecoder_request( $_POST['ecoder_content'], $save['content'], '' ); // content ##
-
-if (get_magic_quotes_gpc()) {
-    $save['content'] = stripslashes ( $save['content'] );
+final class SaveStatus {
+	const SUCCESS=1;
+	const NOTWRITEABLE=-1;
+	const NOTAFILE=-2;
+	const NOEXISTS=-3;
 }
 
-// compile file path ##
-$save['compiled'] = $code['root'].$save['path'].$save['file'];
-
-// does file exists ##
-if ( file_exists ( $save['compiled'] ) ) {    
-    
-    // is it a file ##
-    if ( is_file( $save['compiled'] ) ) {
-    
-        if ( is_writable( $save['compiled'] ) ) {
-            
-            // special characters and replace function ##
-            function fpc( $file, $contents ){
-                return fwrite ( fopen ( $file, 'w' ), $contents );
-            }
-            fpc( $save['compiled'], $save['content'] );
-            
-            $save['result'] = $save['file'].' saved successfully';
-            $save['result_code'] = 1;
-
-        } else { // not writable ##
-
-        // not a file ##
-        $save['result'] = $save['file'].' is not writable';
-        $save['result_code'] = 0;
-
-        }
-    
-    } else {
-        
-        // not a file ##
-        $save['result'] = $save['file'].' is not a file';
-        $save['result_code'] = 0;
-    
-    }
-    
-} else { // perhaps file deleted while being edited -- TODO ##
-    
-    // does not exist ##
-    $save['result'] = 'the file <strong>'.$save['file'].'</strong> does not exist.</p><p>perhaps it has recently been deleted or renamed.';
-    $save['result_code'] = 0;
-
-    // add file ##
-    
-    // put contents ##
-
+function save_edit() {
+	global $code;
+	$path="";
+	$file="";
+	$content="";
+	
+	@ecoder_request($_POST['ecoder_path'],$path,'');
+	@ecoder_request($_POST['ecoder_file'],$file,'');
+	@ecoder_request($_POST['ecoder_content'],$content,'');
+	
+	if (get_magic_quotes_gpc()) {
+		$content=stripslashes($content);
+	}
+	
+	$fullpath=$code['root'].$path.$file;
+	if (!file_exists($fullpath)) { return SaveStatus::NOEXISTS; }
+	if (!is_file($fullpath)) { return SaveStatus::NOTAFILE; }
+	if (!is_writable($fullpath)) { return SaveStatus::NOTWRITEABLE; }
+	
+	fwrite(fopen($fullpath,'w'),$content);
+	return SaveStatus::SUCCESS;
 }
+
+$status=save_edit();
