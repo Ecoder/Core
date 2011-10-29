@@ -26,31 +26,18 @@ $file->canRename=($main['mode'] == 'edit' && $main['shut'] == 1);
 
 $editor->synhl=($_SESSION['editor'] == 'delux');
 // defaults ##
-$main['lock'] = 0; // editable ##
-$main['save'] = 0; // no save script ##
-$main['save_type'] = $main['mode']; // type of save action for javascript ##
-$save['contents'] = ''; // save content from file ##
-$save['file_loaded'] = 0; // file loaded ##
-$save['target']="";
 $html['title_note'] = ''; // notes about file ##
-$main['frame_clean'] = ''; // nada ##
-$main['tabs'] = 0; // not yet ##
 
 // buttons ##
 $main['nav']['save_note'] = ''; // nada ##
-$main['nav']['close'] = 1; // close ## 
-if ( $main['shut'] == 0 ) { $main['nav']['close'] = 0; } // file may not be closed ## 
-
 // get file name, without dot or slash ##    
 $main['frame_clean'] = ecoder_iframe_clean ( $file->path.$file->name ); // for close and refresh ##
-$save['file_loaded'] = 1; // file loaded ##
 
 if ($file->name && $main['type'] ) { // loaded ##
 	if ( $main['mode'] == 'read' ) { // read-only ##       
 		$html['title_note'] = ' [READ ONLY]';
 		$file->isReadOnly=true;
 	} else { // editable ##
-		$main['save'] = 1; // save script ##
 		$main['nav']['save_note'] = 'saving...'; // save note ##
 	}
 }
@@ -79,7 +66,6 @@ if ( !file_exists ( $code['root'].$tabs['home'].".txt" ) ) { // base file not fo
 
 /***NAV.AUTOSAVE***/
 // compile path for editor swap ##
-$editor_swap = 'mode='.$main['mode'].'&file='.$file->name.'&path='.$file->path.'&type='.$main['type'].'&shut='.$main['shut'];
 
 $file->autosaveStatus=($file->isReadOnly ? -1 : ($code['autosave']==1 ? 1 : 0));
 
@@ -100,5 +86,3 @@ if ( file_exists ($file->fullpath) ) {
 	$file->contentraw=file_get_contents($file->fullpath);
 	$file->content=trim(htmlspecialchars($file->contentraw));
 }
-
-$save['contents']="function(){}";

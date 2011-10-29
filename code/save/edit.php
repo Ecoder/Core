@@ -11,17 +11,6 @@ include "../../code.php"; // single included settings file ##
 @ecoder_request( $_POST['ecoder_file'], $save['file'], '' ); // file ##
 @ecoder_request( $_POST['ecoder_content'], $save['content'], '' ); // content ##
 
-if ( $_SESSION['debug'] == 1 ) { // debugging ##
-
-    #$debug = '<div style="margin: 90px 0 0 0;"><div style="float: left; width: 300px;">POST:<br />'.print_r( $_POST ).'</div><div style="float: left; width: 300px;">POST:<br />'.print_r( $_GET ).'</div><div>';
-    #echo $debug;
-    
-} // debugging ##
-
-// slashes and encoding ##
-#$save['content'] = utf8_decode( $save['content'] ); // added for special characters ##
-#$save['content'] = stripslashes ( $save['content'] );
-
 if (get_magic_quotes_gpc()) {
     $save['content'] = stripslashes ( $save['content'] );
 }
@@ -36,8 +25,6 @@ if ( file_exists ( $save['compiled'] ) ) {
     if ( is_file( $save['compiled'] ) ) {
     
         if ( is_writable( $save['compiled'] ) ) {
-        
-            #file_put_contents ( $save['compiled'], $save['content'] );
             
             // special characters and replace function ##
             function fpc( $file, $contents ){
@@ -75,20 +62,3 @@ if ( file_exists ( $save['compiled'] ) ) {
     // put contents ##
 
 }
-
-/*
-if ( $save['result_code'] == 0 ) { // something went wrong - so tell ##
-
-    echo '
-    <script type="text/javascript">
-        
-        // notify ##
-        alert ( "'.$save['result'].'" );
-        var e_note = "<p>'.$save['result'].'</p>";
-        top.ecoder_note ( \'note\', e_note, \'5\', \'block\' );
-
-    </script>';
-
-}
-*/
-?>

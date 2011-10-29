@@ -1,29 +1,3 @@
- // swap autosave status ##
-/*function ecoder_autosave_switch () {
-	// default ##
-	var ecoder_autosave_class = 'swap_on'; // class on ## 
-	var ecoder_autosave_new = 1; // new value ##
-	var ecoder_autosave_title = 'turn on autosave feature';
-
-	if ( ecoder_autosave == 1 ) { // already on ##
-		ecoder_autosave_class = 'swap_off'; // class off ##     
-		ecoder_autosave_new = 0; // new value ##
-		ecoder_autosave_title = 'turn off autosave feature';
-		clearTimeout(autosave); // stop autosave script ##
-	} else { // switching on, so call save function ##
-		var autosave = setTimeout( "ecoder_save()", 0 );
-	}
-
-	// switch variable 
-	ecoder_autosave = ecoder_autosave_new;
-
-	// update button ##
-	var ecoder_autosave_id; // declare ##
-	ecoder_autosave_id = document.getElementById ('swap'); // get element ##
-	ecoder_autosave_id.className = ecoder_autosave_class; // swap class ##
-	ecoder_autosave_id.childNodes[0].title = ecoder_autosave_title; // TODO -- set a title tag ##
-}*/
-
 function CmEditor() {
 	this.init();
 }
@@ -35,6 +9,11 @@ CmEditor.prototype={
 		readOnly:false
 	},
 	codemirror:null,
+	autosaveIntervalId:null,
+	changed:false,
+	filename:null,
+	path:null,
+	
 	init:function() {
 		var self=this;
 		this.options={
@@ -42,6 +21,8 @@ CmEditor.prototype={
 			mime:$("body.editor").attr("data-mime"),
 			readOnly:($("body.editor").attr("data-ro")=="1" ? true : false)
 		};
+		this.filename=$("body.editor").attr("data-filename");
+		this.path=$("body.editor").attr("data-path");
 		this.codemirror=CodeMirror.fromTextArea(
 			this.options.tArea,
 			{
@@ -49,8 +30,7 @@ CmEditor.prototype={
 				indentWithTabs:true,
 				lineNumbers:true,
 				readOnly:this.options.readOnly,
-				onChange:this.editorChange()
-			//TODO Autosaving currently disabled
+				onChange:function() { editor.editorChange(); }
 			}
 		);
 		
@@ -70,23 +50,13 @@ CmEditor.prototype={
 		self._addButtonEvent('#jump',self.jump);
 		self._addButtonEvent('#reindsel',self.reindsel);
 		self._addButtonEvent('#reinddoc',self.reinddoc);
-		//And now we can go and add events on this thing for the buttons
-		//Accessing the cminstance w/ this.codemirror
 	},
 	editorChange:function() {
 		if (!this.codemirror) {return;}
 		var history=this.codemirror.historySize();
-		if (history['undo'] > 0) {
-			$("body.editor ul.nav #undo").attr("data-status","1");
-		} else {
-			$("body.editor ul.nav #undo").attr("data-status","0");
-		}
-		
-		if (history['redo'] > 0) {
-			$("body.editor ul.nav #redo").attr("data-status","1");
-		} else {
-			$("body.editor ul.nav #redo").attr("data-status","0");
-		}
+		$("body.editor ul.nav #undo").attr("data-status",(history['undo'] > 0 ? "1" : "0"));
+		$("body.editor ul.nav #redo").attr("data-status",(history['redo'] > 0 ? "1" : "0"));
+		this.changed=true;
 	},
 	_addButtonEvent:function(selector, fn) {
 		var self=this;
@@ -126,10 +96,16 @@ CmEditor.prototype={
     }
 	},
 	del:function(self) {
-		top.ecoder_files('main','delete',ecoder_path,ecoder_file,'file',content_changed);
+		top.ecoder_files('main','delete',self.path,self.filename,'file',0);
 	},
 	rename:function(self){
-		top.ecoder_files('main','rename',ecoder_path,ecoder_file,'file',content_changed);
+		if (this.changed) {
+			if (confirm("There are open changes. Are you sure you want to rename?")) {
+				top.ecoder_files('main','rename',self.path,self.filename,'file',0);
+			}
+		} else {
+			top.ecoder_files('main','rename',self.path,self.filename,'file',0);
+		}
 	},
 	synhlEnable:function(self) {
 		self.codemirror.setOption("mode",self.options.mime);
@@ -143,54 +119,61 @@ CmEditor.prototype={
 		top.ecoder_loaded_base('block');
 	},
 	close:function(self) {
-		top.ecoder_files(ecoder_iframe,'close',ecoder_path,ecoder_file,'',content_changed);
+		if (this.changed) {
+			if (confirm("There are open changes. Are you sure you want to close?")) {
+				top.ecoder_files(ecoder_iframe,'close',self.path,self.filename,'',0);
+			}
+		} else {
+			top.ecoder_files(ecoder_iframe,'close',self.path,self.filename,'',0);
+		}
 	},
 	reload:function(self) {
-		top.ecoder_files(ecoder_iframe,'reload',ec_mode,ecoder_file,'',content_changed);
+		if (this.changed) {
+			if (confirm("There are open changes. Are you sure you want to reload?")) {
+				top.ecoder_files(ecoder_iframe,'reload',self.path,self.filename,'',0);
+			}
+		} else {
+			top.ecoder_files(ecoder_iframe,'reload',self.path,self.filename,'',0);
+		}
 	},
 	autosaveEnable:function(self) {
 		$('body.editor ul.nav #autosave[data-status="0"]')
 			.attr("data-status",1)
 			.attr("title","turn off autosave feature");
-		//TODO: actually enable it :)
+		self.autosaveIntervalId=setInterval(function() { self.save(self); },autosave_interval);
 	},
 	autosaveDisable:function(self) {
 		$('body.editor ul.nav #autosave[data-status="1"]')
 			.attr("data-status",0)
 			.attr("title","turn on autosave feature");
+		clearInterval(self.autosaveIntervalId);
 	},
 	save:function(self) {
-		self.codemirror.mirror.save();
+		self.codemirror.save();
 		
-		if (typeof(top.hide)!="undefined") {clearTimeout(top.hide);}
-
 		//ecoder_display('save','block','saving',1);
 
 		$.ajax({
 			data:{
-				ecoder_path:ecoder_path,
-				ecoder_file:ecoder_file,
+				ecoder_path:self.path,
+				ecoder_file:self.filename,
 				ecoder_content:($(self.options.tArea).val())
 			},
 			url:"code/save/edit.php",
 			type:'POST',
 			success:function() {
-				//Should give better feedback (like filename in bold when not saved)
+				//TODO Should give better feedback (like filename in bold when not saved)
 				alert("saved");
+				this.changed=false;
 			}
 		});
-
-		/*if ( ecoder_autosave == 1 && ecoder_save_on == 1 ) {      
-			var autosave=setTimeout("ecoder_save()",ec_autosave_time); // call function every x seconds ##
-		}*/
-
-		// reset change counter ##
-		ecoder_changed_stop();
 	}
 };
-
+var editor=null;
 $(document).ready(function() {
-	new CmEditor({
+	$(".editor #load_edit").css("display","none");
+	
+	editor=new CmEditor({
 		tArea:$("body.editor #editarea")[0],
 		mime:$("body.editor").attr("data-mime"),
 		readOnly:($("body.editor").attr("data-ro")=="1" ? true : false)
