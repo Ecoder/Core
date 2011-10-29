@@ -70,7 +70,7 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
 
         var ecoder_rename_clean = ecoder_path_full +'rename_'+type; // new object name ##
         var ecoder_object = ecoder_check_object( ecoder_rename_clean ); // check if object/file is open ##
-        var ecoder_rename = 'edit.php?mode='+ mode +'&path='+ path +'&file='+ file +'&type='+ type; // url to open ##
+        var ecoder_rename = 'rename.php?mode=rename&path='+ path +'&file='+ file +'&type='+ type; // url to open ##
         if ( ecoder_object ) { // rename tab open, so focus ##
             
             var parent_id; // declare ##  

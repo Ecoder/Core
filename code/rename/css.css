@@ -1,0 +1,94 @@
+/* ecoder edit stylesheet */
+
+/* generic */
+
+html, body { margin:0; padding:0; font-size: 9pt; background: #f2f2f2; font-family: verdana, helvetica, sans-serif; }
+a:link, a:hover, a:visited { text-decoration: none; color: #525252; }
+h1 { font-size: 16pt; color: #717171; padding: 6px 0 3px 10px; margin: 15px 0 3px 0; }
+p { color: #525252;  padding: 3px 0 3px 10px; margin: 0px; }
+
+body {
+	height:100%;
+}
+
+html { height: 96%; }
+
+/* javascript test & loader */
+#load_edit { position: absolute; top: 0; bottom: 0%; left: 0; right: 0%; background: url(../../skin/one/design/bg_white_80.png); z-index: 100; text-align: center; width: 100%; height: 100%; margin: 0 auto; } 
+#load_edit .spin { background-color: transparent; float: left; width: 100%; padding-top: 250px; }
+
+/* edit nav */
+.edit_nav { 
+	position: fixed; 
+	top: 0px; 
+	margin: 0; 
+	height: 28px; 
+	background: #f2f2f2; 
+	border-bottom: 1px solid #dddddd; 
+	border-top: 1px solid #dddddd; 
+	padding: 0px; 
+	left:0;
+	right:0;
+}
+.edit_nav .file { height: 18px; padding: 3px 10px 2px 8px; background: #58792A; color: #fff; }
+.edit_nav .file .name { float: left; }
+.edit_nav .file .brand { float: right; width: 150px; text-align: right; }
+.edit_nav .file .brand a { color: #fff; }
+.edit_nav .options { height: 22px; padding: 0px 0 0px 0px; border-top: 0px solid #dddddd; }
+.edit_nav .options .details { float: left; padding: 5px 12px 3px 10px; height: 10px; }
+
+/* save */
+.edit_nav .options #savebtn { float: left; height: 27px; background: url(../../skin/one/design/icon_save.png) no-repeat 5px 5px; margin: 0px; border-right: 1px solid #dddddd; }
+.edit_nav .options #savebtn span { display: block; padding: 5px 8px 5px 29px; }
+.edit_nav .options #savebtn span:hover { background: url(../../skin/one/design/icon_save.png) no-repeat 5px 5px #CDDEEE; color: #736C6C; }
+
+/* close */
+.edit_nav .options #close { float: left; height: 27px; background: url(../../skin/one/design/icon_close.png) no-repeat 5px 5px; border-right: 1px solid #dddddd; margin: 0px; }
+.edit_nav .options #close span { display: block; padding: 5px 8px 5px 29px; }
+.edit_nav .options #close span:hover { background: url(../../skin/one/design/icon_close.png) no-repeat 5px 5px #CDDEEE; color: #736C6C; }
+
+/* save report */
+#save { float: left; display: none; background: #E94400; color: #fff; padding: 5px 10px 0px 10px; }
+#save_report { float: left; background: #E94400; color: #fff; padding: 5px 10px 0px 10px; }
+#save_confirm { background: #168ECA; color: #fff; float:left; margin:3px 0pt 10px 0px; padding:5px 10px; text-align:center; }
+#save_changes { float: left; display: none; background: #dddddd; padding: 5px 10px 0px 10px; }
+
+/* brand */
+.logo { float: right; height: 27px; width: 29px; margin: 0; background: #5A7C2D; display: block; }
+.logo img { padding: 5px 6px 4px 6px; border: 0px; }
+.logo img:hover { background-color: #CDDEEE; }
+
+/* edit area */
+.content_wrapper {
+	position:absolute;
+	top:30px;
+	bottom:0;
+	left:0;
+	right:0;
+}
+
+.edit_area { 
+	height:100%;
+	overflow:scroll;
+}
+
+/* edit pages ## */
+.edit_form p#feedback {
+	display:none;
+}
+.edit_form p#feedback.error {
+	display:block;
+	border:1px solid #FF0000;
+}
+.edit_form p#feedback.success {
+	display:block;
+	border:1px solid #00FF00;
+	
+}
+.edit_form { float: left; padding: 0px 0px 0px 8px }
+.edit_form h1 { color: #8A8A8A; padding: 0 0 2px 0px; font-size: 17pt; }
+.edit_form p { color: #505050; padding: 0 0px 12px 0px; }
+.edit_form .filename { float: left; padding: 0px 10px 0 0; margin: 0 0 10px 0; clear: both; }
+.edit_form .dot { float: left; font-size: 20pt; line-height: 0.5em; padding: 2px 5px 0 5px; }
+.edit_form .text { width: 350px; font-size: 15pt; padding: 3px; }
+.edit_form .type_rename { float: left; padding: 4px 0 0 3px; font-size: 16pt; }
