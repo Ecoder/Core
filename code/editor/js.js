@@ -169,13 +169,43 @@ CmEditor.prototype={
 		});
 	}
 };
+jQuery.fn.center = function () {
+    this.css("position","absolute");
+    this.css("top", (($(window).height() - this.outerHeight()) / 2) + $(window).scrollTop() + "px");
+    this.css("left", (($(window).width() - this.outerWidth()) / 2) + $(window).scrollLeft() + "px");
+    return this;
+};
+var dialog={
+	init:function() {
+		$("#dialogoverlay").live("click",function() {
+			dialog.hide();
+		});
+		$("#dialog #closedialog").live("click",function() {
+			dialog.hide();
+		});
+	},
+	show:function(content) {
+		$("#dialog #content").html(content);
+		$("#dialogoverlay").show();
+		$("#dialog").center().show();
+		$("#dialog #innercontent").css("padding-bottom",""+($("#dialog footer").outerHeight() + 5)+"px");
+	},
+	hide:function() {
+		$("#dialogoverlay").hide();
+		$("#dialog").hide();
+		$("#dialog #content").html("");
+	}
+};
 var editor=null;
 $(document).ready(function() {
+	dialog.init();
 	$(".editor #load_edit").css("display","none");
 	
 	editor=new CmEditor({
 		tArea:$("body.editor #editarea")[0],
 		mime:$("body.editor").attr("data-mime"),
 		readOnly:($("body.editor").attr("data-ro")=="1" ? true : false)
-	})
+	});
+	
+	dialog.show("<h2>Testing</h2><div id='innercontent'><p>Some text</p></div><footer><button>button</button></footer>");
 });

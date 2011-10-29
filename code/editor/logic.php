@@ -1,5 +1,12 @@
 <?php
-include("editor.php");
+/**
+ * TODO Still lacking searchfunctionality
+ * NTH Getting more out of codemirror, like highlighting, folding, ...
+ */
+include_once "code/editor/editor.php";
+include_once "code/editor/file.php";
+include_once "code/editor/status.php";
+include_once "code/editor/filetype.php";
 /***LOGIC***/
 @ecoder_request( $_GET['mode'], $main['mode'], '' ); // mode or action ##
 @ecoder_request( $_GET['path'], $main['path'], '' ); // path to file to process ##
@@ -51,3 +58,4 @@ checkHomeFile();
 
 $file->makeBackupIfNeeded();
 $editor=new Editor();
+include "code/editor/tpl.php";

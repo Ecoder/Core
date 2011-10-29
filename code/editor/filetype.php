@@ -12,7 +12,7 @@ final class Filetype {
 	}
 	
 	//Convertors
-	public function typestring() {
+	public function s() {
 		return $this->type;
 	}
 	public function mime() {

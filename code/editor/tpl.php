@@ -2,20 +2,13 @@
 <html>
 <head>
 	<title>e<?php echo $file->name; ?></title>
-	<script src="http://code.jquery.com/jquery-1.6.4.min.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="plug/codemirror/lib/codemirror.css" />
-	<link rel="stylesheet" href="plug/codemirror/theme/default.css" />
-	<script src="plug/codemirror/lib/codemirror.js"></script>
-	<script src="plug/codemirror/mode/xml/xml.js"></script>
-	<script src="plug/codemirror/mode/javascript/javascript.js"></script>
-	<script src="plug/codemirror/mode/css/css.js"></script>
-	<script src="plug/codemirror/mode/htmlmixed/htmlmixed.js"></script>
-	<script src="plug/codemirror/mode/clike/clike.js"></script>
-	<script src="plug/codemirror/mode/php/php.js"></script>
+	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<link rel="stylesheet" href="plug/codemirror/v2-16-min.css" />
+	<script src="plug/codemirror/v2-16-min.js"></script>
 	
-	<script src="code/base/shortcuts.js" type="text/javascript"></script>
-	<script src="code/editor/js.js" type="text/javascript"></script>
-	<link href="code/editor/css.css" rel="stylesheet" type="text/css" media="screen" />
+	<script src="code/base/shortcuts.js"></script>
+	<script src="code/editor/js.js"></script>
+	<link href="code/editor/css.css" rel="stylesheet" />
 	<script type="text/javascript">
 		var ecoder_iframe = "<?php echo $main['frame_clean']; ?>"; // iframe name ## 
 		var autosave_interval="<?php echo $code['autosave_time']*1000; ?>";
@@ -26,6 +19,8 @@
 	<div id="load_edit"><div class="spin">
 		<img src="skin/one/design/loading.gif" width="45" height="45" alt="ecoder loading, please wait..." border="0" />
 	</div></div>
+	<div id="dialogoverlay"></div>
+	<div id="dialog"><span id="closedialog">&nbsp;</span><div id="content"></div></div>
 	
 	<ul class="nav">
 		<li id="save" data-status="<?php echo (int)(!$isReadOnly); ?>" title="<?php echo ($isReadOnly ? "file can't be saved": "save file"); ?>"></li>

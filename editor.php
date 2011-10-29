@@ -4,4 +4,3 @@
 //TODO cleanup. This code sucks.
 include_once "code.php";
 include_once "code/editor/logic.php";
-include "code/editor/tpl.php";

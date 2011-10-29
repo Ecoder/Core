@@ -23,7 +23,7 @@ CodeMirrorUI.prototype = {
     this.buttonDefs = {
       'search': ["Search/Replace", "find_replace_popup", this.options.path + "../images/silk/find.png", this.find_replace_popup],
       'searchClose': ["Close", "find_replace_popup_close", this.options.path + "../images/silk/cancel.png", this.find_replace_popup_close],
-      'searchDialog': ["Search/Replace", "find_replace_window", this.options.path + "../images/silk/find.png", this.find_replace_window],
+      'searchDialog': ["Search/Replace", "find_replace_window", this.options.path + "../images/silk/find.png", this.find_replace_window]
     };
 
     //place = CodeMirror.replace(place)
