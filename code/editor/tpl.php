@@ -22,20 +22,20 @@
 		top.ecoder_save_type = "<?php echo $main['mode']; ?>"; // declare ##
 	</script>
 </head>
-<body class="editor" data-mime="<?php echo $file->cmMime; ?>" data-ro="<?php echo (int)$file->isReadOnly; ?>" data-filename="<?php echo $file->name; ?>" data-path="<?php echo $file->path; ?>">
+<body class="editor" data-mime="<?php echo $file->type->mime(); ?>" data-ro="<?php echo (int)$isReadOnly; ?>" data-filename="<?php echo $file->name; ?>" data-path="<?php echo $file->path; ?>">
 	<div id="load_edit"><div class="spin">
 		<img src="skin/one/design/loading.gif" width="45" height="45" alt="ecoder loading, please wait..." border="0" />
 	</div></div>
 	
 	<ul class="nav">
-		<li id="save" data-status="<?php echo (int)(!$file->isReadOnly); ?>" title="<?php echo ($file->isReadOnly ? "file can't be saved": "save file"); ?>"></li>
-		<li id="autosave" data-status="<?php echo $file->autosaveStatus; ?>" title="turn <?php echo ($file->autosaveStatus==1 ? "on" : "off"); ?> autosave feature"></li>
+		<li id="save" data-status="<?php echo (int)(!$isReadOnly); ?>" title="<?php echo ($isReadOnly ? "file can't be saved": "save file"); ?>"></li>
+		<li id="autosave" data-status="<?php echo $editor->stAutosave->i(); ?>" title="turn <?php echo $editor->stAutosave->not()->s(); ?> autosave feature"></li>
 		<li id="reload" title="reload file"></li>
-		<li id="close" data-status="<?php echo (int)$file->canClose; ?>" title="<?php echo ($file->canClose ? "close file" : "file can't be closed"); ?>"></li>
+		<li id="close" data-status="<?php echo $editor->stClose->i(); ?>" title="<?php echo ($editor->stClose->b() ? "close file" : "file can't be closed"); ?>"></li>
 		<li id="info" titsle="instructions"></li>
-		<li id="synhl" data-status="<?php echo (int)$editor->synhl; ?>" title="turn <?php echo ($editor->synhl ? "off" : "on"); ?> syntax highlighting"></li>
-		<li id="delete" data-status="<?php echo (int)$file->canDelete; ?>" title="<?php echo ($file->canDelete ? "delete the file" : "delete option not available"); ?>"></li>
-		<li id="rename" data-status="<?php echo (int)$file->canRename; ?>" title="<?php echo ($file->canRename ? "rename the file" : "rename option not available"); ?>"></li>
+		<li id="synhl" data-status="<?php echo $editor->stSytxHl->i(); ?>" title="turn <?php echo $editor->stSytxHl->not()->s(); ?> syntax highlighting"></li>
+		<li id="delete" data-status="<?php echo $editor->stDelete->i(); ?>" title="<?php echo ($editor->stDelete->b() ? "delete the file" : "delete option not available"); ?>"></li>
+		<li id="rename" data-status="<?php echo $editor->stRename->i(); ?>" title="<?php echo ($editor->stRename->b() ? "rename the file" : "rename option not available"); ?>"></li>
 		<li id="search" data-status="-1" title="Search/Replace"></li>
 		<li id="undo" data-status="0" title="Undo"></li>
 		<li id="redo" data-status="0" title="Redo"></li>
