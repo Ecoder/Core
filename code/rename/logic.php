@@ -1,27 +1,13 @@
 <?php
 /*
  * TODO
- *  - Move nonspecific php up
  *  - Use RenameStatus and thus also translations
  *  - Move dialog up from editor
  *  - Refactor view into dialog (inc top.ecoder_files)
  *  - Pass POST JSON instead of shitload GET or POST params
  * LATER
  *  - Make loadable via index
- *  - Extend Controller to be more dynamic, input validation, ...
  */
-abstract class Controller {
-	public static $DFLT;
-	
-	public static function _init($action="") {
-		if (empty($action)) {
-			$action=static::$DFLT;
-		}
-		$st=new static();
-		call_user_func(array($st,$action));
-	}
-}
-
 final class RenameStatus {
 	const SUCCESS="SUCCESS";
 	const COULDNOTBERENAMED="COULDNOTBERENAMED";

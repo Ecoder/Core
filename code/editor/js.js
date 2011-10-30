@@ -96,16 +96,10 @@ CmEditor.prototype={
     }
 	},
 	del:function(self) {
-		top.ecoder_files('main','delete',self.path,self.filename,'file',0);
+		top.ecoder_files('main','delete',self.path,self.filename,'file',Integer(self.changed)+1);
 	},
 	rename:function(self){
-		if (this.changed) {
-			if (confirm("There are open changes. Are you sure you want to rename?")) {
-				top.ecoder_files('main','rename',self.path,self.filename,'file',0);
-			}
-		} else {
-			top.ecoder_files('main','rename',self.path,self.filename,'file',0);
-		}
+		top.ecoder_files('main','rename',self.path,self.filename,'file',Integer(self.changed)+1);
 	},
 	synhlEnable:function(self) {
 		self.codemirror.setOption("mode",self.options.mime);
@@ -119,22 +113,10 @@ CmEditor.prototype={
 		top.ecoder_loaded_base('block');
 	},
 	close:function(self) {
-		if (this.changed) {
-			if (confirm("There are open changes. Are you sure you want to close?")) {
-				top.ecoder_files(ecoder_iframe,'close',self.path,self.filename,'',0);
-			}
-		} else {
-			top.ecoder_files(ecoder_iframe,'close',self.path,self.filename,'',0);
-		}
+		top.ecoder_files(ecoder_iframe,'close',self.path,self.filename,'',Integer(self.changed)+1);
 	},
 	reload:function(self) {
-		if (this.changed) {
-			if (confirm("There are open changes. Are you sure you want to reload?")) {
-				top.ecoder_files(ecoder_iframe,'reload',self.path,self.filename,'',0);
-			}
-		} else {
-			top.ecoder_files(ecoder_iframe,'reload',self.path,self.filename,'',0);
-		}
+		top.ecoder_files(ecoder_iframe,'reload',self.path,self.filename,'',Integer(self.changed)+1);
 	},
 	autosaveEnable:function(self) {
 		$('body.editor ul.nav #autosave[data-status="0"]')

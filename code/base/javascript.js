@@ -1,4 +1,79 @@
 // main ecoder javascript ##
+String.prototype.format = function() {
+  var args = arguments;
+  return this.replace(/{(\d+)}/g, function(match, number) { 
+    return typeof args[number] != 'undefined'
+      ? args[number]
+      : match
+    ;
+  });
+};
+
+var trans={
+	rename:{
+		intro:"<p>to rename <strong>{0}</strong> enter a new name and press SAVE, to cancel click CLOSE.</p>",
+		renameOpen:"<p>you can only rename one file at a time.</p><p>pick a new name or CLOSE the current file rename operation.</p>",
+		alreadyEditing:"<p>as <strong>{0}</strong> is already open for editing you should SAVE any changes and click the rename icon to the top right to continue.</p>",
+		closeConfirm:"if you close {0} unsaved changes will be lost.\npress OK to close or CANCEL to stop."
+	}
+}
+
+function rename(path,file,type,changed) {
+	var warningMinChanges=1;
+	var cleanPath=ecoder_replace_all(path,[["/","_"]]);
+	var cleanName=ecoder_replace_all(file,[[".","_"]]);
+	var cleanPathName=cleanPath+cleanName;
+	
+	var renameTabId=cleanPath+'rename_'+type;
+	var parent_id;
+	
+	var opentab=function(tabId,type,path,file) {
+		var url='rename.php?mode=rename&path='+path+'&file='+file+'&type='+type;
+		top.ecoder_tabs_add(tabId,'rename '+type,url,'');
+		ecoder_html_title('rename '+type);
+		top.ecoder_note('note',trans.rename.intro.format(file),'5','block');
+	};
+	
+	if (ecoder_check_object(renameTabId)) { //Is rename tab open?
+		parent_id=document.getElementById(renameTabId).parentNode.id; // get id from parent ##
+		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ## //alert ( parent_id );                      
+		top.ecoder_tabs_focus(file,renameTabId,parent_id); // focus tab ##
+		top.ecoder_note('note',trans.rename.renameOpen,'5','block');
+		return;
+	}
+	
+	if (!ecoder_check_object(cleanPathName)) { // Is edit/view tab open?
+		opentab(renameTabId,type,path,file);
+		return;
+	}
+	
+	parent_id=document.getElementById(cleanPathName).parentNode.id; // get id from parent ##
+	parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##          
+	if (parent_id!=ecoder_tab) { // It isn't the current tab
+		top.ecoder_tabs_focus(file,cleanPathName,parent_id);
+		top.ecoder_note('note',trans.rename.alreadyEditing.format(file),'5','block');
+		ecoder_html_title(file);
+		return; 
+	}
+	
+	var close_do=false; // false ##
+	if (changed>warningMinChanges) { // changes made -- was > 1 TODO ##
+		if (confirm(trans.rename.closeConfirm.format(file))) { // confirm ## + changed
+			close_do=true; // ok ##
+		}    
+	} else { // no changes made ##
+		close_do=true; // ok ##       
+	}
+
+	if (close_do) { // closed confirmed and not home tab ##                     
+		if (top.ecoder_tab>0) { // close if not focused on home ##
+			top.ecoder_tabs_close();
+		}
+
+		opentab(renameTabId,type,path,file);
+	}
+	return;
+}
 
 // file functions ##
 // frame target, action || mode, file path, file name, file extension || file/folder, change tracker ##
@@ -67,85 +142,7 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
         }
         
     } else if ( ecoder_mode == 'rename' ) { // rename file or folder ##
-
-        var ecoder_rename_clean = ecoder_path_full +'rename_'+type; // new object name ##
-        var ecoder_object = ecoder_check_object( ecoder_rename_clean ); // check if object/file is open ##
-        var ecoder_rename = 'rename.php?mode=rename&path='+ path +'&file='+ file +'&type='+ type; // url to open ##
-        if ( ecoder_object ) { // rename tab open, so focus ##
-            
-            var parent_id; // declare ##  
-            parent_id = document.getElementById( ecoder_rename_clean ).parentNode.id; // get id from parent ##
-            parent_id = parent_id.replace( /tabber_panel_/, "" );// remove 'tabber_panel_' ## //alert ( parent_id );                      
-            top.ecoder_tabs_focus ( file, ecoder_rename_clean, parent_id ); // focus tab ##        
-            
-            // note ##
-            var e_note = "<p>you can only rename one file at a time.</p><p>pick a new name or CLOSE the current file rename operation.</p>";
-            top.ecoder_note ( 'note', e_note, '5', 'block' );
-
-        } else { // rename tab not open yet ##
-            
-            //alert ( "check if iframe "+ ecoder_file_clean +" open" );
-            // check if file is being edited ##
-            var ecoder_object_rename = ecoder_check_object( ecoder_file_clean ); // object name ##
-            //alert ( ecoder_file_clean );
-            if ( ecoder_object_rename ) { // file open already ##
-                //alert ( 'file open' );
-                // focus open file tab ##
-                var parent_id; // declare ##  
-                parent_id = document.getElementById( ecoder_file_clean ).parentNode.id; // get id from parent ##
-                parent_id = parent_id.replace( /tabber_panel_/, "" );// remove 'tabber_panel_' ##          
-                //alert ( parent_id + ' - ' + ecoder_tab );
-                if ( parent_id != ecoder_tab ) { // focus, if not clicked on current tab ##
-                    
-                    // focus tab ##
-                    //alert ( "focus "+ ecoder_tab +" iframe: "+ ecoder_file_clean );
-                    top.ecoder_tabs_focus ( file, ecoder_file_clean, parent_id );
-
-                    // note ##
-                    var e_note = "<p>as <strong>"+ file +"</strong> is already open for editing you should SAVE any changes and click the rename icon to the top right to continue.</p>";
-                    top.ecoder_note ( 'note', e_note, '5', 'block' );
-
-                    // set title ##     
-                    ecoder_html_title ( file );   
-                
-                } else { // current tab - so confirm close if changed and switch to rename tab ##
-                    
-                    var close_do = 0; // false ##
-                    var close_confirm = 'if you close '+ file +' unsaved changes will be lost.\npress OK to close or CANCEL to stop.'; // message ##
-                    if ( changed > ecoder_changed_min ) { // changes made -- was > 1 TODO ##
-                        if ( confirm ( close_confirm ) ) { // confirm ## + changed
-                            close_do = 1; // ok ##
-                        }    
-                    } else { // no changes made ##
-                        close_do = 1; // ok ##       
-                    }
-
-                    if ( close_do == 1 ) { // closed confirmed and not home tab ##                     
-                    
-                        if ( top.ecoder_tab > 0 ) { // close if not focused on home ##
-                            //alert ( "close "+ ecoder_tab );
-                            top.ecoder_tabs_close();
-                        }
-
-                        // add delete tab -- iframe name/id ,label, iframe url, path ##
-                        //alert ( "add rename tab" );
-                        top.ecoder_tabs_add ( ecoder_rename_clean, 'rename '+type, ecoder_rename, '' );
-
-                        // note ##
-                        var e_note = "<p>to rename <strong>"+ file +"</strong> enter a new name and press SAVE, to cancel click CLOSE.</p>";
-                        top.ecoder_note ( 'note', e_note, '5', 'block' );
-
-                    } // do close ##
-                                        
-                }
-        
-            } else { // file not being edited ##                
-                //alert ( "just open rename tab" );
-                top.ecoder_tabs_add ( ecoder_rename_clean, 'rename '+type, ecoder_rename, '' ); // add new tab -- iframe name/id ,label, iframe url, path ##  
-                ecoder_html_title ( 'rename '+type ); // set title ##          
-            }            
-        }        
-
+			rename(path,file,type,changed);
     } else if ( ecoder_mode == 'delete' ) { // delete file or folder ##
 
         var ecoder_delete_clean = ecoder_path_full +'delete_'+type; // new object name ##

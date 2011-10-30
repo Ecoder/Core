@@ -55,5 +55,4 @@ include "code/base/logic.php"; // apply settings ##
 include "code/base/functions.php"; // php functions ## 
 include "code/base/secure.php"; // secure system ##
 include "code/base/editor.php"; // editor hot swapper ## 
-
-?>
+include "code/base/controller.php";

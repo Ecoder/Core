@@ -31,7 +31,7 @@ $(document).ready(function() {
 					top.ecoder_tree('tree','reload'); // refresh tree ##
 					top.ecoder_note('note',json.msg,'5','block'); // show report ##
 					var fn=function() { top.ecoder_files(ecoder_type+'_file','close','',ecoder_type+'_file')};
-					var close_tab=setTimeout(fn,1000);
+					setTimeout(fn,1000);
 				}
 			}
 		});
