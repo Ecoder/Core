@@ -242,18 +242,6 @@ function ecoder_delete_dir ( $dir ) {
 ecoder_empty ( $path );
 */
 
-##################################################
-
-function ecoder_rename ( $from, $to, $mode ) {
-	if ( @rename ( $from, $to ) ) {
-		//chmod ( $to, octdec( $mode ) ); // TODO -- possibly ##
-		//touch ( $to, filemtime( $from ) ); // to track last modified time
-		ecoder_echo ( '', '', $from.' ~ renamed: '.$to.' | permissions:'. $mode.'' );
-	} else {
-		ecoder_echo ( '', '', 'cannot rename '.$from.' to '.$to.' | permissions:'. $mode.'' );
-	}
-}
-
 #######################################
 
 // remove special characters ## TODO - white list, include ' -, _, space' ##

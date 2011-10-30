@@ -19,7 +19,7 @@ $(document).ready(function() {
 				ext:ec_ext,
 				file_new:newname
 			},
-			url:"code/save/rename.php",
+			url:"rename.php?action=save",
 			type:'POST',
 			datatype:'json',
 			success:function(json) {
