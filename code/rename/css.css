@@ -48,7 +48,6 @@ html { height: 96%; }
 .edit_nav .options #close span:hover { background: url(../../skin/one/design/icon_close.png) no-repeat 5px 5px #CDDEEE; color: #736C6C; }
 
 /* save report */
-#save { float: left; display: none; background: #E94400; color: #fff; padding: 5px 10px 0px 10px; }
 #save_report { float: left; background: #E94400; color: #fff; padding: 5px 10px 0px 10px; }
 #save_confirm { background: #168ECA; color: #fff; float:left; margin:3px 0pt 10px 0px; padding:5px 10px; text-align:center; }
 #save_changes { float: left; display: none; background: #dddddd; padding: 5px 10px 0px 10px; }

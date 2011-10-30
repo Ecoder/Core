@@ -35,8 +35,6 @@
 					<span title="close<?php echo $html['title']; ?>">CLOSE</span>
 				</div>
 				<div class="details"><?php echo $main['path']; ?><strong><?php echo $html['title']; ?></strong></div>
-				<div id="save">enter the new <?php echo $main['type']; ?> name</div>
-				<div id="save_changes"></div>
 				<div class="logo">
 					<span title="<?php echo $code['name']; ?> instructions">
 						<img src="skin/one/design/icon_ecoder.png" alt="<?php echo $code['name']; ?> instructions" />

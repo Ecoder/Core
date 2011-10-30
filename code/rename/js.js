@@ -10,7 +10,6 @@ $(document).ready(function() {
 		if (newname=="") { // validate ##
 			var e_note = "<p>you have not entered a new name for <strong>"+ec_html_title+"</strong>, please complete the box and then press SAVE.</p>";
 			top.ecoder_note('note',e_note,'5','block');
-			return false;        
 		}
 		$.ajax({
 			data:{
@@ -24,11 +23,11 @@ $(document).ready(function() {
 			type:'POST',
 			datatype:'json',
 			success:function(json) {
+				json=$.parseJSON(json);
 				if (json.code!=1) {
-					$("#feedback").removeClass("success").addClass("error").html("to rename "+ecoder_path+ec_html_title+" enter a new name, without extension and save.")
-					$("#save").html(json.msg).show();
+					$("#feedback").removeClass("success").addClass("error").html(json.msg);
 				} else {
-					$("#feedback").removeClass("success").addClass("success").html("this tab will close itself now.");
+					$("#feedback").removeClass("error").addClass("success").html("this tab will close itself now.");
 					top.ecoder_tree('tree','reload'); // refresh tree ##
 					top.ecoder_note('note',json.msg,'5','block'); // show report ##
 					var fn=function() { top.ecoder_files(ecoder_type+'_file','close','',ecoder_type+'_file')};
