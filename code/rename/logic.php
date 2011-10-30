@@ -39,11 +39,12 @@ class Rename extends Controller {
 	
 	public function save() {
 		global $code; //sigh
-		$this->path=(isset($_POST['path']) ? $_POST['path'] : "");
-		$this->name=(isset($_POST['file']) ? $_POST['file'] : "");
-		$this->type=(isset($_POST['type']) ? $_POST['type'] : "");
-		$this->ext=(isset($_POST['ext']) ? $_POST['ext'] : "");
-		$newname=(isset($_POST['file_new']) ? $_POST['file_new'] : "");
+		$i=Input::_get();
+		$this->path=($i->path ?: "");
+		$this->name=($i->file ?: "");
+		$this->type=($i->type ?: "");
+		$this->ext=($i->ext ?: "");
+		$newname=($i->file_new ?: "");
 		$newname=preg_replace('/[^0-9A-Za-z.]/', '_',$newname);
 
 		$filepath="%s%s%s%s%s";

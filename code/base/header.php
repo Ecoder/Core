@@ -10,13 +10,13 @@ echo '<!--[if IE]><?xml version="1.0" encoding="UTF-8"?><![endif]-->
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
     <head>
-				<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+				<script src="http://code.jquery.com/jquery-'.$code['jQuery'].'.min.js"></script>
+				<script src="plug/jq_json-'.$code['jQ_json'].'.min.js"></script>
         <title>'.$code['name'].'</title>
         <meta http-equiv="content-Type" content="text/html; charset=UTF-8" />
         <meta http-equiv="content-language" content="en" />
         <meta name="robots" content="noindex,nofollow" />
         <meta name="author" content="GMEditor.com" />
-				<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"; type="text/javascript"></script>
         <link rel="stylesheet" type="text/css" media="screen" href="'.$code['skin_path'].'base.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="'.$code['skin_path'].'tabs.css" />';
         include "code/base/css.php"; // browser specific base css ## 

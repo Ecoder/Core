@@ -3,7 +3,8 @@
 	<head>
 		<title>e<?php echo $this->name; ?></title>
 		<meta http-equiv="content-Type" content="text/html; charset=UTF-8" />
-		<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+		<script src="http://code.jquery.com/jquery-<?php echo $code['jQuery']; ?>.min.js"></script>
+		<script src="plug/jq_json-<?php echo $code['jQ_json']; ?>.min.js"></script>
 		<script src="code/base/shortcuts.js"></script>
 		
 		<script>
@@ -20,12 +21,6 @@
 		<link href="code/rename/css.css" rel="stylesheet" />
 	</head>
 	<body>
-		<div id="load_edit">
-			<div class="spin">
-				<img src="skin/one/design/loading.gif" width="45" height="45" alt="ecoder loading, please wait..." border="0">
-			</div>
-		</div>
-		
 		<div class="edit_nav">
 			<div class="options">
 				<div id="savebtn">

@@ -21,6 +21,10 @@ $code['backup'] = 1; // 1 = on || 0 = off -- create backup copy of files opened 
 #$code['domain'] = "http://www.gmeditor.com/"; // domain name ##
 $code['name'] = "ecoder"; // system name ##
 $code['version'] = "v 0.5.0m1"; // system version ##
+//Version keepers
+$code['jQuery']="1.6.4";
+$code['codemirror']="2.16";
+$code['jQ_json']="2.3";
 
 // security settings ##
 $code['secure'] = 0; // 0 = not secured || 1 = secured, uses settings below ##
@@ -56,3 +60,6 @@ include "code/base/functions.php"; // php functions ##
 include "code/base/secure.php"; // secure system ##
 include "code/base/editor.php"; // editor hot swapper ## 
 include "code/base/controller.php";
+include "code/base/input.php";
+
+$i=Input::_get();

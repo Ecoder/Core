@@ -1,10 +1,7 @@
 //dirty code ahead...
 //This can under no circumstances be moved to the topframe without rewriting
-if ( top === self ) { document.location='index.php'; }
 
 $(document).ready(function() {
-	$("#load_edit").hide();
-	
 	$(".edit_nav #savebtn span").click(function() {
 		var newname=$("#filenewname").val();
 		if (newname=="") { // validate ##
@@ -12,14 +9,14 @@ $(document).ready(function() {
 			top.ecoder_note('note',e_note,'5','block');
 		}
 		$.ajax({
-			data:{
+			data:{json:$.toJSON({
 				path:ecoder_path,
 				file:ec_html_title,
 				type:ecoder_type,
 				ext:ec_ext,
 				file_new:newname
-			},
-			url:"rename.php?action=save",
+			})},
+			url:"rename.php?controller=rename&action=save",
 			type:'POST',
 			datatype:'json',
 			success:function(json) {

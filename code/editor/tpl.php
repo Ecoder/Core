@@ -2,9 +2,10 @@
 <html>
 <head>
 	<title>e<?php echo $file->name; ?></title>
-	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-	<link rel="stylesheet" href="plug/codemirror/v2-16-min.css" />
-	<script src="plug/codemirror/v2-16-min.js"></script>
+	<script src="http://code.jquery.com/jquery-<?php echo $code['jQuery']; ?>.min.js"></script>
+	<script src="plug/jq_json-<?php echo $code['jQ_json']; ?>.min.js"></script>
+	<link rel="stylesheet" href="plug/codemirror-<?php echo $code['codemirror']; ?>.min.css" />
+	<script src="plug/codemirror-<?php echo $code['codemirror']; ?>.min.js"></script>
 	
 	<script src="code/base/shortcuts.js"></script>
 	<script src="code/editor/js.js"></script>
