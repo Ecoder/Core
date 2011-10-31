@@ -20,8 +20,6 @@
 	<div id="load_edit"><div class="spin">
 		<img src="skin/one/design/loading.gif" width="45" height="45" alt="ecoder loading, please wait..." border="0" />
 	</div></div>
-	<div id="dialogoverlay"></div>
-	<div id="dialog"><span id="closedialog">&nbsp;</span><div id="content"></div></div>
 	
 	<ul class="nav">
 		<li id="save" data-status="<?php echo (int)(!$isReadOnly); ?>" title="<?php echo ($isReadOnly ? "file can't be saved": "save file"); ?>"></li>

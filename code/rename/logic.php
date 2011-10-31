@@ -2,11 +2,9 @@
 /*
  * TODO
  *  - Use RenameStatus and thus also translations
- *  - Move dialog up from editor
- *  - Refactor view into dialog (inc top.ecoder_files)
- *  - Pass POST JSON instead of shitload GET or POST params
  * LATER
  *  - Make loadable via index
+ *  - Unify output via output class which always sends json which might contain html field
  */
 final class RenameStatus {
 	const SUCCESS="SUCCESS";
@@ -19,22 +17,22 @@ class Rename extends Controller {
 	public static $DFLT="form";
 	private $path,$name,$type,$ext;
 	
-	public function form() {
+	public function dialog() {
 		global $code; //sigh
 		//This should mostly be moved to constructor
-		$this->path=(isset($_GET['path']) ? $_GET['path'] : "");
-		$this->name=(isset($_GET['file']) ? $_GET['file'] : "");
-		$this->type=(isset($_GET['type']) ? $_GET['type'] : "");
-		$this->ext="";
-		if ($this->_isFile()) {
-			$exta=explode('.',$this->name);
-			$this->ext=end($exta);
-		}
+		$i=Input::_get();
+		$this->path=($i->path ?: "");
+		$this->name=($i->file ?: "");
+		$this->type=($i->type ?: "");
+		$this->ext=($i->ext ?: "");
 		//Until here
 		$vv=new StdClass(); //ViewVariables
 		$vv->pframename='rename_'.$this->type;
 		$vv->fframename=ecoder_iframe_clean($this->path.$vv->pframename);
-		include "code/rename/tpl.php";
+		ob_start();
+		include "code/rename/dialog.php";
+		$html=ob_get_clean();
+		echo json_encode(array("html"=>$html));
 	}
 	
 	public function save() {

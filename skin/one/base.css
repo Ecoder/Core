@@ -87,3 +87,86 @@ iframe { display:block; width:100%; border:none; }
 #note_x { width: 20px; height: 18px; text-align: center; }
 #note_clock { width: 19px; height: 18px; text-align: center; color: #CFB8B8; }
 
+#dialogoverlay {
+	height:auto;
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	background:#FFFFFF;
+	opacity:.7;
+	display:none;
+	z-index:1000;
+}
+#dialog {
+	height:auto;
+	display:none;
+	background:#FFFFFF;
+	position:absolute;
+	min-width:300px;
+	min-height:200px;
+	opacity:1;
+	border:5px solid #58792A;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	z-index:1001;
+}
+#dialog h2 {
+	background:#58792A;
+	text-transform:uppercase;
+	color:#FFFFFF;
+	margin:0;
+	padding:2px 2px 2px 5px;
+	height:20px;
+	font-size:0.9em;
+}
+#dialog #closedialog {
+	background-image: url(design/icon_close.png);
+	width:18px;
+	height:18px;
+	position:absolute;
+	right:0;
+	top:0;
+	display:block;
+}
+#dialog #innercontent {
+	padding:5px 5px 5px 5px;
+	height:auto;
+}
+#dialog #innercontent p:first-child {
+	padding:0;
+	margin:0;
+}
+#dialog footer {
+	background:#58792A;
+	position:absolute;
+	bottom:0;
+	width:100%;
+}
+
+/** DIALOG.RENAME **/
+div.dialogcontentwrapper.rename {
+	
+}
+	div.dialogcontentwrapper.rename #feedback {
+		display:none;
+	}
+	div.dialogcontentwrapper.rename #feedback.error {
+		display:block;
+		border:1px solid #FF0000;
+	}
+	div.dialogcontentwrapper.rename #feedback.success {
+		display:block;
+		border:1px solid #00FF00;
+	}
+	div.dialogcontentwrapper.rename #feedback.info {
+		display:block;
+		border:1px solid #0000FF;
+	}
+	div.dialogcontentwrapper.rename .submit {
+		background:#FFFFFF;
+		text-transform: uppercase;
+		display: block;
+	}

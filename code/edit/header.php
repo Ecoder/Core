@@ -21,20 +21,7 @@ echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     include "code/edit/editarea_ini.php"; 
     
     } // file loaded ##*/
-		?>
-		<link rel="stylesheet" href="plug/codemirror-ui/lib/CodeMirror-2.0/lib/codemirror.css" />
-		<link rel="stylesheet" href="plug/codemirror-ui/lib/CodeMirror-2.0/theme/default.css" />
-    <script src="plug/codemirror-ui/lib/CodeMirror-2.0/lib/codemirror.js"></script>
-    <script src="plug/codemirror-ui/lib/CodeMirror-2.0/mode/xml/xml.js"></script>
-    <script src="plug/codemirror-ui/lib/CodeMirror-2.0/mode/javascript/javascript.js"></script>
-    <script src="plug/codemirror-ui/lib/CodeMirror-2.0/mode/css/css.js"></script>
-    <script src="plug/codemirror-ui/lib/CodeMirror-2.0/mode/htmlmixed/htmlmixed.js"></script>
-		<script src="plug/codemirror-ui/lib/CodeMirror-2.0/mode/clike/clike.js"></script>
-    <script src="plug/codemirror-ui/lib/CodeMirror-2.0/mode/php/php.js"></script>
 		
-		<script src="plug/codemirror-ui/js/codemirror-ui.js" type="text/javascript"></script>
-		<link rel="stylesheet" href="plug/codemirror-ui/css/codemirror-ui.css" type="text/css" media="screen" />
-		<?php
     echo '
     <script src="code/base/shortcuts.js" type="text/javascript"></script>
     <script src="code/edit/javascript.js" type="text/javascript"></script>

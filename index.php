@@ -10,7 +10,10 @@ include "code/base/header.php"; // html header, branding ##
     // build main structure ##
     echo '
     </head>
-    <body>';
+    <body>
+		<div id="dialogoverlay"></div>
+	<div id="dialog"><span id="closedialog">&nbsp;</span><div id="dialogcontent"></div></div>
+	';
     
     // test if javascript enabled ##
     include "code/base/loader.php"; 

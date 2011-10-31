@@ -2,6 +2,7 @@
 class Input {
 	private static $_instance;
 	private $data;
+	private $raw;
 	
 	public function __set($name, $value) {
 		$this->data[$name] = $value;
@@ -21,8 +22,9 @@ class Input {
 	
 	private function __construct() {
 		if (isset($_POST['json'])) {
-			$j=json_decode($_POST['json'],true);
-			foreach ($j as $k=>$v) {
+			$this->raw=$_POST['json'];
+			$arr=json_decode($_POST['json'],true);
+			foreach ($arr as $k=>$v) {
 				$this->$k=$v;
 			}
 		}
@@ -33,5 +35,9 @@ class Input {
 			self::$_instance=new Input();
 		}
 		return self::$_instance;
+	}
+	
+	public static function raw() {
+		return self::_get()->raw;
 	}
 }

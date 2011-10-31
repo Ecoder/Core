@@ -1,12 +1,10 @@
 // main ecoder javascript ##
-String.prototype.format = function() {
-  var args = arguments;
-  return this.replace(/{(\d+)}/g, function(match, number) { 
-    return typeof args[number] != 'undefined'
-      ? args[number]
-      : match
-    ;
-  });
+
+jQuery.fn.center = function () {
+	this.css("position","absolute");
+	this.css("top", (($(window).height() - this.outerHeight()) / 2) + $(window).scrollTop() + "px");
+	this.css("left", (($(window).width() - this.outerWidth()) / 2) + $(window).scrollLeft() + "px");
+	return this;
 };
 
 var trans={
@@ -16,7 +14,116 @@ var trans={
 		alreadyEditing:"<p>as <strong>{0}</strong> is already open for editing you should SAVE any changes and click the rename icon to the top right to continue.</p>",
 		closeConfirm:"if you close {0} unsaved changes will be lost.\npress OK to close or CANCEL to stop."
 	}
+};
+
+var dialog={
+	init:function() {
+		$("#dialogoverlay").live("click",function() {
+			dialog.hide();
+		});
+		$("#dialog #closedialog").live("click",function() {
+			dialog.hide();
+		});
+	},
+	show:function(content) {
+		$("#dialog #dialogcontent").html(content);
+		$("#dialogoverlay").show();
+		$("#dialog").center().show();
+		$("#dialog #innercontent").css("padding-bottom",""+($("#dialog footer").outerHeight() + 5)+"px");
+	},
+	hide:function() {
+		$("#dialogoverlay").hide();
+		$("#dialog").hide();
+		$("#dialog #dialogcontent").html("");
+	}
+};
+
+function callAction(controller,action,data,fn) {
+	$.ajax({
+		data:{json:JSON.stringify(data)},
+		url:"rename.php?controller="+controller+"&action="+action,
+		type:'POST',
+		datatype:'json',
+		success:function(json) {
+			json=JSON.parse(json);
+			fn(json);
+		}
+	});
 }
+
+function setLiveEvents() {
+	dialog.init();
+	rename_v2.setLiveEvents();
+}
+/*
+ * TODO
+ *  - Replace path, name, type, ext variables by file object.
+ */
+var rename_v2={
+	path:null,
+	name:null,
+	type:null,
+	ext:null,
+	setLiveEvents:function() {
+		$('.rename .submit').live("click",function() {rename_v2.save();});
+	},
+	setFeedback:function(msg,type) {
+		$(".rename #feedback").html(msg).removeClass("success error info").addClass(type);
+	},
+	init:function(path,name,type,changed) {
+		this.path=path;
+		this.name=name;
+		this.type=type;
+		this.ext=name.split('.').lastVal();
+		
+		if (this._IsOpenEdit()) {
+			//TODO error
+			return;
+		}
+		callAction("rename","dialog",{
+				path:this.path,
+				file:this.name,
+				type:this.type,
+				ext:this.ext
+			},function(json) {
+				dialog.show(json.html);
+			}
+		);
+		//Check if file is open in editmode
+		//	T: Error and return
+		//Open dialog for file
+		//Save event can be live'd
+	},
+	_IsOpenEdit:function() {
+		var cleanPath=ecoder_replace_all(this.path,[["/","_"]]);
+		var cleanName=ecoder_replace_all(this.name,[[".","_"]]);
+		var cleanPathName=cleanPath+cleanName;
+		return ecoder_check_object(cleanPathName);
+	},
+	save:function() {
+		var i=rename_v2;
+		var newname=$("#filenewname").val();
+		if (newname=="") {
+			var e_note = "<p>you have not entered a new name for <strong>"+ec_html_title+"</strong>, please complete the box and then press SAVE.</p>";
+			i.setFeedback(e_note,"error");
+		}
+		callAction("rename","save",{
+				path:i.path,
+				file:i.name,
+				type:i.type,
+				ext:i.ext,
+				file_new:newname
+			},function(json) {
+				if (json.code!=1) {
+					i.setFeedback(json.msg,"error");
+					return;
+				}
+				i.setFeedback(json.msg,"success");
+				ecoder_tree('tree','reload');
+			}
+		);
+	}
+};
 
 function rename(path,file,type,changed) {
 	var warningMinChanges=1;
@@ -123,7 +230,7 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
         }       
 
         if ( swap_do == 1 ) {
-            top.frames[frame].location='edit.php?'+ path +'&editor='+ type; // call ##
+            top.frames[frame].location='editor.php?'+ path +'&editor='+ type; // call ##
             ecoder_editor = ecoder_type; // update ecoder_editor variable if swapped ##
         }
 
@@ -142,7 +249,7 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
         }
         
     } else if ( ecoder_mode == 'rename' ) { // rename file or folder ##
-			rename(path,file,type,changed);
+			rename_v2.init(path,file,type,changed);
     } else if ( ecoder_mode == 'delete' ) { // delete file or folder ##
 
         var ecoder_delete_clean = ecoder_path_full +'delete_'+type; // new object name ##
@@ -275,7 +382,7 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
     } else if ( ecoder_mode == 'read' || ecoder_mode == 'edit' ) { // edit or read ##            
         
         var ecoder_object = ecoder_check_object( ecoder_file_clean ); // check if object/file is open ##
-        var ecoder_file = 'edit.php?mode='+ mode +'&path='+ path +'&file='+ file +'&type='+ type; // url to open ##
+        var ecoder_file = 'editor.php?mode='+ mode +'&path='+ path +'&file='+ file +'&type='+ type; // url to open ##
         if ( ecoder_object ) { // tab open, so focus ##
             
             var parent_id; // declare ##  
@@ -399,7 +506,7 @@ function ecoder_note_track ( track ) {
 
 // countdown ( div, seconds )
 function ecoder_count ( c_div, c_time ){
-     if ( typeof ( note_clock ) != "undefined" ) { clearTimeout ( note_clock ); } // clear if counting already ##
+     if ( typeof ( note_clock ) != "undefined" ) {clearTimeout ( note_clock );} // clear if counting already ##
      document.getElementById( c_div ).innerHTML = c_time; // return value to div ##
      if ( c_time > 0 ){ // continue ##
         ecoder_count_time = c_time; // update ##   
@@ -576,3 +683,6 @@ function addLoadEvent( func ) {
 
 // ----------------------------------------------------------------------------------------------------------
 
+$(document).ready(function() {
+	setLiveEvents();
+});
