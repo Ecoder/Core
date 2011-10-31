@@ -41,3 +41,16 @@ class Input {
 		return self::_get()->raw;
 	}
 }
+
+class Output {
+	private static $data;
+	
+	public static function add($k,$v) {
+		self::$data[$k]=$v;
+	}
+	
+	public static function send() {
+		echo json_encode(self::$data);
+		exit;
+	}
+}

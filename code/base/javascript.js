@@ -76,9 +76,15 @@ var rename_v2={
 		this.type=type;
 		this.ext=name.split('.').lastVal();
 		
+		//Very dirty code for now, thanks to tabs api.
 		if (this._IsOpenEdit()) {
-			//TODO error
-			return;
+			if (this._IsNotCurrentOpenThenSwitch()) {
+				return
+			}
+			if (!this.IsCurrentOpenThenAskIfClose(changed)) {
+				return;
+			}
+			
 		}
 		callAction("rename","dialog",{
 				path:this.path,
@@ -89,16 +95,47 @@ var rename_v2={
 				dialog.show(json.html);
 			}
 		);
-		//Check if file is open in editmode
-		//	T: Error and return
-		//Open dialog for file
-		//Save event can be live'd
 	},
+	//TODO: Refactor tabs engine -_-
 	_IsOpenEdit:function() {
 		var cleanPath=ecoder_replace_all(this.path,[["/","_"]]);
 		var cleanName=ecoder_replace_all(this.name,[[".","_"]]);
 		var cleanPathName=cleanPath+cleanName;
 		return ecoder_check_object(cleanPathName);
+	},
+	_IsNotCurrentOpenThenSwitch:function() {
+		var cleanPath=ecoder_replace_all(this.path,[["/","_"]]);
+		var cleanName=ecoder_replace_all(this.name,[[".","_"]]);
+		var cleanPathName=cleanPath+cleanName;
+		var parent_id=document.getElementById(cleanPathName).parentNode.id; // get id from parent ##
+		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##          
+		if (parent_id!=ecoder_tab) { // It isn't the current tab
+			top.ecoder_tabs_focus(file,cleanPathName,parent_id);
+			top.ecoder_note('note',trans.rename.alreadyEditing.format(file),'5','block');
+			ecoder_html_title(file);
+			return true; 
+		}
+		return false
+	},
+	IsCurrentOpenThenAskIfClose:function(changed) {
+		var close_do=false; // false ##
+		//Checking for changes won't work with old change api so disabling for now
+		//if (changed>1) { // changes made -- was > 1 TODO ##
+			if (confirm(trans.rename.closeConfirm.format(this.name))) { // confirm ## + changed
+				close_do=true; // ok ##
+			}    
+		/*} else { // no changes made ##
+			close_do=true; // ok ##       
+		}*/
+
+		if (close_do) { // closed confirmed and not home tab ##                     
+			if (top.ecoder_tab>0) { // close if not focused on home ##
+				top.ecoder_tabs_close();
+			}
+
+			return true;
+		}
+		return false;
 	},
 	save:function() {
 		var i=rename_v2;
@@ -124,63 +161,6 @@ var rename_v2={
 		);
 	}
 };
-
-function rename(path,file,type,changed) {
-	var warningMinChanges=1;
-	var cleanPath=ecoder_replace_all(path,[["/","_"]]);
-	var cleanName=ecoder_replace_all(file,[[".","_"]]);
-	var cleanPathName=cleanPath+cleanName;
-	
-	var renameTabId=cleanPath+'rename_'+type;
-	var parent_id;
-	
-	var opentab=function(tabId,type,path,file) {
-		var url='rename.php?mode=rename&path='+path+'&file='+file+'&type='+type;
-		top.ecoder_tabs_add(tabId,'rename '+type,url,'');
-		ecoder_html_title('rename '+type);
-		top.ecoder_note('note',trans.rename.intro.format(file),'5','block');
-	};
-	
-	if (ecoder_check_object(renameTabId)) { //Is rename tab open?
-		parent_id=document.getElementById(renameTabId).parentNode.id; // get id from parent ##
-		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ## //alert ( parent_id );                      
-		top.ecoder_tabs_focus(file,renameTabId,parent_id); // focus tab ##
-		top.ecoder_note('note',trans.rename.renameOpen,'5','block');
-		return;
-	}
-	
-	if (!ecoder_check_object(cleanPathName)) { // Is edit/view tab open?
-		opentab(renameTabId,type,path,file);
-		return;
-	}
-	
-	parent_id=document.getElementById(cleanPathName).parentNode.id; // get id from parent ##
-	parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##          
-	if (parent_id!=ecoder_tab) { // It isn't the current tab
-		top.ecoder_tabs_focus(file,cleanPathName,parent_id);
-		top.ecoder_note('note',trans.rename.alreadyEditing.format(file),'5','block');
-		ecoder_html_title(file);
-		return; 
-	}
-	
-	var close_do=false; // false ##
-	if (changed>warningMinChanges) { // changes made -- was > 1 TODO ##
-		if (confirm(trans.rename.closeConfirm.format(file))) { // confirm ## + changed
-			close_do=true; // ok ##
-		}    
-	} else { // no changes made ##
-		close_do=true; // ok ##       
-	}
-
-	if (close_do) { // closed confirmed and not home tab ##                     
-		if (top.ecoder_tab>0) { // close if not focused on home ##
-			top.ecoder_tabs_close();
-		}
-
-		opentab(renameTabId,type,path,file);
-	}
-	return;
-}
 
 // file functions ##
 // frame target, action || mode, file path, file name, file extension || file/folder, change tracker ##

@@ -1,4 +1,4 @@
-<div class="dialogcontentwrapper rename" data-json="<?php echo htmlspecialchars(Input::raw(),ENT_QUOTES); ?>">
+<div class="dialogcontentwrapper rename">
 	<h2>Rename <?php echo $this->path; ?><?php echo $this->name; ?></h2>
 	<div id='innercontent'>
 		<p id="feedback" class="info">Enter a new name and press save, or cancel by closing the dialog.</p>

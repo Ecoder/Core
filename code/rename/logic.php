@@ -4,7 +4,8 @@
  *  - Use RenameStatus and thus also translations
  * LATER
  *  - Make loadable via index
- *  - Unify output via output class which always sends json which might contain html field
+ *  - Extend VC-framework so a controller can have a definition
+ *			of its actions including needed input.
  */
 final class RenameStatus {
 	const SUCCESS="SUCCESS";
@@ -18,7 +19,6 @@ class Rename extends Controller {
 	private $path,$name,$type,$ext;
 	
 	public function dialog() {
-		global $code; //sigh
 		//This should mostly be moved to constructor
 		$i=Input::_get();
 		$this->path=($i->path ?: "");
@@ -26,13 +26,11 @@ class Rename extends Controller {
 		$this->type=($i->type ?: "");
 		$this->ext=($i->ext ?: "");
 		//Until here
-		$vv=new StdClass(); //ViewVariables
-		$vv->pframename='rename_'.$this->type;
-		$vv->fframename=ecoder_iframe_clean($this->path.$vv->pframename);
 		ob_start();
 		include "code/rename/dialog.php";
 		$html=ob_get_clean();
-		echo json_encode(array("html"=>$html));
+		Output::add("html",$html);
+		return;
 	}
 	
 	public function save() {
@@ -64,8 +62,9 @@ class Rename extends Controller {
 			$res='the '.$this->type.' <strong>'.$this->name.'</strong> does not exist, please close the tab and try again.';
 			$resc=0;
 		}
-
-		echo json_encode(array("msg"=>$res,"code"=>$resc));
+		Output::add("msg",$res);
+		Output::add("code",$resc);
+		return;
 	}
 	
 	private function _isFile() {

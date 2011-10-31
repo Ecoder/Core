@@ -60,6 +60,6 @@ include "code/base/functions.php"; // php functions ##
 include "code/base/secure.php"; // secure system ##
 include "code/base/editor.php"; // editor hot swapper ## 
 include "code/base/controller.php";
-include "code/base/input.php";
+include "code/base/io.php";
 
 $i=Input::_get();

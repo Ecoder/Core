@@ -12,5 +12,6 @@ abstract class Controller {
 		}
 		$st=new static();
 		call_user_func(array($st,$action));
+		Output::send();
 	}
 }
