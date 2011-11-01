@@ -1,13 +1,13 @@
 <div class="dialogcontentwrapper rename">
-	<h2>Rename <?php echo $this->path; ?><?php echo $this->name; ?></h2>
+	<h2><?php echo translation_format($translations->rename->dialogTitle,array("path"=>$this->path,"name"=>$this->name)); ?></h2>
 	<div id='innercontent'>
-		<p id="feedback" class="info">Enter a new name and press save, or cancel by closing the dialog.</p>
+		<p id="feedback" class="info"><?php echo $translations->rename->intro; ?></p>
 		<p>
 			<input id="filenewname" type="text" value="" />
 			<span>.<?php echo $this->ext; ?></span>
 		</p>
 	</div>
 	<footer>
-		<span class="submit button">save</span>
+		<span class="submit button"><?php echo $translations->rename->saveButton; ?></span>
 	</footer>
 </div>

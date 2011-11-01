@@ -19,6 +19,7 @@ class Rename extends Controller {
 	private $path,$name,$type,$ext;
 	
 	public function dialog() {
+		global $translations;
 		//This should mostly be moved to constructor
 		$i=Input::_get();
 		$this->path=($i->path ?: "");

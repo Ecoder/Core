@@ -7,15 +7,6 @@ jQuery.fn.center = function () {
 	return this;
 };
 
-var trans={
-	rename:{
-		intro:"<p>to rename <strong>{0}</strong> enter a new name and press SAVE, to cancel click CLOSE.</p>",
-		renameOpen:"<p>you can only rename one file at a time.</p><p>pick a new name or CLOSE the current file rename operation.</p>",
-		alreadyEditing:"<p>as <strong>{0}</strong> is already open for editing you should SAVE any changes and click the rename icon to the top right to continue.</p>",
-		closeConfirm:"if you close {0} unsaved changes will be lost.\npress OK to close or CANCEL to stop."
-	}
-};
-
 var dialog={
 	init:function() {
 		$("#dialogoverlay").live("click",function() {
@@ -110,9 +101,9 @@ var rename_v2={
 		var parent_id=document.getElementById(cleanPathName).parentNode.id; // get id from parent ##
 		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##          
 		if (parent_id!=ecoder_tab) { // It isn't the current tab
-			top.ecoder_tabs_focus(file,cleanPathName,parent_id);
-			top.ecoder_note('note',trans.rename.alreadyEditing.format(file),'5','block');
-			ecoder_html_title(file);
+			top.ecoder_tabs_focus(this.file,cleanPathName,parent_id);
+			top.ecoder_note('note',translations.rename.alreadyEditing.format({name:this.file}),'5','block');
+			ecoder_html_title(this.file);
 			return true; 
 		}
 		return false
@@ -121,7 +112,7 @@ var rename_v2={
 		var close_do=false; // false ##
 		//Checking for changes won't work with old change api so disabling for now
 		//if (changed>1) { // changes made -- was > 1 TODO ##
-			if (confirm(trans.rename.closeConfirm.format(this.name))) { // confirm ## + changed
+			if (confirm(translations.rename.closeConfirm.format({name:this.name}))) { // confirm ## + changed
 				close_do=true; // ok ##
 			}    
 		/*} else { // no changes made ##
@@ -141,8 +132,7 @@ var rename_v2={
 		var i=rename_v2;
 		var newname=$("#filenewname").val();
 		if (newname=="") {
-			var e_note = "<p>you have not entered a new name for <strong>"+ec_html_title+"</strong>, please complete the box and then press SAVE.</p>";
-			i.setFeedback(e_note,"error");
+			i.setFeedback(translations.rename.noNameEntered.format({name:i.name}),"error");
 		}
 		callAction("rename","save",{
 				path:i.path,
@@ -662,7 +652,15 @@ function addLoadEvent( func ) {
 }
 
 // ----------------------------------------------------------------------------------------------------------
-
+var translations=null;
 $(document).ready(function() {
 	setLiveEvents();
+	
+	$.ajax({
+		url:"translations.json",
+		datatype:'json',
+		success:function(msg) { 
+			translations=msg[$("body").attr("data-lang")]; 
+		}
+	});
 });

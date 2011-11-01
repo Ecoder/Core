@@ -299,4 +299,8 @@ function ecoder_echo ( $GM_e, $GM_e_name, $GM_e_comment='' ) {
 GM_e($variable,'$variable','this is my comment');
 */
 
-?>
+function translation_format($str,$args) {
+	return preg_replace_callback("({[A-Za-z0-9_]+})",function($matches) use ($args) {
+		return $args[trim($matches[0],"{}")];
+	},$str);
+}

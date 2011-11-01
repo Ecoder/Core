@@ -21,6 +21,7 @@ $code['backup'] = 1; // 1 = on || 0 = off -- create backup copy of files opened 
 #$code['domain'] = "http://www.gmeditor.com/"; // domain name ##
 $code['name'] = "ecoder"; // system name ##
 $code['version'] = "v 0.5.0m1"; // system version ##
+$code['lang']="en";
 //Version keepers
 $code['jQuery']="1.6.4";
 $code['codemirror']="2.16";
@@ -63,3 +64,7 @@ include "code/base/controller.php";
 include "code/base/io.php";
 
 $i=Input::_get();
+$x=json_decode(file_get_contents("translations.json"));
+$y=$code["lang"];
+$translations=$x->$y;
+unset($x,$y);

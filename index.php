@@ -10,7 +10,7 @@ include "code/base/header.php"; // html header, branding ##
     // build main structure ##
     echo '
     </head>
-    <body>
+    <body data-lang="'.$code['lang'].'">
 		<div id="dialogoverlay"></div>
 	<div id="dialog"><span id="closedialog">&nbsp;</span><div id="dialogcontent"></div></div>
 	';

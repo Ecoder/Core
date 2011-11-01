@@ -14,8 +14,8 @@
 Object.defineProperty(String.prototype,'format',{
 	value:function() {
 		var args = arguments;
-		return this.replace(/{(\d+)}/g, function(match, number) { 
-			return typeof args[number] != 'undefined' ? args[number] : match;
+		return this.replace(/{([A-Za-z0-9_]+)}/g, function(match, number) { 
+			return typeof args.number != 'undefined' ? args.number : match;
 		})
 	}
 });
