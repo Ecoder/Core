@@ -96,10 +96,10 @@ CmEditor.prototype={
     }
 	},
 	del:function(self) {
-		top.ecoder_files('main','delete',self.path,self.filename,'file',Integer(self.changed)+1);
+		top.del.init(self.path,self.filename,'file',parseInt(self.changed)+1);
 	},
 	rename:function(self){
-		top.ecoder_files('main','rename',self.path,self.filename,'file',Integer(self.changed)+1);
+		top.ecoder_files('main','rename',self.path,self.filename,'file',parseInt(self.changed)+1);
 	},
 	synhlEnable:function(self) {
 		self.codemirror.setOption("mode",self.options.mime);

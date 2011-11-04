@@ -43,7 +43,7 @@ if ( is_writeable ( $code['root'].$tree['path'].'/'.$tree['file_name'] ) ) { // 
         
         // delete ##
         $tree['delete'] = 1; // yes ##
-        $tree['delete_link'] = 'top.ecoder_files( \'main\', \'delete\', \''.$tree['path'].'\', \''.$tree['file_name'].'\', \''.$tree['file_type'].'\' );'; // link ##
+        $tree['delete_link'] = 'top.del(\''.$tree['path'].'\', \''.$tree['file_name'].'\', \''.$tree['file_type'].'\' );'; // link ##
         $tree['delete_icon'] = ''; // swap icon ##
         $tree['delete_title'] = 'delete file'; // title ##
         $tree['delete_note'] = 'you can delete the file '.$tree['file_name']; // delete note ##

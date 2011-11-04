@@ -12,7 +12,7 @@ save file - close tab - open file deletion tab ##
                
             echo '
             <a href="javascript:void(0);" 
-                onclick="top.ecoder_files( \'main\', \'delete\', \''.$main['path'].'\', \''.$main['file'].'\', \'file\', content_changed );"  
+                onclick="top.del(\''.$main['path'].'\', \''.$main['file'].'\', \'file\', content_changed );"  
                 title="delete the file '.$main['file'].'">
                 <img src="'.$code['skin_path'].'design/icon_delete.png" alt="delete the file '.$main['file'].'" />
             </a>';

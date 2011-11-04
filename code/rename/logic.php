@@ -15,18 +15,19 @@ final class RenameStatus {
 }
 
 class Rename extends Controller {
-	public static $DFLT="form";
+	public static $DFLT="dialog";
 	private $path,$name,$type,$ext;
 	
-	public function dialog() {
-		global $translations;
-		//This should mostly be moved to constructor
+	public function __construct() {
 		$i=Input::_get();
 		$this->path=($i->path ?: "");
 		$this->name=($i->file ?: "");
 		$this->type=($i->type ?: "");
 		$this->ext=($i->ext ?: "");
-		//Until here
+	}
+	
+	public function dialog() {
+		global $translations;
 		ob_start();
 		include "code/rename/dialog.php";
 		$html=ob_get_clean();
@@ -36,11 +37,6 @@ class Rename extends Controller {
 	
 	public function save() {
 		global $code; //sigh
-		$i=Input::_get();
-		$this->path=($i->path ?: "");
-		$this->name=($i->file ?: "");
-		$this->type=($i->type ?: "");
-		$this->ext=($i->ext ?: "");
 		$newname=($i->file_new ?: "");
 		$newname=preg_replace('/[^0-9A-Za-z.]/', '_',$newname);
 
