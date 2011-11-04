@@ -38,7 +38,7 @@ class Rename extends Controller {
 	public function save() {
 		global $code; //sigh
 		$newname=($i->file_new ?: "");
-		$newname=preg_replace('/[^0-9A-Za-z.]/', '_',$newname);
+		$newname=preg_replace('/[^0-9A-Za-z.-_]/', '_',$newname);
 
 		$filepath="%s%s%s%s%s";
 		$orig=sprintf($filepath,$code['root'],$this->path,$this->name,"","");

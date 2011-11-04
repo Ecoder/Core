@@ -34,21 +34,7 @@ include "code/edit/header.php"; // main header ##
     <div class="edit_area">';
     
         // action area ##
-        /*if ( $main['mode'] == 'edit' || $main['mode'] == 'read' ) { // edit or read file ##
-            $main['content'] = $code['root'].'/'.$main['path'].'/'.$main['file']; // path & file name ##
-            include "code/edit/file.backup.php"; // create backup copy of file ##
-            include "code/edit/file.php"; // get file contents & build editor ##
-
-        } else*/if ( $main['mode'] == 'add' ) { // add file or folder ##
-            include "code/edit/add.php";
-
-        } elseif ( $main['mode'] == 'delete' ) { // delete file or folder ##
-            include "code/edit/delete.php";
-
-        } else/*if ( $main['mode'] == 'rename' ) { // rename file or folder ##
-            include "code/edit/rename.php";
-
-        } else*/if ( $main['mode'] == 'upload' ) { // upload files ##
+        if ( $main['mode'] == 'upload' ) { // upload files ##
             include "code/edit/upload.php";
 
         } // main options ##

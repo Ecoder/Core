@@ -39,6 +39,7 @@ function setLiveEvents() {
 	dialog.init();
 	rename_v2.setLiveEvents();
 	del.setLiveEvents();
+	add.setLiveEvents();
 }
 /*
  * TODO
@@ -242,90 +243,63 @@ var del={
 		);
 	}
 };
-/*
-function del(path,file,type,changed) {
-	// make uniquish iframe id ##
-	var ecoder_file_full = file; // assign file to variable ##
-	var ecoder_path_full = path; // assign path to variable ##
-	var ecoder_file_clean = ''; // declare ##
-	var ecoder_changed_min = 1; // number of changes to warn on ##
-	ecoder_path_full = ecoder_replace_all( ecoder_path_full, [ ["/", "_"] ] ); // replace / with _ in path ##   
-	ecoder_file_full = ecoder_replace_all( ecoder_file_full, [ [".", "_"] ] ); // replace . with _ in file ##   
-	ecoder_file_clean = ecoder_path_full + ecoder_file_full; // add path & file ##
-		
-	var ecoder_delete_clean = ecoder_path_full +'delete_'+type; // new object name ##
-	var ecoder_object = ecoder_check_object( ecoder_delete_clean ); // check if object/file is open ##
-	var ecoder_delete = 'delete.php?path='+ path +'&file='+ file +'&type='+ type; // url to open ##
-  
-	if ( ecoder_object ) { // delete tab open, so focus ##
-		//alert ( "delete tab open" );
-		var parent_id; // declare ##  
-		parent_id = document.getElementById( ecoder_delete_clean ).parentNode.id; // get id from parent ##
-		parent_id = parent_id.replace( /tabber_panel_/, "" );// remove 'tabber_panel_' ## //alert ( parent_id );                      
-		top.ecoder_tabs_focus ( file, ecoder_delete_clean, parent_id ); // focus tab ##        
 
-		// note ##
-		var e_note = "<p>you can only delete one <strong>"+ type +"</strong> at a time</p><p>press SAVE to delete or CLOSE to the cancel the operation.</p>";
-		top.ecoder_note ( 'note', e_note, '5', 'block' );
-	} else { // delete tab not open yet ##      
-		//alert ( "check if iframe "+ ecoder_file_clean +" open" );
-		// check if file is being edited ##
-		var ecoder_object_delete = ecoder_check_object( ecoder_file_clean ); // object name ##
-		//alert ( ecoder_file_clean );
+var add={
+	path:null,
+	type:null,
+	setLiveEvents:function() {
+		$('.add .submit').live("click",function() {add.save();});
+	},
+	setFeedback:function(msg,type) {
+		$(".add #feedback").html(msg).removeClass("success error info").addClass(type);
+	},
+	init:function(path,type) {
+		this.path=path;
+		this.type=type;
+    var ecoder_path_full = ecoder_replace_all(path, [ ["/", "_"] ] ); // replace / with _ in path ##   
 		
-		if ( ecoder_object_delete ) { // file open already ##
-			//alert ( 'file open' );
-			// focus open file tab ##
+		var ecoder_file_clean = ecoder_path_full +'add_'+this.type; // new object name ##
+		var ecoder_object = ecoder_check_object( ecoder_file_clean ); // check if object/file is open ##
+		if ( ecoder_object ) { // tab open, so focus ##
 			var parent_id; // declare ##  
 			parent_id = document.getElementById( ecoder_file_clean ).parentNode.id; // get id from parent ##
 			parent_id = parent_id.replace( /tabber_panel_/, "" );// remove 'tabber_panel_' ##          
-			//alert ( parent_id + ' - ' + ecoder_tab );
-			
-			if ( parent_id != ecoder_tab ) { // focus, if not clicked on current tab ##      
-				// focus tab ##
-				//alert ( "focus "+ ecoder_tab +" iframe: "+ ecoder_file_clean );
-				top.ecoder_tabs_focus ( file, ecoder_file_clean, parent_id );
+			top.ecoder_tabs_focus ('', ecoder_file_clean, parent_id ); // focus tab ##        
 
-				// note ##
-				var e_note = "<p><strong>"+file+"</strong> is already open and has been focused, to delete this file you should click the delete option to the top right.</p>";
-				top.ecoder_note ( 'note', e_note, '5', 'block' );
-
-				// set title ##     
-				ecoder_html_title ( file );   
-			} else { // current tab - so confirm close if changes and switch to delete tab ##   
-				var close_do = 0; // false ##
-				var close_confirm = 'if you close '+ file +' unsaved changes will be lost.\npress OK to close or CANCEL to stop.'; // message ##
-				if ( changed > ecoder_changed_min ) { // changes made -- was > 1 TODO ##
-					if ( confirm ( close_confirm ) ) { // confirm ## + changed
-						close_do = 1; // ok ##
-					}    
-				} else { // no changes made ##
-					close_do = 1; // ok ##       
+			// note ##
+			var e_note = "<p>the <strong>new "+this.type+"</strong> tab for the folder <strong>"+this.path+"</strong> is already open and has been focused.</p>";
+			top.ecoder_note ( 'note', e_note, '5', 'block' );
+		} else { // not open yet ##
+			callAction("add","dialog",{
+					path:this.path,
+					type:this.type
+				},function(json) {
+					dialog.show(json.html);
 				}
-				
-				if ( close_do == 1 ) { // closed confirmed and not home tab ##                     
-					if ( top.ecoder_tab > 0 ) { // close if not focused on home ##
-						//alert ( "close "+ ecoder_tab );
-						top.ecoder_tabs_close();
-					}
-
-					// add delete tab -- iframe name/id ,label, iframe url, path ##
-					//alert ( "add delete tab" );
-					top.ecoder_tabs_add ( ecoder_delete_clean, 'delete '+type, ecoder_delete, '' );
-
-					// note ##
-					var e_note = "<p>to delete <strong>"+ file +"</strong> press SAVE, to cancel click CLOSE.</p>";
-					top.ecoder_note ( 'note', e_note, '5', 'block' );
-				} // do close ##
+			);
+		}
+		ecoder_html_title('new '+this.type); // set title ##
+	},
+	
+	save:function() {
+		var i=add;
+		callAction("add","save",{
+				path:i.path,
+				file:$(".dialogcontentwrapper.add #nodename").val(),
+				ext:$(".dialogcontentwrapper.add #ext").val(),
+				type:i.type
+			},function(json) {
+				if (json.code!=1) {
+					i.setFeedback(json.msg,"error");
+					return;
+				}
+				i.setFeedback(json.msg,"success");
+				ecoder_tree('tree','reload');
 			}
-		} else { // file not being edited ##                
-			//alert ( "just open delete tab" );
-			top.ecoder_tabs_add ( ecoder_delete_clean, 'delete '+type, ecoder_delete, '' ); // add new tab -- iframe name/id ,label, iframe url, path ##  
-			ecoder_html_title ( 'delete '+type ); // set title ##          
-		}            
-	}        
+		);
+	}
 }
-*/
+
 // file functions ##
 // frame target, action || mode, file path, file name, file extension || file/folder, change tracker ##
 function ecoder_files ( frame, mode, path, file, type, changed ) {
@@ -335,6 +309,8 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
 				return rename_v2.init(path,file,type,changed);
 			case "delete":
 				return del.init(path,file,type,changed);
+			case "add":
+				return add.init(path,type);
 		}
 		
     var ecoder_tabs_max = 10; // max tabs ##
@@ -399,28 +375,6 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
             top.frames[frame].location.reload(true); // call ##
         }
         
-    } else if ( ecoder_mode == 'add' ) { // add file or folder to tree ##
-
-        var ecoder_file_clean = ecoder_path_full +'add_'+type; // new object name ##
-        var ecoder_object = ecoder_check_object( ecoder_file_clean ); // check if object/file is open ##
-        var ecoder_file = 'edit.php?mode='+ mode +'&path='+ path +'&file='+ file +'&type='+ type; // url to open ##
-        if ( ecoder_object ) { // tab open, so focus ##
-        
-            var parent_id; // declare ##  
-            parent_id = document.getElementById( ecoder_file_clean ).parentNode.id; // get id from parent ##
-            parent_id = parent_id.replace( /tabber_panel_/, "" );// remove 'tabber_panel_' ##          
-            top.ecoder_tabs_focus ( file, ecoder_file_clean, parent_id ); // focus tab ##        
-
-            // note ##
-            var e_note = "<p>the <strong>new "+type+"</strong> tab for the folder <strong>"+path+"</strong> is already open and has been focused.</p>";
-            top.ecoder_note ( 'note', e_note, '5', 'block' );
-  
-        } else { // not open yet ##
-            top.ecoder_tabs_add ( ecoder_file_clean, 'new '+type, ecoder_file, '' ); // add new tab -- iframe name/id ,label, iframe url, path ##
-            
-        }
-        ecoder_html_title ( 'new '+type ); // set title ##
-
     } else if ( ecoder_mode == 'upload' ) { // upload file to tree ##
 
         var ecoder_file_clean = ecoder_path_full +'upload_file'; // new object name ##
