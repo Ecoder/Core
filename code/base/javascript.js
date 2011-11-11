@@ -300,6 +300,32 @@ var add={
 	}
 }
 
+var upload={
+	init:function(path) {
+    var ecoder_path_full = ecoder_replace_all(path,[["/","_"]]); // replace / with _ in path ##
+		var ecoder_file_clean = ecoder_path_full +'upload_file'; // new object name ##
+		var ecoder_object = ecoder_check_object( ecoder_file_clean ); // check if object/file is open ##
+		var ecoder_file = 'upload.php?path='+path; // url to open ##
+		
+		if ( ecoder_object ) { // tab open, so focus ##
+			var parent_id; // declare ##  
+			parent_id = document.getElementById( ecoder_file_clean ).parentNode.id; // get id from parent ##
+			parent_id = parent_id.replace( /tabber_panel_/, "" );// remove 'tabber_panel_' ##          
+			top.ecoder_tabs_focus ('', ecoder_file_clean, parent_id ); // focus tab ##        
+
+			// note ##
+			var e_note = "<p>the <strong>file upload</strong> tab for the folder <strong>"+path+"</strong> is already open and has been focused.";
+			top.ecoder_note ( 'note', e_note, '5', 'block' );
+		} else { // not open yet ##
+			top.ecoder_tabs_add ( ecoder_file_clean, 'upload file', ecoder_file, '' ); // add new tab -- iframe name/id ,label, iframe url, path ##
+			// note ##
+			var e_note = "<p>to upload a file to the folder <strong>"+path+"</strong> click browse, find the file and then press SAVE.";
+			top.ecoder_note ( 'note', e_note, '5', 'block' );
+		}
+		ecoder_html_title ( 'upload file' ); // set title ##
+	}
+}
+
 // file functions ##
 // frame target, action || mode, file path, file name, file extension || file/folder, change tracker ##
 function ecoder_files ( frame, mode, path, file, type, changed ) {
@@ -311,6 +337,8 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
 				return del.init(path,file,type,changed);
 			case "add":
 				return add.init(path,type);
+			case "upload":
+				return upload.init(path);
 		}
 		
     var ecoder_tabs_max = 10; // max tabs ##
@@ -375,32 +403,6 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
             top.frames[frame].location.reload(true); // call ##
         }
         
-    } else if ( ecoder_mode == 'upload' ) { // upload file to tree ##
-
-        var ecoder_file_clean = ecoder_path_full +'upload_file'; // new object name ##
-        var ecoder_object = ecoder_check_object( ecoder_file_clean ); // check if object/file is open ##
-        var ecoder_file = 'edit.php?mode='+ mode +'&path='+ path +'&file='+ file +'&type=file'; // url to open ##
-        if ( ecoder_object ) { // tab open, so focus ##
-        
-            var parent_id; // declare ##  
-            parent_id = document.getElementById( ecoder_file_clean ).parentNode.id; // get id from parent ##
-            parent_id = parent_id.replace( /tabber_panel_/, "" );// remove 'tabber_panel_' ##          
-            top.ecoder_tabs_focus ( file, ecoder_file_clean, parent_id ); // focus tab ##        
-
-            // note ##
-            var e_note = "<p>the <strong>file upload</strong> tab for the folder <strong>"+path+"</strong> is already open and has been focused.";
-            top.ecoder_note ( 'note', e_note, '5', 'block' );
-
-        } else { // not open yet ##
-            top.ecoder_tabs_add ( ecoder_file_clean, 'upload file', ecoder_file, '' ); // add new tab -- iframe name/id ,label, iframe url, path ##
-
-            // note ##
-            var e_note = "<p>to upload a file to the folder <strong>"+path+"</strong> click browse, find the file and then press SAVE.";
-            top.ecoder_note ( 'note', e_note, '5', 'block' );
-     
-        }
-        ecoder_html_title ( 'upload file' ); // set title ##
-       
     } else if ( ecoder_mode == 'read' || ecoder_mode == 'edit' ) { // edit or read ##            
         
         var ecoder_object = ecoder_check_object( ecoder_file_clean ); // check if object/file is open ##

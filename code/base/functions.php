@@ -304,3 +304,23 @@ function translation_format($str,$args) {
 		return $args[trim($matches[0],"{}")];
 	},$str);
 }
+
+//////////////////////////////////////
+http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions/860509#860509
+function strStartsWith($haystack,$needle,$case=true)
+{
+   if($case)
+       return strpos($haystack, $needle, 0) === 0;
+
+   return stripos($haystack, $needle, 0) === 0;
+}
+
+function strEndsWith($haystack,$needle,$case=true)
+{
+  $expectedPosition = strlen($haystack) - strlen($needle);
+
+  if($case)
+      return strrpos($haystack, $needle, 0) === $expectedPosition;
+
+  return strripos($haystack, $needle, 0) === $expectedPosition;
+}
