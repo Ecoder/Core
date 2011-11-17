@@ -97,7 +97,7 @@ var rename_v2={
 		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##          
 		if (parent_id!=ecoder_tab) { // It isn't the current tab
 			top.ecoder_tabs_focus(this.file,cleanPathName,parent_id);
-			top.ecoder_note('note',translations.rename.alreadyEditing.format({name:this.file}),'5','block');
+			top.ecoder_note('note',ecoder.translations.rename.alreadyEditing.format({name:this.file}),'5','block');
 			ecoder_html_title(this.file);
 			return true; 
 		}
@@ -107,7 +107,7 @@ var rename_v2={
 		var close_do=false; // false ##
 		//Checking for changes won't work with old change api so disabling for now
 		//if (changed>1) { // changes made -- was > 1 TODO ##
-			if (confirm(translations.rename.closeConfirm.format({name:this.name}))) { // confirm ## + changed
+			if (confirm(ecoder.translations.rename.closeConfirm.format({name:this.name}))) { // confirm ## + changed
 				close_do=true; // ok ##
 			}    
 		/*} else { // no changes made ##
@@ -127,7 +127,7 @@ var rename_v2={
 		var i=rename_v2;
 		var newname=$("#filenewname").val();
 		if (newname=="") {
-			i.setFeedback(translations.rename.noNameEntered.format({name:i.name}),"error");
+			i.setFeedback(ecoder.translations.rename.noNameEntered.format({name:i.name}),"error");
 		}
 		callAction("rename","save",{
 				path:i.path,
@@ -199,7 +199,7 @@ var del={
 		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##          
 		if (parent_id!=ecoder_tab) { // It isn't the current tab
 			top.ecoder_tabs_focus(this.file,cleanPathName,parent_id);
-			top.ecoder_note('note',translations.del.alreadyEditing.format({name:this.file}),'5','block');
+			top.ecoder_note('note',ecoder.translations.del.alreadyEditing.format({name:this.file}),'5','block');
 			ecoder_html_title(this.file);
 			return true; 
 		}
@@ -209,7 +209,7 @@ var del={
 		var close_do=false; // false ##
 		//Checking for changes won't work with old change api so disabling for now
 		//if (changed>1) { // changes made -- was > 1 TODO ##
-			if (confirm(translations.edit.closeConfirm.format({name:this.name}))) { // confirm ## + changed
+			if (confirm(ecoder.translations.edit.closeConfirm.format({name:this.name}))) { // confirm ## + changed
 				close_do=true; // ok ##
 			}    
 		/*} else { // no changes made ##
@@ -256,29 +256,13 @@ var add={
 	init:function(path,type) {
 		this.path=path;
 		this.type=type;
-    var ecoder_path_full = ecoder_replace_all(path, [ ["/", "_"] ] ); // replace / with _ in path ##   
-		
-		var ecoder_file_clean = ecoder_path_full +'add_'+this.type; // new object name ##
-		var ecoder_object = ecoder_check_object( ecoder_file_clean ); // check if object/file is open ##
-		if ( ecoder_object ) { // tab open, so focus ##
-			var parent_id; // declare ##  
-			parent_id = document.getElementById( ecoder_file_clean ).parentNode.id; // get id from parent ##
-			parent_id = parent_id.replace( /tabber_panel_/, "" );// remove 'tabber_panel_' ##          
-			top.ecoder_tabs_focus ('', ecoder_file_clean, parent_id ); // focus tab ##        
-
-			// note ##
-			var e_note = "<p>the <strong>new "+this.type+"</strong> tab for the folder <strong>"+this.path+"</strong> is already open and has been focused.</p>";
-			top.ecoder_note ( 'note', e_note, '5', 'block' );
-		} else { // not open yet ##
-			callAction("add","dialog",{
-					path:this.path,
-					type:this.type
-				},function(json) {
-					dialog.show(json.html);
-				}
-			);
-		}
-		ecoder_html_title('new '+this.type); // set title ##
+		callAction("add","dialog",{
+				path:this.path,
+				type:this.type
+			},function(json) {
+				dialog.show(json.html);
+			}
+		);
 	},
 	
 	save:function() {
@@ -300,30 +284,114 @@ var add={
 	}
 }
 
-var upload={
-	init:function(path) {
-    var ecoder_path_full = ecoder_replace_all(path,[["/","_"]]); // replace / with _ in path ##
-		var ecoder_file_clean = ecoder_path_full +'upload_file'; // new object name ##
-		var ecoder_object = ecoder_check_object( ecoder_file_clean ); // check if object/file is open ##
-		var ecoder_file = 'upload.php?path='+path; // url to open ##
-		
-		if ( ecoder_object ) { // tab open, so focus ##
-			var parent_id; // declare ##  
-			parent_id = document.getElementById( ecoder_file_clean ).parentNode.id; // get id from parent ##
-			parent_id = parent_id.replace( /tabber_panel_/, "" );// remove 'tabber_panel_' ##          
-			top.ecoder_tabs_focus ('', ecoder_file_clean, parent_id ); // focus tab ##        
-
-			// note ##
-			var e_note = "<p>the <strong>file upload</strong> tab for the folder <strong>"+path+"</strong> is already open and has been focused.";
-			top.ecoder_note ( 'note', e_note, '5', 'block' );
-		} else { // not open yet ##
-			top.ecoder_tabs_add ( ecoder_file_clean, 'upload file', ecoder_file, '' ); // add new tab -- iframe name/id ,label, iframe url, path ##
-			// note ##
-			var e_note = "<p>to upload a file to the folder <strong>"+path+"</strong> click browse, find the file and then press SAVE.";
-			top.ecoder_note ( 'note', e_note, '5', 'block' );
-		}
-		ecoder_html_title ( 'upload file' ); // set title ##
+function upload(p) {
+	var _self=this;
+	var path=p;
+	var MAXSIZE=ecoder.info.maxUploadSize;
+	
+	this.init=function() {
+		callAction("upload","dialog",{
+			path:path
+		},function(json) {
+			dialog.show(json.html);
+			$(".dialogcontentwrapper.upload #file").change(handleUploaderChange);
+			$(".dialogcontentwrapper.upload #reset").click(clearList);
+			$(".dialogcontentwrapper.upload #upload").click(uploadQueue);
+		});
+		return _self;
 	}
+	
+	var handleUploaderChange=function() {
+		addToFileList(this.files);
+	};
+	
+	var clearList=function(ev) {
+		ev.preventDefault();
+		$(".dialogcontentwrapper.upload #fileList").html("");
+	};
+	
+	var uploadQueue=function(ev) {
+		ev.preventDefault();
+		$('.dialogcontentwrapper.upload #fileList li[data-status="0"]').each(function(k,v) {
+			var el=$(v);
+			var loader="<p class='loader'>Uploading...</p>";
+			el.html(el.html()+loader);
+			if (el.attr("data-rsize") < MAXSIZE) {
+				uploadFile(el);
+			} else {
+				el.children(".loader").html("File to large").css("color","red");
+			}
+			el.attr("data-status","1");
+		});
+	};
+	
+	var addToFileList=function(files) {
+		for (var i=0; i<files.length; i++) {
+			new FileObject(files[i]);
+		}
+	};
+	
+	var nodeToHtml=function(fileObject) {
+		var htmlTpl="<li data-status='0' data-name='{name}' data-type='{type}' data-rsize='{rsize}'><h3>{name}</h3><p>File type: ({type}) - {fsize} KB</p><div class='loadingIndicator'></div></li>";
+		return htmlTpl.format({name:fileObject.name,type:fileObject.type,rsize:fileObject.rsize,fsize:fileObject.fsize});
+	};
+	
+	var FileObject=function(file) {
+		var fr = new FileReader();
+		this.name=file.name;
+		this.type=file.type;
+		this.rsize=file.size;
+		this.fsize=Math.round(this.rsize/1024);
+		this.dataurl=null;
+		var self=this;
+		fr.file = file;
+		fr.onloadend = function(e) {self.dataurl=e.target.result;showFileInList(self);};
+		fr.readAsDataURL(file);
+	}
+	
+	var showFileInList=function(fileObject) {
+		if (fileObject) {
+				$("#fileList").html($("#fileList").html()+nodeToHtml(fileObject));
+				$.data($("#fileList li:last-child")[0],"file",fileObject);
+			}
+	};
+	
+	var uploadFile=function(el) {
+		if (!el) {
+			return;
+		}
+		var xhr=new XMLHttpRequest();
+		var upload=xhr.upload;
+		var file=$.data(el[0],"file");
+		
+		xhr.addEventListener("readystatechange",function (ev) {
+			if (xhr.readyState != 4)  { return; }
+			if (xhr.status == 200) {
+				var json=JSON.parse(xhr.responseText);
+				var x=null;
+				if (json.error) {
+					x="err_"+json.error;
+				} else {
+					x="err_uplsuccess";
+					el.children(".loadingIndicator").css("width","100%").css("background-color","#0f0");
+					el.children(".loader").html("Upload complete").css("color","#3DD13F");
+				}
+				
+				$("#feedback").html(ecoder.translations.upload[x]).addClass("error");
+			}
+		},false);
+		
+		upload.addEventListener("error",function (ev) {
+			console.log(ev);
+		},false);
+		
+		xhr.open("POST","upload.php?controller=upload&action=save");
+		xhr.setRequestHeader("Cache-Control", "no-cache");
+		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+		xhr.setRequestHeader("X-File-Name", file.name);
+		xhr.setRequestHeader("X-File-Path", p);
+		xhr.send(file.dataurl);
+	};
 }
 
 // file functions ##
@@ -338,7 +406,7 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
 			case "add":
 				return add.init(path,type);
 			case "upload":
-				return upload.init(path);
+				return new upload(path).init();
 		}
 		
     var ecoder_tabs_max = 10; // max tabs ##
@@ -661,16 +729,52 @@ function addLoadEvent( func ) {
   }
 }
 
+function ecoder() {
+	var _self=this;
+	this.translations=null; //var later
+	this.info=null;
+	
+	this.init=function() {
+		if (!testCompat()) {
+			$("body").html("").css("background","#000000");
+			alert("Sorry, your browser does not support some of the features needed for ecoder. Please update your browser");
+		}
+
+		getTranslations();
+		getInfo();
+		return _self;
+	}
+	
+	var testCompat=function() {
+		return !(typeof FileReader == "undefined");
+	}
+	
+	var getTranslations=function() {
+		$.ajax({
+			url:"translations.json",
+			datatype:'json',
+			success:function(msg) { 
+				_self.translations=msg[$("body").attr("data-lang")]; 
+			}
+		});
+	}
+	
+	var getInfo=function() {
+		$.ajax({
+			url:"info.php",
+			datatype:'json',
+			success:function(json) {
+				_self.info=JSON.parse(json);
+			}
+		})
+	}
+}
+
 // ----------------------------------------------------------------------------------------------------------
-var translations=null;
+var translations, ecoder;
 $(document).ready(function() {
+	ecoder=new ecoder().init(); //temp
 	setLiveEvents();
 	
-	$.ajax({
-		url:"translations.json",
-		datatype:'json',
-		success:function(msg) { 
-			translations=msg[$("body").attr("data-lang")]; 
-		}
-	});
+	translations=ecoder.translations;
 });

@@ -11,7 +11,7 @@ include "code/base/header.php"; // html header, branding ##
     echo '
     </head>
     <body data-lang="'.$code['lang'].'">
-		<div id="dialogoverlay"></div>
+		<div id="dialogoverlay"></div> <!--Also used for compatability-->
 	<div id="dialog"><span id="closedialog">&nbsp;</span><div id="dialogcontent"></div></div>
 	';
     

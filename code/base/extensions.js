@@ -12,11 +12,13 @@
  * Based on: http://stackoverflow.com/questions/610406/javascript-equivalent-to-printf-string-format/4673436#4673436
  */
 Object.defineProperty(String.prototype,'format',{
-	value:function() {
-		var args = arguments;
-		return this.replace(/{([A-Za-z0-9_]+)}/g, function(match, number) { 
-			return typeof args.number != 'undefined' ? args.number : match;
-		})
+	value:function(replacements) {
+		var result=this;
+		$.each(replacements,function(k,v) {
+			var regex=new RegExp("{"+k+"}","g");
+			result=result.replace(regex,v);
+		});
+		return result;
 	}
 });
 

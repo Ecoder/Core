@@ -21,11 +21,12 @@ class Input {
 	}
 	
 	private function __construct() {
+		$this->data=array();
 		if (isset($_POST['json'])) {
 			$this->raw=$_POST['json'];
 			$arr=json_decode($_POST['json'],true);
 			foreach ($arr as $k=>$v) {
-				$this->$k=$v;
+				$this->data[$k]=$v;
 			}
 		}
 	}

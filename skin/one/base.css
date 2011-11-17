@@ -170,3 +170,128 @@ div.dialogcontentwrapper.rename {
 		text-transform: uppercase;
 		display: block;
 	}
+	
+	
+	
+/** DIALOG.UPLOAD **/
+div.dialogcontentwrapper.upload {
+    font: 0.8em/1em "trebuchet MS", arial, sans-serif;
+    color: #777;
+}
+
+div.dialogcontentwrapper.upload h1 {
+    font-size: 1.6em;
+    margin: 30px 0;
+    padding: 0;
+}
+
+div.dialogcontentwrapper.upload h2 {
+    font-size: 1.4em;
+    padding: 0 0 6px 0;
+    margin: 0;
+    border-bottom: solid 1px #ccc;
+}
+
+div.dialogcontentwrapper.upload h3 {
+    font-size: 1.2em;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+div.dialogcontentwrapper.upload p {
+    margin: 0;
+    padding: 0;
+}
+
+div.dialogcontentwrapper.upload form {
+    padding: 0 0 30px 0;
+}
+
+div.dialogcontentwrapper.upload #wrap {
+    width: 800px;
+    margin: 0 auto;
+}
+
+div.dialogcontentwrapper.upload #files {
+    margin: 0 0 0 400px;
+    width: 356px;
+    padding: 20px 20px 40px 20px;
+    border: solid 2px #ccc;
+    background: #fefefe;
+    min-height: 240px;
+    position: relative;
+}
+
+div.dialogcontentwrapper.upload #files {
+    -moz-box-shadow: 0 0 20px #ccc;
+}
+
+div.dialogcontentwrapper.upload #fileList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    div.dialogcontentwrapper.upload #fileList li {
+        margin: 0;
+        padding: 10px 0;
+        margin: 0;
+        overflow: auto;
+        border-bottom: solid 1px #ccc;
+        position: relative;
+    }
+
+        div.dialogcontentwrapper.upload #fileList li img {
+            width: 120px;
+            border: solid 1px #999;
+            padding: 6px;
+            margin: 0 10px 0 0;
+            background-color: #eee;
+            display: block;
+            float: left;
+        }
+
+div.dialogcontentwrapper.upload #reset {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #ccc;
+    text-decoration: none;
+}
+
+div.dialogcontentwrapper.upload #reset:hover {
+    color: #333;
+}
+
+div.dialogcontentwrapper.upload #upload {
+    color: #fff;
+    position: absolute;
+    display: block;
+    bottom: 10px;
+    right: 10px;
+    width: auto;
+    background-color: #777;
+    padding: 4px 6px;
+    text-decoration: none;
+    font-weight: bold;
+    -moz-border-radius: 6px;
+}
+
+div.dialogcontentwrapper.upload #upload:hover {
+    background-color: #333;
+}
+
+div.dialogcontentwrapper.upload .loader {
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+    color: orange;
+}
+
+div.dialogcontentwrapper.upload .loadingIndicator {
+    width: 0%;
+    height: 2px;
+    background-color: orange;
+    position: absolute;
+    bottom: 0;
+}
