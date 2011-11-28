@@ -3,9 +3,24 @@
 <head>
 	<title>e<?php echo $file->name; ?></title>
 	<script src="http://code.jquery.com/jquery-<?php echo $code['jQuery']; ?>.min.js"></script>
-	<script src="plug/jq_json-<?php echo $code['jQ_json']; ?>.min.js"></script>
-	<link rel="stylesheet" href="plug/codemirror-<?php echo $code['codemirror']; ?>.min.css" />
-	<script src="plug/codemirror-<?php echo $code['codemirror']; ?>.min.js"></script>
+	
+	<!--<link rel="stylesheet" href="plug/codemirror-<?php echo $code['codemirror']; ?>.min.css" />
+	<script src="plug/codemirror-<?php echo $code['codemirror']; ?>.min.js"></script>-->
+	
+	<link rel="stylesheet" href="plug/codemirror/lib/codemirror.css" />
+	<link rel="stylesheet" href="plug/codemirror/theme/default.css" />
+	<script src="plug/codemirror/lib/codemirror.js"></script>
+	<script src="plug/codemirror/mode/clike/clike.js"></script>
+	<script src="plug/codemirror/mode/coffeescript/coffeescript.js"></script>
+	<script src="plug/codemirror/mode/css/css.js"></script>
+	<script src="plug/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+	<script src="plug/codemirror/mode/javascript/javascript.js"></script>
+	<script src="plug/codemirror/mode/php/php.js"></script>
+	<script src="plug/codemirror/mode/python/python.js"></script>
+	<script src="plug/codemirror/mode/ruby/ruby.js"></script>
+	<script src="plug/codemirror/mode/xml/xml.js"></script>
+	<script src="plug/codemirror/mode/xmlpure/xmlpure.js"></script>
+	<script src="plug/codemirror/mode/yaml/yaml.js"></script>
 	
 	<script src="code/base/shortcuts.js"></script>
 	<script src="code/editor/js.js"></script>

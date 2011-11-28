@@ -7,7 +7,7 @@
  */
 
 /*
- * String.format(var v1,...)
+ * String..format({var1:var1val})
  * Format w {0}, {1}, ...
  * Based on: http://stackoverflow.com/questions/610406/javascript-equivalent-to-printf-string-format/4673436#4673436
  */

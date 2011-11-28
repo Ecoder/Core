@@ -365,7 +365,7 @@ function upload(p) {
 		var file=$.data(el[0],"file");
 		
 		xhr.addEventListener("readystatechange",function (ev) {
-			if (xhr.readyState != 4)  { return; }
+			if (xhr.readyState != 4)  {return;}
 			if (xhr.status == 200) {
 				var json=JSON.parse(xhr.responseText);
 				var x=null;
@@ -509,8 +509,149 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
     return false; // no return ##
 }
 
-// ----------------------------------------------------------------------------------------------------------
+function ContextMenu(options) {
+	
+	this.init=function(options) {
+		var html=setUpHtml(options.buttons);
+		$("body").append(html);
+		$("#ctxtmenu").css("top",options.pos.y).css("left",options.pos.x);
+		setUpEvents(options.buttons);
+	}
+	
+	var setUpHtml=function(buttons) {
+		var htmlFormat='<div id="ctxtmenucontainer"><div id="ctxtmenuoverlay"></div><ul id="ctxtmenu">{items}</ul></div>';
+		var html="";
+		var itemsHtml="";
+		buttons.forEach(function(v) {
+			itemsHtml+=v.toString();
+		});
+		html=htmlFormat.format({items:itemsHtml});
+		return html;
+	};
+	
+	var setUpEvents=function(buttons) {
+		$("#ctxtmenucontainer #ctxtmenuoverlay").on("click",function() {
+			console.log("ctxtmenu-close");
+			$("#ctxtmenucontainer").remove();
+			return false;
+		});
+		buttons.forEach(function(v) {
+			v.addEvent();
+		});
+	};
+	
+	
+	//At the end
+	this.init(options);
+}
 
+function ContextMenuItem(options) {
+	this.id="";
+	this.name="";
+	this.callback=function() {};
+	this.isSep=false;
+
+	var defaultOptions={id:"",name:"",callback:function() {},isSep:false};
+
+	this.init=function(options) {
+		options=$.extend({},defaultOptions,options);
+		this.id=options.id;
+		this.name=options.name;
+		this.callback=options.callback;
+		this.isSep=options.isSep;
+	}
+
+	this.toString=function() {
+		var itemFormat='<li id="{id}" class="{xclass}">{name}</li>';
+		var res=itemFormat.format({id:this.id,name:this.name,xclass:(this.isSep ? "sep": "")});
+		return res;
+	}
+
+	this.addEvent=function() {
+		var self=this;
+		$("#ctxtmenucontainer ul#ctxtmenu li#"+this.id).on("click",function(e) {
+			self.callback(e);
+		});
+	}
+
+	this.init(options);
+}
+
+function Tree() {
+	
+	this.init=function() {
+		$.ajax({
+			url:"tree2.php",
+			datatype:"json",
+			success:function(json) {
+				json=JSON.parse(json);
+				if (json.error) {
+					$("#tree")
+						.append("<p class='error'>"+json.error+"</p>")
+						.css("background","#FF7373");
+					return;
+				}
+				if (!json.tree) {return;} //Shouldn't happen
+				$("#tree").append('<ul id="toplevel">'+parseNodeToHtml(json.tree)+'</ul>');
+				registerEvents();
+			}
+		});
+	};
+	
+	var parseNodeToHtml=function(node) {
+		var htmlTmpl='<li data-type="{type}"><span>{name}</span>{children}</li>';
+		var html="";
+		var subTreeHtml="";
+		if (node.children != null) {
+			subTreeHtml="<ul>";
+			if (node.children.length==0) {
+				subTreeHtml+='<li class="empty"><em>empty...</em></li>';
+			}
+			node.children.forEach(function(n,k,arr) {
+				subTreeHtml+=parseNodeToHtml(n);
+			});
+			subTreeHtml+="</ul>";
+		}
+		html+=htmlTmpl.format({type:node.type,name:node.name,children:subTreeHtml});
+		return html;
+	};
+	
+	var registerEvents=function() {
+		$('#tree li[data-type="dir"]').on("click",function(e) {
+			toggleDir(e);
+			return false;
+		});
+		$('#tree li[data-type="file"]').on("click",function(e) {
+			return false;
+		});
+		$('#tree li').on("contextmenu",function(e) {
+			var el=null;
+			if (e.target.nodeName.toLowerCase()=="li") {
+				el=$(e.target);
+			} else {
+				el=$(e.target).parent("li");
+			}
+			var openOption=null;
+			if (el.attr("data-type")=="dir") {
+				openOption=new ContextMenuItem({id:"opendir",name:"Open folder",callback:toggleDir});
+			} else if (el.attr("data-type")=="file") {
+				openOption=new ContextMenuItem({id:"openfile",name:"Open file",callback:function() {
+						//Also double code, once we implement it
+				}});
+			}
+			var buttons=new Array(openOption); //later also rename, delete. can be done in same call
+			new ContextMenu({buttons:buttons,pos:{x:e.pageX,y:e.pageY}});
+			return false;
+		});
+	};
+	
+	var toggleDir=function(e) {
+		$(e.target).next("ul").toggle();
+	}
+	
+	this.init();
+}
+/*
 // tree functions ##
 function ecoder_tree ( frame, mode, path, hidden ) {
     
@@ -533,7 +674,7 @@ function ecoder_tree ( frame, mode, path, hidden ) {
         
     }
     return false; // no return ##
-}
+}*/
 
 // ----------------------------------------------------------------------------------------------------------
 
@@ -729,10 +870,11 @@ function addLoadEvent( func ) {
   }
 }
 
-function ecoder() {
+function Ecoder() {
 	var _self=this;
 	this.translations=null; //var later
 	this.info=null;
+	var tree;
 	
 	this.init=function() {
 		if (!testCompat()) {
@@ -742,6 +884,7 @@ function ecoder() {
 
 		getTranslations();
 		getInfo();
+		tree=new Tree();
 		return _self;
 	}
 	
@@ -768,13 +911,16 @@ function ecoder() {
 			}
 		})
 	}
+	
+	this.init();
 }
 
 // ----------------------------------------------------------------------------------------------------------
 var translations, ecoder;
 $(document).ready(function() {
-	ecoder=new ecoder().init(); //temp
+	ecoder=new Ecoder(); //temp
 	setLiveEvents();
 	
 	translations=ecoder.translations;
+	
 });

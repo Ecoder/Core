@@ -17,11 +17,13 @@ include "code/base/header.php"; // html header, branding ##
     
     // test if javascript enabled ##
     include "code/base/loader.php"; 
-        
-        echo '
-        <div id="left">
+        ?>
+<div id="tree">
+	<h2>Ecoder</h2>
+</div>
+        <?php echo '<!--<div id="left">
             <iframe name="tree" id="iframe_tree" src="tree.php"></iframe>
-        </div>
+        </div>-->
 
         <div id="content">';
 

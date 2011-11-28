@@ -4,75 +4,7 @@
 included functions ##
 */
 
-/// scan directory ##
-function ecoder_tree ( $scan_path, $scan_dirs = 0, $hidden, $recurse = 0, $tree=array() ){
 
-    // only include files with these extensions
-    $allow_extensions = $_SESSION['tree_file_types'];
-    
-    // make any specific files you wish to be excluded
-    $ignore_files = $_SESSION['tree_file_ignore'];
-    $ignore_regex = '/^_/';
-    
-    // skip these directories
-    $ignore_dirs = $_SESSION['tree_dir_ignore'];
-    
-    // hidden files & folders ##
-    $hidden_stuff = '.'; // first char . ##
-    if ( $hidden == 1 ) { $hidden_stuff = ""; }
-    
-    // scan away ##
-    $scan = scandir( $scan_path );
-    foreach ( $scan as $k => $content ) {
-
-    // build path ##
-    $path = $scan_path.'/'.$content;
-      
-    // file ##      
-    if ( is_file ( $path ) && is_readable ( $path ) && $scan_dirs == 0 ) {     
-        if ( $content[0] != $hidden_stuff ) {   
-            if ( !in_array ( $content, $ignore_files ) ) { // skip ignored files
-                if ( preg_match ( $ignore_regex, $content ) == 0 ) {                
-                    $content_chunks = explode( ".", $content );
-                    $ext = $content_chunks[count( $content_chunks ) - 1];            
-                    if ( in_array( $ext, $allow_extensions ) ) { // only include files with desired extensions
-                        $path_array = explode ( "/", $path ); // break into array ##
-                        $tree['file'][] = end ( $path_array ); // save file ##
-                        $path_array_ext = explode ( ".", end ( $path_array ) ); // get extension ##
-                        $tree['ext'][] = end ( $path_array_ext );      
-                        $tree['permissions'][] = substr ( sprintf ( '%o', fileperms( $path ) ), -4 ); // get permissions ##
-                        $tree['date'][] = filemtime ( $path ); // get file date ##                
-                        $tree['size'][] = ecoder_filesize ( filesize ( $path ) ); // get filesize in byte ##
-                    }                
-                }
-            }
-        }
-    }
-      
-    // directory ##
-    elseif ( is_dir ( $path ) && is_readable ( $path ) && $scan_dirs == 1 ) {    
-        if ( $content[0] != $hidden_stuff ) {     
-            if ( !in_array ( $content, $ignore_dirs ) ) { // skip any ignored dirs 
-                $path_array_dir = explode( '/', $path ); // build array ##
-                $tree['file'][] = end ( $path_array_dir );  // directory name ##
-                $tree['file_path'][] = end ( $path_array_dir ).'/';  // directory name with seperator ##
-                $tree['permissions'][] = substr ( sprintf ( '%o', fileperms( $path ) ), -4 ); // get permissions ##
-                // get date ##
-                $tree['date'][] = filemtime ( $path.'/.' ); // get file date ##    
-                // get size ##
-                $tree['size'][] = ecoder_filesize ( ecoder_dirsize ( $path ) ); // get filesize in byte ##
-
-                // recursive callback to open new directory ##
-                if ( $recurse == 1 ) { // go back again ##
-                    $tree = ecoder_tree( $path, $scan_dirs, $hidden, $recurse, $tree );
-                } 
-            }
-        }
-    }
-
-    }
-    return $tree;
-}
 
 /* usage
 $ecoder_tree_file = GM_tree( $code['root'].$path, 0, 0 );

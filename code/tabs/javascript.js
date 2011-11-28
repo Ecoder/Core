@@ -271,3 +271,14 @@ function ecoder_tabs_close ( ) { // close ##
     tabber.close ( tabber.currentHighTab );
 }
 
+var tabber;
+var home;
+$(document).ready(function() {
+	/* init etabs */ 
+	tabber=new tabber_build('tabber_',document.getElementById('mainTabArea'),document.getElementById('mainPanelArea'));
+
+	/* build home tab */
+	//Everywhere where it says home (in strings) in next two lines: $tabs['home']
+	home = tabber.add('home','home_txt');
+	home.innerHTML='<iframe src="editor.php?mode=edit&path=&file=home.txt&type=text&shut=0" id="home_txt" name="home_txt" frameborder="0" style="height:100%; width:100%;"></iframe>';
+});

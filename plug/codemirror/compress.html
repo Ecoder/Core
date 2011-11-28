@@ -27,6 +27,7 @@
       <input type="hidden" id="download" name="download" value="codemirror-compressed.js"/>
       <p>Version: <select id="version" onchange="setVersion(this);" style="padding: 1px">
         <option value="http://codemirror.net/">HEAD</option>
+        <option value="http://marijnhaverbeke.nl/git/codemirror2?a=blob_plain;hb=v2.18;f=">2.18</option>
         <option value="http://marijnhaverbeke.nl/git/codemirror2?a=blob_plain;hb=v2.16;f=">2.16</option>
         <option value="http://marijnhaverbeke.nl/git/codemirror2?a=blob_plain;hb=v2.15;f=">2.15</option>
         <option value="http://marijnhaverbeke.nl/git/codemirror2?a=blob_plain;hb=v2.13;f=">2.13</option>
@@ -43,8 +44,11 @@
       <select multiple="multiple" name="code_url" style="width: 40em;" class="field" id="files">
         <optgroup label="CodeMirror Library">
           <option value="http://codemirror.net/lib/codemirror.js" selected>codemirror.js</option>
-          <option value="http://codemirror.net/lib/overlay.js">overlay.js</option>
-          <option value="http://codemirror.net/lib/runmode.js">runmode.js</option>
+          <option value="http://codemirror.net/lib/util/overlay.js">overlay.js</option>
+          <option value="http://codemirror.net/lib/util/runmode.js">runmode.js</option>
+          <option value="http://codemirror.net/lib/util/simple-hint.js">simple-hint.js</option>
+          <option value="http://codemirror.net/lib/util/javascript-hint.js">javascript-hint.js</option>
+          <option value="http://codemirror.net/lib/util/codefold.js">codefold.js</option>
         </optgroup>
         <optgroup label="Modes">
           <option value="http://codemirror.net/mode/clike/clike.js">clike.js</option>
@@ -52,6 +56,7 @@
           <option value="http://codemirror.net/mode/coffeescript/coffeescript.js">coffeescript.js</option>
           <option value="http://codemirror.net/mode/css/css.js">css.js</option>
           <option value="http://codemirror.net/mode/diff/diff.js">diff.js</option>
+          <option value="http://codemirror.net/mode/gfm/gfm.js">gfm.js</option>
           <option value="http://codemirror.net/mode/groovy/groovy.js">groovy.js</option>
           <option value="http://codemirror.net/mode/haskell/haskell.js">haskell.js</option>
           <option value="http://codemirror.net/mode/htmlmixed/htmlmixed.js">htmlmixed.js</option>
@@ -66,6 +71,8 @@
           <option value="http://codemirror.net/mode/plsql/plsql.js">plsql.js</option>
           <option value="http://codemirror.net/mode/python/python.js">python.js</option>
           <option value="http://codemirror.net/mode/r/r.js">r.js</option>
+          <option value="http://codemirror.net/mode/rpm/changes/changes.js">rpm/changes.js</option>
+          <option value="http://codemirror.net/mode/rpm/spec/spec.js">rpm/spec.js</option>
           <option value="http://codemirror.net/mode/rst/rst.js">rst.js</option>
           <option value="http://codemirror.net/mode/ruby/ruby.js">ruby.js</option>
           <option value="http://codemirror.net/mode/rust/rust.js">rust.js</option>

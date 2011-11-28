@@ -11,8 +11,7 @@ echo '<!--[if IE]><?xml version="1.0" encoding="UTF-8"?><![endif]-->
 
     <head>
 				<script src="http://code.jquery.com/jquery-'.$code['jQuery'].'.min.js"></script>
-				<script src="plug/jq_json-'.$code['jQ_json'].'.min.js"></script>
-					<script src="code/base/extensions.js" type="text/javascript"></script>
+				<script src="code/base/extensions.js" type="text/javascript"></script>
         <title>'.$code['name'].'</title>
         <meta http-equiv="content-Type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="noindex,nofollow" />

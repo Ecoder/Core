@@ -154,7 +154,7 @@ testCM("coordsFromIndex", function(cm) {
     "to line and ch."
   );
 
-  var i, pos, example, examples = [
+  var examples = [
     { index: -1, line: 0, ch: 0  }, // <- Tests clipping
     { index: 0,  line: 0, ch: 0  },
     { index: 10, line: 0, ch: 10 },
@@ -164,10 +164,9 @@ testCM("coordsFromIndex", function(cm) {
     { index: 64, line: 2, ch: 15 }  // <- Tests clipping
   ];
 
-  for (i = 0; i < examples.length; i++) {
-    example = examples[i];
-    pos = cm.coordsFromIndex(example.index);
-    
+  for (var i = 0; i < examples.length; i++) {
+    var example = examples[i];
+    var pos = cm.coordsFromIndex(example.index);
     eq(pos.line, example.line);
     eq(pos.ch, example.ch);
   }  
@@ -220,6 +219,69 @@ testCM("undoMultiLine", function(cm) {
   eq(cm.getValue(), "abc\ndef\nghi");
 }, {value: "abc\ndef\nghi"});
 
+testCM("markTextSingleLine", function(cm) {
+  forEach([{a: 0, b: 1, c: "", f: 2, t: 5},
+           {a: 0, b: 4, c: "", f: 0, t: 2},
+           {a: 1, b: 2, c: "x", f: 3, t: 6},
+           {a: 4, b: 5, c: "", f: 3, t: 5},
+           {a: 4, b: 5, c: "xx", f: 3, t: 7},
+           {a: 2, b: 5, c: "", f: 2, t: 3},
+           {a: 2, b: 5, c: "abcd", f: 6, t: 7},
+           {a: 2, b: 6, c: "x", f: null, t: null},
+           {a: 3, b: 6, c: "", f: null, t: null},
+           {a: 0, b: 9, c: "hallo", f: null, t: null},
+           {a: 4, b: 6, c: "x", f: 3, t: 4},
+           {a: 4, b: 8, c: "", f: 3, t: 4},
+           {a: 6, b: 6, c: "a", f: 3, t: 6},
+           {a: 8, b: 9, c: "", f: 3, t: 6}], function(test) {
+    cm.setValue("1234567890");
+    var r = cm.markText({line: 0, ch: 3}, {line: 0, ch: 6}, "foo");
+    cm.replaceRange(test.c, {line: 0, ch: test.a}, {line: 0, ch: test.b});
+    var f = r.find();
+    eq(f.from && f.from.ch, test.f); eq(f.to && f.to.ch, test.t);
+  });
+});
+
+testCM("markTextMultiLine", function(cm) {
+  function p(v) { return v && {line: v[0], ch: v[1]}; }
+  forEach([{a: [0, 0], b: [0, 5], c: "", f: [0, 0], t: [2, 5]},
+           {a: [0, 1], b: [0, 10], c: "", f: [0, 1], t: [2, 5]},
+           {a: [0, 5], b: [0, 6], c: "x", f: [0, 6], t: [2, 5]},
+           {a: [0, 0], b: [1, 0], c: "", f: [0, 0], t: [1, 5]},
+           {a: [0, 6], b: [2, 4], c: "", f: [0, 5], t: [0, 7]},
+           {a: [0, 6], b: [2, 4], c: "aa", f: [0, 5], t: [0, 9]},
+           {a: [1, 2], b: [1, 8], c: "", f: [0, 5], t: [2, 5]},
+           {a: [0, 5], b: [2, 5], c: "xx", f: null, t: null},
+           {a: [0, 0], b: [2, 10], c: "x", f: null, t: null},
+           {a: [1, 5], b: [2, 5], c: "", f: [0, 5], t: [1, 5]},
+           {a: [2, 0], b: [2, 3], c: "", f: [0, 5], t: [2, 2]},
+           {a: [2, 5], b: [3, 0], c: "a\nb", f: [0, 5], t: [2, 5]},
+           {a: [2, 3], b: [3, 0], c: "x", f: [0, 5], t: [2, 3]},
+           {a: [1, 1], b: [1, 9], c: "1\n2\n3", f: [0, 5], t: [4, 5]}], function(test) {
+    cm.setValue("aaaaaaaaaa\nbbbbbbbbbb\ncccccccccc\ndddddddd\n");
+    var r = cm.markText({line: 0, ch: 5}, {line: 2, ch: 5}, "foo");
+    cm.replaceRange(test.c, p(test.a), p(test.b));
+    var f = r.find();
+    eqPos(f.from, p(test.f)); eqPos(f.to, p(test.t));
+  });
+});
+
+testCM("bookmark", function(cm) {
+  function p(v) { return v && {line: v[0], ch: v[1]}; }
+  forEach([{a: [1, 0], b: [1, 1], c: "", d: [1, 4]},
+           {a: [1, 1], b: [1, 1], c: "xx", d: [1, 7]},
+           {a: [1, 4], b: [1, 5], c: "ab", d: [1, 6]},
+           {a: [1, 4], b: [1, 6], c: "", d: null},
+           {a: [1, 5], b: [1, 6], c: "abc", d: [1, 5]},
+           {a: [1, 6], b: [1, 8], c: "", d: [1, 5]},
+           {a: [1, 4], b: [1, 4], c: "\n\n", d: [3, 1]}], function(test) {
+    cm.setValue("1234567890\n1234567890\n1234567890");
+    var b = cm.setBookmark({line: 1, ch: 5});
+    cm.replaceRange(test.c, p(test.a), p(test.b));
+    eqPos(b.find(), p(test.d));
+  });
+});
+
 // Scaffolding
 
 function htmlEscape(str) {
@@ -266,6 +328,8 @@ function eq(a, b, msg) {
   if (a != b) throw new Failure(a + " != " + b + (msg ? " (" + msg + ")" : ""));
 }
 function eqPos(a, b, msg) {
+  if (a == b) return;
+  if (a == null || b == null) throw new Failure("comparing point to null");
   eq(a.line, b.line, msg);
   eq(a.ch, b.ch, msg);
 }

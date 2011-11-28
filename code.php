@@ -23,9 +23,8 @@ $code['name'] = "ecoder"; // system name ##
 $code['version'] = "v 0.5.0m1"; // system version ##
 $code['lang']="en";
 //Version keepers
-$code['jQuery']="1.6.4";
+$code['jQuery']="1.7.1";
 $code['codemirror']="2.16";
-$code['jQ_json']="2.3";
 
 // security settings ##
 $code['secure'] = 0; // 0 = not secured || 1 = secured, uses settings below ##
