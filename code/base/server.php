@@ -16,14 +16,13 @@ $browser_agent = 'UNKNOWN'; if ( isset ( $_SERVER['HTTP_USER_AGENT'] ) ) { $brow
 
 $code=array("domain_cookie"=>""); //Fix notice. Crappy code(tm)
 // local / live checker ##
-if ( strstr ( $gm_server_http_host, "localhost" ) == TRUE ) { // localhost settings  
-    
+if ( strstr ( $gm_server_http_host, "localhost" ) == TRUE ) { // localhost settings
+
     $_SESSION['live'] = 0; // live or local ##
-    $_SESSION['google'] = 0; // show ads ##
     ini_set( "session.cookie_domain", "" ); // cookie domain ##
     $_SESSION['debug'] = 0; // debug ## TODO
     $_SESSION['debug_functions'] = 0; // debug php functions ## TODO
-    
+
     // permissions for file and folder creation ##
     $code['permissions_file'] = '0777'; // file ##
     $code['permissions_dir'] = '0777'; // dir ##
@@ -35,11 +34,9 @@ if ( strstr ( $gm_server_http_host, "localhost" ) == TRUE ) { // localhost setti
     #}
 
 } else { // live ##
-    
-    $_SESSION['google'] = 1; // show ads ##
-    
+
     $_SESSION['live'] = 1; // live or local ##
-    ini_set( "session.cookie_domain", $code['domain_cookie'] ); // cookie domain ##    
+    ini_set( "session.cookie_domain", $code['domain_cookie'] ); // cookie domain ##
     $_SESSION['debug'] = 0; // debug ## TODO
     $_SESSION['debug_functions'] = 0; // debug php functions ## TODO
 
@@ -66,9 +63,3 @@ ini_set( 'session.gc_maxlifetime', $garbage_timeout );
 
 $session_expire = 60*60*24*100; // 100 days - cookie expiration ##
 session_set_cookie_params( $session_expire );
-
-// OS & browser agent details -- get early, so can build customized version for each ## 
-include "agent.system.php"; // OS ##
-include "agent.browser.php"; // browser ## 
-
-?>

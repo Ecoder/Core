@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
 simple javascript > php passer ##
 */
 
@@ -12,9 +12,6 @@ simple javascript > php passer ##
             var ecoder_save_type = "home"; // declare ##
             var ecoder_tab = 0; // current tab ##
             var ecoder_iframe = "home_txt"; // start at home ##
-            var ecoder_agent_browser = "'.$browser['agent'].'"; // browser ##
-            var ecoder_agent_system = "'.$system['agent'].'"; // operating system ##
-            var ecoder_tree_home = "'.$tree['root'].'"; // tree home destination ##            
         </script>';
 
 ?>

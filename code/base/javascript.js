@@ -62,7 +62,7 @@ var rename_v2={
 		this.name=name;
 		this.type=type;
 		this.ext=name.split('.').lastVal();
-		
+
 		//Very dirty code for now, thanks to tabs api.
 		if (this._IsOpenEdit()) {
 			if (this._IsNotCurrentOpenThenSwitch()) {
@@ -71,7 +71,7 @@ var rename_v2={
 			if (!this.IsCurrentOpenThenAskIfClose(changed)) {
 				return;
 			}
-			
+
 		}
 		callAction("rename","dialog",{
 				path:this.path,
@@ -95,12 +95,12 @@ var rename_v2={
 		var cleanName=ecoder_replace_all(this.name,[[".","_"]]);
 		var cleanPathName=cleanPath+cleanName;
 		var parent_id=document.getElementById(cleanPathName).parentNode.id; // get id from parent ##
-		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##          
+		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##
 		if (parent_id!=ecoder_tab) { // It isn't the current tab
 			top.ecoder_tabs_focus(this.file,cleanPathName,parent_id);
 			top.ecoder_note('note',ecoder.translations.rename.alreadyEditing.format({name:this.file}),'5','block');
 			ecoder_html_title(this.file);
-			return true; 
+			return true;
 		}
 		return false
 	},
@@ -110,12 +110,12 @@ var rename_v2={
 		//if (changed>1) { // changes made -- was > 1 TODO ##
 			if (confirm(ecoder.translations.rename.closeConfirm.format({name:this.name}))) { // confirm ## + changed
 				close_do=true; // ok ##
-			}    
+			}
 		/*} else { // no changes made ##
-			close_do=true; // ok ##       
+			close_do=true; // ok ##
 		}*/
 
-		if (close_do) { // closed confirmed and not home tab ##                     
+		if (close_do) { // closed confirmed and not home tab ##
 			if (top.ecoder_tab>0) { // close if not focused on home ##
 				top.ecoder_tabs_close();
 			}
@@ -164,7 +164,7 @@ var del={
 		this.name=name;
 		this.type=type;
 		this.ext=name.split('.').lastVal();
-		
+
 		//Very dirty code for now, thanks to tabs api.
 		if (this._IsOpenEdit()) {
 			if (this._IsNotCurrentOpenThenSwitch()) {
@@ -173,7 +173,7 @@ var del={
 			if (!this.IsCurrentOpenThenAskIfClose(changed)) {
 				return;
 			}
-			
+
 		}
 		callAction("delete","dialog",{
 				path:this.path,
@@ -197,12 +197,12 @@ var del={
 		var cleanName=ecoder_replace_all(this.name,[[".","_"]]);
 		var cleanPathName=cleanPath+cleanName;
 		var parent_id=document.getElementById(cleanPathName).parentNode.id; // get id from parent ##
-		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##          
+		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##
 		if (parent_id!=ecoder_tab) { // It isn't the current tab
 			top.ecoder_tabs_focus(this.file,cleanPathName,parent_id);
 			top.ecoder_note('note',ecoder.translations.del.alreadyEditing.format({name:this.file}),'5','block');
 			ecoder_html_title(this.file);
-			return true; 
+			return true;
 		}
 		return false
 	},
@@ -212,12 +212,12 @@ var del={
 		//if (changed>1) { // changes made -- was > 1 TODO ##
 			if (confirm(ecoder.translations.edit.closeConfirm.format({name:this.name}))) { // confirm ## + changed
 				close_do=true; // ok ##
-			}    
+			}
 		/*} else { // no changes made ##
-			close_do=true; // ok ##       
+			close_do=true; // ok ##
 		}*/
 
-		if (close_do) { // closed confirmed and not home tab ##                     
+		if (close_do) { // closed confirmed and not home tab ##
 			if (top.ecoder_tab>0) { // close if not focused on home ##
 				top.ecoder_tabs_close();
 			}
@@ -265,7 +265,7 @@ var add={
 			}
 		);
 	},
-	
+
 	save:function() {
 		var i=add;
 		callAction("add","save",{
@@ -289,7 +289,7 @@ function upload(p) {
 	var _self=this;
 	var path=p;
 	var MAXSIZE=ecoder.info.maxUploadSize;
-	
+
 	this.init=function() {
 		callAction("upload","dialog",{
 			path:path
@@ -301,16 +301,16 @@ function upload(p) {
 		});
 		return _self;
 	}
-	
+
 	var handleUploaderChange=function() {
 		addToFileList(this.files);
 	};
-	
+
 	var clearList=function(ev) {
 		ev.preventDefault();
 		$(".dialogcontentwrapper.upload #fileList").html("");
 	};
-	
+
 	var uploadQueue=function(ev) {
 		ev.preventDefault();
 		$('.dialogcontentwrapper.upload #fileList li[data-status="0"]').each(function(k,v) {
@@ -325,18 +325,18 @@ function upload(p) {
 			el.attr("data-status","1");
 		});
 	};
-	
+
 	var addToFileList=function(files) {
 		for (var i=0; i<files.length; i++) {
 			new FileObject(files[i]);
 		}
 	};
-	
+
 	var nodeToHtml=function(fileObject) {
 		var htmlTpl="<li data-status='0' data-name='{name}' data-type='{type}' data-rsize='{rsize}'><h3>{name}</h3><p>File type: ({type}) - {fsize} KB</p><div class='loadingIndicator'></div></li>";
 		return htmlTpl.format({name:fileObject.name,type:fileObject.type,rsize:fileObject.rsize,fsize:fileObject.fsize});
 	};
-	
+
 	var FileObject=function(file) {
 		var fr = new FileReader();
 		this.name=file.name;
@@ -349,14 +349,14 @@ function upload(p) {
 		fr.onloadend = function(e) {self.dataurl=e.target.result;showFileInList(self);};
 		fr.readAsDataURL(file);
 	}
-	
+
 	var showFileInList=function(fileObject) {
 		if (fileObject) {
 				$("#fileList").html($("#fileList").html()+nodeToHtml(fileObject));
 				$.data($("#fileList li:last-child")[0],"file",fileObject);
 			}
 	};
-	
+
 	var uploadFile=function(el) {
 		if (!el) {
 			return;
@@ -364,7 +364,7 @@ function upload(p) {
 		var xhr=new XMLHttpRequest();
 		var upload=xhr.upload;
 		var file=$.data(el[0],"file");
-		
+
 		xhr.addEventListener("readystatechange",function (ev) {
 			if (xhr.readyState != 4)  {return;}
 			if (xhr.status == 200) {
@@ -377,15 +377,15 @@ function upload(p) {
 					el.children(".loadingIndicator").css("width","100%").css("background-color","#0f0");
 					el.children(".loader").html("Upload complete").css("color","#3DD13F");
 				}
-				
+
 				$("#feedback").html(ecoder.translations.upload[x]).addClass("error");
 			}
 		},false);
-		
+
 		upload.addEventListener("error",function (ev) {
 			console.log(ev);
 		},false);
-		
+
 		xhr.open("POST","upload.php?controller=upload&action=save");
 		xhr.setRequestHeader("Cache-Control", "no-cache");
 		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
@@ -398,7 +398,7 @@ function upload(p) {
 // file functions ##
 // frame target, action || mode, file path, file name, file extension || file/folder, change tracker ##
 function ecoder_files ( frame, mode, path, file, type, changed ) {
-    
+
 		switch (mode) {
 			case "rename":
 				return rename_v2.init(path,file,type,changed);
@@ -409,18 +409,18 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
 			case "upload":
 				return new upload(path).init();
 		}
-		
+
     var ecoder_tabs_max = 10; // max tabs ##
-    
+
     // make uniquish iframe id ##
     var ecoder_file_full = file; // assign file to variable ##
     var ecoder_path_full = path; // assign path to variable ##
     var ecoder_file_clean = ''; // declare ##
     var ecoder_changed_min = 1; // number of changes to warn on ##
-    ecoder_path_full = ecoder_replace_all( ecoder_path_full, [ ["/", "_"] ] ); // replace / with _ in path ##   
-    ecoder_file_full = ecoder_replace_all( ecoder_file_full, [ [".", "_"] ] ); // replace . with _ in file ##   
+    ecoder_path_full = ecoder_replace_all( ecoder_path_full, [ ["/", "_"] ] ); // replace / with _ in path ##
+    ecoder_file_full = ecoder_replace_all( ecoder_file_full, [ [".", "_"] ] ); // replace . with _ in file ##
     ecoder_file_clean = ecoder_path_full + ecoder_file_full; // add path & file ##
-      
+
     var ecoder_frame = frame; // get frame ##
     var ecoder_mode = mode; // get mode ##
     var ecoder_type = type; // get frame ##
@@ -432,9 +432,9 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
         if ( changed > ecoder_changed_min ) { // delux and changes made -- was > 1 ##
             if ( confirm ( close_confirm ) ) { // confirm ## + changed
                 close_do = 1; // ok ##
-            }    
+            }
         } else { // delux and no changes made ##
-            close_do = 1; // ok ##       
+            close_do = 1; // ok ##
         }
 
         if ( close_do == 1 && top.ecoder_tab > 0 ) {
@@ -451,7 +451,7 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
             }
         } else { // delux and no changes made ##
             swap_do = 1; // ok ##
-        }       
+        }
 
         if ( swap_do == 1 ) {
             top.frames[frame].location='editor.php?'+ path +'&editor='+ type; // call ##
@@ -464,62 +464,62 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
         if ( changed > ecoder_changed_min ) { // delux and changes made -- was > 1  ##
             if ( confirm( reload_confirm ) ) { // confirm ## + changed
                 reload_do = 1; // ok ##
-            }    
+            }
         } else { // delux and no changes made ##
             reload_do = 1; // ok ##
         }
         if ( reload_do == 1 ) {
             top.frames[frame].location.reload(true); // call ##
         }
-        
-    } else if ( ecoder_mode == 'read' || ecoder_mode == 'edit' ) { // edit or read ##            
+
+    } else if ( ecoder_mode == 'read' || ecoder_mode == 'edit' ) { // edit or read ##
         //TODO: New tree always passes mode edit.
 				// Editor will have to find out writability for itself
         var ecoder_object = ecoder_check_object( ecoder_file_clean ); // check if object/file is open ##
         var ecoder_file = 'editor.php?mode='+ mode +'&path='+ path +'&file='+ file +'&type='+ type; // url to open ##
         if ( ecoder_object ) { // tab open, so focus ##
-            
-            var parent_id; // declare ##  
+
+            var parent_id; // declare ##
             parent_id = document.getElementById( ecoder_file_clean ).parentNode.id; // get id from parent ##
-            parent_id = parent_id.replace( /tabber_panel_/, "" );// remove 'tabber_panel_' ##          
+            parent_id = parent_id.replace( /tabber_panel_/, "" );// remove 'tabber_panel_' ##
             //alert ( parent_id + ' - ' + ecoder_tab );
             if ( parent_id != ecoder_tab ) { // focus, if not clicked on current tab ##
                 top.ecoder_tabs_focus ( file, ecoder_file_clean, parent_id ); // focus tab ##
             }
-            
-        } else { // not open yet ##       
+
+        } else { // not open yet ##
             if ( top.tabber.tabContainer.cells.length + 1 > ecoder_tabs_max ) { // restrict to x tabs
-                
+
                 // note ##
                 var e_note = "<p>you already have <strong>"+ ecoder_tabs_max +"</strong> tabs open which is the maximum allowed in the configuration.</p>";
-                top.ecoder_note ( 'note', e_note, '5', 'block' );                
-                
-            } else { // ok to add tab ##     
-            
+                top.ecoder_note ( 'note', e_note, '5', 'block' );
+
+            } else { // ok to add tab ##
+
                 if ( ecoder_mode == "read" ) { // read only notice ##
                     var e_note = "<p><strong>"+ file +"</strong> is read-only, so you can view but not edit this document.</p>";
-                    top.ecoder_note ( 'note', e_note, '5', 'block' );      
-                }   
-                   
+                    top.ecoder_note ( 'note', e_note, '5', 'block' );
+                }
+
                 top.ecoder_tabs_add ( ecoder_file_clean, file, ecoder_file, path ); // add new tab -- iframe name/id ,label, iframe url, path ##
-                
+
             }
         }
-        ecoder_html_title ( file ); // set title ## // path+file           
-       
+        ecoder_html_title ( file ); // set title ## // path+file
+
     }
     return false; // no return ##
 }
 
 function ContextMenu(options) {
-	
+
 	this.init=function(options) {
 		var html=setUpHtml(options.buttons);
 		$("body").append(html);
 		$("#ctxtmenu").css("top",options.pos.y).css("left",options.pos.x);
 		setUpEvents(options.buttons,options.origEl);
 	}
-	
+
 	var setUpHtml=function(buttons) {
 		var htmlFormat='<div id="ctxtmenucontainer"><div id="ctxtmenuoverlay"></div><ul id="ctxtmenu">{items}</ul></div>';
 		var html="";
@@ -532,7 +532,7 @@ function ContextMenu(options) {
 		html=htmlFormat.format({items:itemsHtml});
 		return html;
 	};
-	
+
 	var setUpEvents=function(buttons,origEl) {
 		$("#ctxtmenucontainer #ctxtmenuoverlay").on("click",function() {
 			$("#ctxtmenucontainer").remove();
@@ -542,8 +542,8 @@ function ContextMenu(options) {
 			v.addEvent(origEl);
 		});
 	};
-	
-	
+
+
 	//At the end
 	this.init(options);
 }
@@ -583,14 +583,16 @@ function ContextMenuItem(options) {
 }
 
 function Tree(options) {
+	var _self=this;
 	this.options={showHidden:false};
-	
+
 	this.init=function(options) {
 		$.extend(this.options,options);
-		
+
 		$.ajax({
 			url:"tree2.php",
 			data:{json:JSON.stringify({showHidden:this.options.showHidden})},
+			type:"POST",
 			datatype:"json",
 			success:function(json) {
 				json=JSON.parse(json);
@@ -608,7 +610,7 @@ function Tree(options) {
 			}
 		});
 	};
-	
+
 	var parseNodeToHtml=function(node) {
 		var htmlTmpl='<li data-type="{type}" data-name="{name}" data-path="{path}" data-ext="{ext}" data-subtype="{subtype}"><span>{name}</span>{children}</li>';
 		var html="";
@@ -626,11 +628,13 @@ function Tree(options) {
 		html+=htmlTmpl.format({type:node.type,name:node.name,path:node.path,ext:node.ext,subtype:node.subtype,children:subTreeHtml});
 		return html;
 	};
-	
+
 	var registerEvents=function() {
 		$("#tree h2").on("contextmenu",function(e) {
+			e.stopPropagation();
 			var hiddenOption=null;
-			if (this.options.showHidden) {
+			console.log("showhidden = "+_self.options.showHidden);
+			if (_self.options.showHidden) {
 				hiddenOption=new ContextMenuItem({id:"hidden_hide",name:"Hide hidden files",callback:hideHidden});
 			} else {
 				hiddenOption=new ContextMenuItem({id:"hidden_show",name:"Show hidden files",callback:showHidden});
@@ -687,60 +691,63 @@ function Tree(options) {
 			return false;
 		});
 	};
-	
+
 	///////////// TREE ACTION CALLBACKS
 	var toggleDir=function(li) {
 		li.children("ul").toggle();
 	}
-	
+
 	var editFile=function(li) {
 		var path=li.attr("data-path");
 		var name=li.attr("data-name");
 		var subtype=li.attr("data-subtype");
 		ecoder_files('main','edit',path,name,subtype);
 	}
-	
+
 	var rename=function(li) {
 		var path=li.attr("data-path");
 		var name=li.attr("data-name");
 		var type=li.attr("data-type");
 		ecoder_files('main','rename',path,name,type);
 	}
-	
+
 	var del=function(li) {
 		var path=li.attr("data-path");
 		var name=li.attr("data-name");
 		var type=li.attr("data-type");
 		ecoder_files('main','delete',path,name,type);
 	}
-	
+
 	var addFileHere=function(li) {
 		var path=li.attr("data-path");
 		ecoder_files('main','add',path,'','file');
 	}
-	
+
 	var addFolderHere=function(li) {
 		var path=li.attr("data-path");
 		ecoder_files('main','add',path,'','folder');
 	}
-	
+
 	var uploadHere=function(li) {
 		var path=li.attr("data-path");
 		ecoder_files('main','upload',path,'','file');
 	}
-	
+
 	var hideHidden=function() {
+		$("#ctxtmenucontainer").remove();
 		ecoder.tree=new Tree($.extend({},this.options,{showHidden:false}));
 	}
-	
+
 	var showHidden=function() {
+		$("#ctxtmenucontainer").remove();
 		ecoder.tree=new Tree($.extend({},this.options,{showHidden:true}));
 	}
-	
+
 	var refresh=function() {
+		$("#ctxtmenucontainer").remove();
 		ecoder.tree=new Tree(this.options);
 	}
-	
+
 	this.init(options);
 }
 
@@ -751,21 +758,21 @@ var ecoder_count_time = 0; // set to zero ##
 var ecoder_note_open = 0; // timeout ID ##
 //var ecoder_note_fade = 1; // timeout ID ##
 function ecoder_note ( n_div, n_msg, n_delay, n_display ) {
-    
+
     clearTimeout ( ecoder_note_open ); // clear all open note timeouts ##
-      
+
     // set time if not passed ##
     if ( typeof ( n_delay ) == "undefined" || n_delay < 5 ) n_delay = 5;
-    
+
     // convert n_delay to miliseconds ##
     note_delay = ( n_delay * 1000 );
-    
+
     // show hide ##
     var elem = document.getElementById( n_div );
-    if ( n_display == "none" ) { 
-        elem.style.display = "none"; 
+    if ( n_display == "none" ) {
+        elem.style.display = "none";
     } else {
-        elem.style.display = "block"; 
+        elem.style.display = "block";
     }
 
     // add close and clock ##
@@ -775,13 +782,13 @@ function ecoder_note ( n_div, n_msg, n_delay, n_display ) {
     if ( n_msg ) { // change innerHTML of save div ##
         elem.innerHTML = n_close + n_msg; // change message ##
     }
-    
+
     // start clock and set hide timeout ##
     ecoder_note_open = setTimeout( "ecoder_note_reset ( '"+ n_div +"', 'none' )", note_delay ); // hide after a delay ##
     var note_clock = setTimeout( "ecoder_count ( 'note_clock', '"+ n_delay +"' )", 0 ); // count it ##
-    
+
     // swallow return ##
-    return false; 
+    return false;
 }
 
 // hide note ##
@@ -796,7 +803,7 @@ function ecoder_count ( c_div, c_time ){
      if ( typeof ( note_clock ) != "undefined" ) {clearTimeout ( note_clock );} // clear if counting already ##
      document.getElementById( c_div ).innerHTML = c_time; // return value to div ##
      if ( c_time > 0 ){ // continue ##
-        ecoder_count_time = c_time; // update ##   
+        ecoder_count_time = c_time; // update ##
         note_clock = setTimeout ( "top.ecoder_count( '"+c_div+"', '"+( c_time - 1 )+"' )", 1000 ); // each second ##
      }
 }
@@ -804,8 +811,8 @@ function ecoder_count ( c_div, c_time ){
 // ----------------------------------------------------------------------------------------------------------
 
 // fade out boxes ##
-function ecoder_fade ( id, opacStart, opacEnd, millisec ) { 
-   
+function ecoder_fade ( id, opacStart, opacEnd, millisec ) {
+
     var speed = Math.round(millisec / 100); //speed for each frame
     var timer = 0;
 
@@ -832,17 +839,17 @@ function ecoder_fade_do(opacity, id) {
     object.MozOpacity = (opacity / 100);
     object.KhtmlOpacity = (opacity / 100);
     object.filter = "alpha(opacity=" + opacity + ")";
-    
-} 
+
+}
 
 // ----------------------------------------------------------------------------------------------------------
 
 // html title function ## remove mode ##
 function ecoder_html_title ( file ) {
-    
+
     var ecoder_title = 'home'; // declare default ##
     var ecoder_file = file; // file name from function ##
-    if ( ecoder_file ) ecoder_title = ecoder_file; // add file if set ##    
+    if ( ecoder_file ) ecoder_title = ecoder_file; // add file if set ##
     top.document.title = ecoder_name + ' | '+ ecoder_title; // apply title ##
     return false; // no return ##
 
@@ -852,7 +859,7 @@ function ecoder_html_title ( file ) {
 
 // track changes to editarea ##
 var content_changed = 0; // swallow first change ( focus ) to editarea ##
-function ecoder_changed () {	
+function ecoder_changed () {
     content_changed ++; // iterate to count changes ##
 }
 
@@ -873,7 +880,7 @@ function ecoder_track ( what, reference ) {
         ecoder_tab = reference; // update variable ##
     }
     // track tab ##
-    if ( what == 'iframe' ) {  
+    if ( what == 'iframe' ) {
         ecoder_iframe = reference; // update iframe reference ## -- document.getElementById ( reference )
     }
 }
@@ -919,7 +926,7 @@ function ecoder_loaded_base( mode ) {
     b_div = 'load_base';
     var elem = document.getElementById( b_div );
     elem.style.display = ( elem.style.display == "none" ) ? "" : "none";
-    
+
 }
 
 // ----------------------------------------------------------------------------------------------------------
@@ -943,53 +950,53 @@ function Ecoder() {
 	this.translations=null; //var later
 	this.info=null;
 	this.tree=null;
-	
+
 	this.init=function() {
 		if (!testCompat()) {
 			$("body").html("").css("background","#000000");
 			alert("Sorry, your browser does not support some of the features needed for ecoder. Please update your browser");
 		}
 
-		getTranslations();
 		getInfo();
-		
+
 		return _self;
 	}
-	
+
 	var testCompat=function() {
 		return !(typeof FileReader == "undefined");
 	}
-	
+
 	var getTranslations=function() {
 		$.ajax({
 			url:"translations.json",
 			datatype:'json',
-			success:function(msg) { 
-				_self.translations=msg[$("body").attr("data-lang")];
+			success:function(msg) {
+				_self.translations=msg[_self.info.lang];
 				translations=_self.translations; //temp TODO remove use
 			}
 		});
 	}
-	
+
 	var getInfo=function() {
 		$.ajax({
 			url:"info.php",
 			datatype:'json',
 			success:function(json) {
 				_self.info=JSON.parse(json);
-				
+
 				//getInfo is the last call, for now... TODO should be cleaner. Fire custom event?
 				afterEcoderReady();
 			}
 		})
 	}
-	
+
 	var afterEcoderReady=function() {
+		getTranslations();
 		_self.tree=new Tree({showHidden:_self.info.showHidden});
 		setLiveEvents();
 		$("body").on("contextmenu",false);
 	}
-	
+
 	this.init();
 }
 

@@ -19,12 +19,13 @@ function return_bytes($val) {
 }
 
 function getInfo(){
-	global $cnf;
+	global $cnf,$code;
 	$upload_max_filesize=return_bytes(ini_get("upload_max_filesize"));
-	
+
 	Output::add("maxUploadSize",$upload_max_filesize);
 	Output::add("dirSep",DIRECTORY_SEPARATOR);
 	Output::add("tree_showHidden",$cnf['showHidden']);
+	Output::add("lang",$code['lang']);
 }
 getInfo();
 Output::send();

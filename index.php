@@ -1,6 +1,6 @@
 <?php
 
-/* 
+/*
 main page - include all items, in iframes ##
 */
 
@@ -10,34 +10,27 @@ include "code/base/header.php"; // html header, branding ##
     // build main structure ##
     echo '
     </head>
-    <body data-lang="'.$code['lang'].'">
+    <body>
 		<div id="dialogoverlay"></div> <!--Also used for compatability-->
 	<div id="dialog"><span id="closedialog">&nbsp;</span><div id="dialogcontent"></div></div>
 	';
-    
+
     // test if javascript enabled ##
-    include "code/base/loader.php"; 
+    include "code/base/loader.php";
         ?>
 <div id="tree">
 	<h2>Ecoder</h2>
 </div>
-        <?php echo '<!--<div id="left">
-            <iframe name="tree" id="iframe_tree" src="tree.php"></iframe>
-        </div>-->
-
-        <div id="content">';
+        <?php echo '<div id="content">';
 
             // include required tabs mark-up ##
-            include "code/tabs/build.php";                
-            
+            include "code/tabs/build.php";
+
         echo '
         </div>';
-            
-    include "code/tabs/init.php"; // build tabs ##
 
     // notes and messages ##
-    include "code/base/notes.php";
+     echo '<div id="note">no messages from ecoder.</div>';
 
-include "code/base/footer.php"; // html footer ##
-
-?>
+echo '</body>
+</html>';
