@@ -1,4 +1,5 @@
 // main ecoder javascript ##
+var translations, ecoder;
 
 var dialog={
 	init:function() {
@@ -524,7 +525,9 @@ function ContextMenu(options) {
 		var html="";
 		var itemsHtml="";
 		buttons.forEach(function(v) {
-			itemsHtml+=v.toString();
+			if (v!=null) {
+				itemsHtml+=v.toString();
+			}
 		});
 		html=htmlFormat.format({items:itemsHtml});
 		return html;
@@ -579,14 +582,20 @@ function ContextMenuItem(options) {
 	this.init(options);
 }
 
-function Tree() {
+function Tree(options) {
+	this.options={showHidden:false};
 	
-	this.init=function() {
+	this.init=function(options) {
+		$.extend(this.options,options);
+		
 		$.ajax({
 			url:"tree2.php",
+			data:{json:JSON.stringify({showHidden:this.options.showHidden})},
 			datatype:"json",
 			success:function(json) {
 				json=JSON.parse(json);
+				$("#tree ul#toplevel").remove();
+				$("#tree p.error").remove();
 				if (json.error) {
 					$("#tree")
 						.append("<p class='error'>"+json.error+"</p>")
@@ -619,7 +628,20 @@ function Tree() {
 	};
 	
 	var registerEvents=function() {
-		$('#tree li[data-type="dir"]').on("click",function(e) {
+		$("#tree h2").on("contextmenu",function(e) {
+			var hiddenOption=null;
+			if (this.options.showHidden) {
+				hiddenOption=new ContextMenuItem({id:"hidden_hide",name:"Hide hidden files",callback:hideHidden});
+			} else {
+				hiddenOption=new ContextMenuItem({id:"hidden_show",name:"Show hidden files",callback:showHidden});
+			}
+			//TODO hidden
+			var refreshOption=new ContextMenuItem({id:"refresh",name:"Refresh the tree",callback:refresh});
+			var buttons=new Array(hiddenOption,refreshOption);
+			new ContextMenu({buttons:buttons,pos:{x:e.pageX,y:e.pageY},origEl:$(e.target)});
+			return false;
+		});
+		$('#tree li[data-type="dir"] span').on("click",function(e) {
 			var el=null;
 			if (e.target.nodeName.toLowerCase()=="li") {
 				el=$(e.target);
@@ -629,7 +651,7 @@ function Tree() {
 			toggleDir(el);
 			return false;
 		});
-		$('#tree li[data-type="file"]').on("click",function(e) {
+		$('#tree li[data-type="file"] span').on("click",function(e) {
 			var el=null;
 			if (e.target.nodeName.toLowerCase()=="li") {
 				el=$(e.target);
@@ -639,7 +661,7 @@ function Tree() {
 			editFile(el);
 			return false;
 		});
-		$('#tree li').on("contextmenu",function(e) {
+		$('#tree li span').on("contextmenu",function(e) {
 			var el=null;
 			if (e.target.nodeName.toLowerCase()=="li") {
 				el=$(e.target);
@@ -647,18 +669,26 @@ function Tree() {
 				el=$(e.target).parent("li");
 			}
 			var openOption=null;
+			var addFileHereOption=null;
+			var addFolderHereOption=null;
+			var uploadHereOption=null;
 			if (el.attr("data-type")=="dir") {
 				openOption=new ContextMenuItem({id:"opendir",name:"Open folder",callback:toggleDir});
+				addFileHereOption=new ContextMenuItem({id:"addfile",name:"Add file in this folder",callback:addFileHere,isSep:true});
+				addFolderHereOption=new ContextMenuItem({id:"addfolder",name:"Add folder in this folder",callback:addFolderHere});
+				uploadHereOption=new ContextMenuItem({id:"upload",name:"Upload in this folder",callback:uploadHere});
 			} else if (el.attr("data-type")=="file") {
 				openOption=new ContextMenuItem({id:"openfile",name:"Open file",callback:editFile});
 			}
-			var buttons=new Array(openOption); //later also rename, delete. can be done in same call
+			var renameOption=new ContextMenuItem({id:"rename",name:"Rename",callback:rename,isSep:true});
+			var deleteOption=new ContextMenuItem({id:"delete",name:"Delete",callback:del});
+			var buttons=new Array(openOption,renameOption,deleteOption,addFileHereOption,addFolderHereOption,uploadHereOption); //later also rename, delete. can be done in same call
 			new ContextMenu({buttons:buttons,pos:{x:e.pageX,y:e.pageY},origEl:el});
 			return false;
 		});
 	};
 	
-	//We could do this cleaner: make sure we always pass the correct li.
+	///////////// TREE ACTION CALLBACKS
 	var toggleDir=function(li) {
 		li.children("ul").toggle();
 	}
@@ -666,35 +696,53 @@ function Tree() {
 	var editFile=function(li) {
 		var path=li.attr("data-path");
 		var name=li.attr("data-name");
-		ecoder_files('main','edit',path,name,'text'); //TODO real type
+		var subtype=li.attr("data-subtype");
+		ecoder_files('main','edit',path,name,subtype);
 	}
 	
-	this.init();
+	var rename=function(li) {
+		var path=li.attr("data-path");
+		var name=li.attr("data-name");
+		var type=li.attr("data-type");
+		ecoder_files('main','rename',path,name,type);
+	}
+	
+	var del=function(li) {
+		var path=li.attr("data-path");
+		var name=li.attr("data-name");
+		var type=li.attr("data-type");
+		ecoder_files('main','delete',path,name,type);
+	}
+	
+	var addFileHere=function(li) {
+		var path=li.attr("data-path");
+		ecoder_files('main','add',path,'','file');
+	}
+	
+	var addFolderHere=function(li) {
+		var path=li.attr("data-path");
+		ecoder_files('main','add',path,'','folder');
+	}
+	
+	var uploadHere=function(li) {
+		var path=li.attr("data-path");
+		ecoder_files('main','upload',path,'','file');
+	}
+	
+	var hideHidden=function() {
+		ecoder.tree=new Tree($.extend({},this.options,{showHidden:false}));
+	}
+	
+	var showHidden=function() {
+		ecoder.tree=new Tree($.extend({},this.options,{showHidden:true}));
+	}
+	
+	var refresh=function() {
+		ecoder.tree=new Tree(this.options);
+	}
+	
+	this.init(options);
 }
-/*
-// tree functions ##
-function ecoder_tree ( frame, mode, path, hidden ) {
-    
-    var ecoder_mode = mode; // get mode ##
-     
-    if ( ecoder_mode == 'reload' ) { // reload ##
-        top.frames[frame].location.reload(true);
-        
-    } else if ( ecoder_mode == 'home' ) { // tree home ##
-        top.frames[frame].location=''+ frame +'.php?path='+ path; // call ##
-
-    } else if ( ecoder_mode == 'up' ) { // tree up ##
-        top.frames[frame].location=''+ frame +'.php?path='+ path; // call ##
-        
-    } else if ( ecoder_mode == 'open' ) { // tree open folder ##
-        top.frames[frame].location=''+ frame +'.php?path='+ path; // call ##
-
-    } else if ( ecoder_mode == 'hidden' ) { // show / hide hidden files ##
-        top.frames[frame].location=''+ frame +'.php?path='+ path +'&hidden='+ hidden; // call ##
-        
-    }
-    return false; // no return ##
-}*/
 
 // ----------------------------------------------------------------------------------------------------------
 
@@ -894,7 +942,7 @@ function Ecoder() {
 	var _self=this;
 	this.translations=null; //var later
 	this.info=null;
-	var tree;
+	this.tree=null;
 	
 	this.init=function() {
 		if (!testCompat()) {
@@ -904,7 +952,7 @@ function Ecoder() {
 
 		getTranslations();
 		getInfo();
-		tree=new Tree();
+		
 		return _self;
 	}
 	
@@ -917,7 +965,8 @@ function Ecoder() {
 			url:"translations.json",
 			datatype:'json',
 			success:function(msg) { 
-				_self.translations=msg[$("body").attr("data-lang")]; 
+				_self.translations=msg[$("body").attr("data-lang")];
+				translations=_self.translations; //temp TODO remove use
 			}
 		});
 	}
@@ -928,19 +977,23 @@ function Ecoder() {
 			datatype:'json',
 			success:function(json) {
 				_self.info=JSON.parse(json);
+				
+				//getInfo is the last call, for now... TODO should be cleaner. Fire custom event?
+				afterEcoderReady();
 			}
 		})
+	}
+	
+	var afterEcoderReady=function() {
+		_self.tree=new Tree({showHidden:_self.info.showHidden});
+		setLiveEvents();
+		$("body").on("contextmenu",false);
 	}
 	
 	this.init();
 }
 
 // ----------------------------------------------------------------------------------------------------------
-var translations, ecoder;
 $(document).ready(function() {
-	ecoder=new Ecoder(); //temp
-	setLiveEvents();
-	
-	translations=ecoder.translations;
-	
+	ecoder=new Ecoder();
 });

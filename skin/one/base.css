@@ -61,6 +61,7 @@ body {
 	color:#FFFFFF;
 	margin:0;
 	padding:3px;
+	text-align:center;
 }
 #tree .error {
 	width:100px;
@@ -74,9 +75,18 @@ body {
 	display:none;
 }
 #tree ul#toplevel {
-	margin-top:5px;
 	margin-left:5px;
 	display:block;
+	overflow:scroll;
+	position:fixed;
+	top:26px;
+	left:0;
+	right:0;
+	bottom:0;
+	width:245px;
+}
+#tree ul#toplevel > li:first-child {
+	margin-top:5px;
 }
 #tree li {
 	background:url(design/icon_text.png) no-repeat;
@@ -88,6 +98,27 @@ body {
 	list-style:none;
 	padding-left:21px;
 	margin-left:-15px;
+}
+#tree li[data-type="dir"] {
+	background-image:url(design/icon_folder.png);
+}
+#tree li[data-type="file"] {
+	background-image:url(design/icon_text.png);
+}
+#tree li[data-subtype="html"] {
+	background-image:url(design/icon_html.png);
+}
+#tree li[data-subtype="script"] {
+	background-image:url(design/icon_script.png);
+}
+#tree li[data-subtype="css"] {
+	background-image:url(design/icon_css.png);
+}
+#tree li[data-subtype="text"] {
+	background-image:url(design/icon_text.png);
+}
+#tree li[data-subtype="php"] {
+	background-image:url(design/icon_php.png);
 }
 #tree li span {
 	line-height:20px;
@@ -370,6 +401,12 @@ div.dialogcontentwrapper.upload .loadingIndicator {
 			padding:2px;
 			padding-left:5px;
 		}
+			#ctxtmenucontainer ul#ctxtmenu li:first-child {
+				font-weight:bold;
+			}
 			#ctxtmenucontainer ul#ctxtmenu li.sep {
 				border-top:1px solid #CCCCCC;
+			}
+			#ctxtmenucontainer ul#ctxtmenu li:hover {
+				background-color:#deeecd;
 			}

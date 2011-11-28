@@ -15,15 +15,17 @@ class TreeNode {
 	public $name,$type,$path,$ext="",$subtype="unknown";
 	public $children;
 	
-	public function __construct($pathname) {
+	public function __construct($pathname,$showHidden=true) {
 		$sfi=new SplFileInfo($pathname);
 		$this->_getPropertiesFromSfi($sfi);
+		
 		if ($sfi->isDir()) {
 			$this->children=array();
 			$di=new DirectoryIterator($pathname);
 			foreach ($di as $f) {
 				if ($f->isDot()) { continue; }
-				$this->children[]=new TreeNode($f->getPathname());
+				if (substr($f->getFilename(),0,1)==self::HIDDEN && $showHidden===false) { continue; }
+				$this->children[]=new TreeNode($f->getPathname(),$showHidden);
 			}
 			usort($this->children,array($this,"_sortMyChildrenCallback"));
 		} else {
@@ -53,8 +55,8 @@ class TreeNode {
 	}
 	
 	private function _sortMyChildrenCallback(TreeNode $a,TreeNode $b) {
+		//First DIR, FILE
 		$firstCmp=0;
-		
 		if ($a->isDir() && $b->isFile()) {
 			$firstCmp=-1;
 		} else if ($a->isFile() && $b->isDir()) {
@@ -63,6 +65,7 @@ class TreeNode {
 		
 		if ($firstCmp!=0) { return $firstCmp; }
 		
+		//Then HIDDEN, NOT HIDDEN
 		if ($a->isHidden() && $b->isHidden()) {
 			return 0;
 		} else if ($a->isHidden() && (!$b->isHidden())) {
@@ -71,7 +74,8 @@ class TreeNode {
 			return 1;
 		}
 		
-		//TODO add alphabetic sort
+		//Then alphabetical
+		return strcasecmp($a->name,$b->name);
 	}
 	
 	public function isDir() {

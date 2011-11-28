@@ -55,6 +55,8 @@ $_SESSION['tree_dir_ignore'] = array( ".", "..", ".files", ".snap", "logic", "cp
 $dbug['error_path'] = '/home/ecoder/code/logs/error.log'; // full path to error log file ##
 $dbug['error_email'] = 'log@website.com'; // email log errors ##
 
+$cnf['showHidden']=false; //Temp.. tree: show hidden files?
+
 include "code/base/logic.php"; // apply settings ##
 include "code/base/functions.php"; // php functions ## 
 include "code/base/secure.php"; // secure system ##
