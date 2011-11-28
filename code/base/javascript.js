@@ -472,7 +472,8 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
         }
         
     } else if ( ecoder_mode == 'read' || ecoder_mode == 'edit' ) { // edit or read ##            
-        
+        //TODO: New tree always passes mode edit.
+				// Editor will have to find out writability for itself
         var ecoder_object = ecoder_check_object( ecoder_file_clean ); // check if object/file is open ##
         var ecoder_file = 'editor.php?mode='+ mode +'&path='+ path +'&file='+ file +'&type='+ type; // url to open ##
         if ( ecoder_object ) { // tab open, so focus ##
@@ -515,7 +516,7 @@ function ContextMenu(options) {
 		var html=setUpHtml(options.buttons);
 		$("body").append(html);
 		$("#ctxtmenu").css("top",options.pos.y).css("left",options.pos.x);
-		setUpEvents(options.buttons);
+		setUpEvents(options.buttons,options.origEl);
 	}
 	
 	var setUpHtml=function(buttons) {
@@ -529,14 +530,13 @@ function ContextMenu(options) {
 		return html;
 	};
 	
-	var setUpEvents=function(buttons) {
+	var setUpEvents=function(buttons,origEl) {
 		$("#ctxtmenucontainer #ctxtmenuoverlay").on("click",function() {
-			console.log("ctxtmenu-close");
 			$("#ctxtmenucontainer").remove();
 			return false;
 		});
 		buttons.forEach(function(v) {
-			v.addEvent();
+			v.addEvent(origEl);
 		});
 	};
 	
@@ -567,10 +567,12 @@ function ContextMenuItem(options) {
 		return res;
 	}
 
-	this.addEvent=function() {
+	this.addEvent=function(origEl) {
 		var self=this;
 		$("#ctxtmenucontainer ul#ctxtmenu li#"+this.id).on("click",function(e) {
-			self.callback(e);
+			self.callback(origEl);
+			$("#ctxtmenucontainer").remove();
+			return false;
 		});
 	}
 
@@ -599,7 +601,7 @@ function Tree() {
 	};
 	
 	var parseNodeToHtml=function(node) {
-		var htmlTmpl='<li data-type="{type}"><span>{name}</span>{children}</li>';
+		var htmlTmpl='<li data-type="{type}" data-name="{name}" data-path="{path}" data-ext="{ext}" data-subtype="{subtype}"><span>{name}</span>{children}</li>';
 		var html="";
 		var subTreeHtml="";
 		if (node.children != null) {
@@ -612,16 +614,29 @@ function Tree() {
 			});
 			subTreeHtml+="</ul>";
 		}
-		html+=htmlTmpl.format({type:node.type,name:node.name,children:subTreeHtml});
+		html+=htmlTmpl.format({type:node.type,name:node.name,path:node.path,ext:node.ext,subtype:node.subtype,children:subTreeHtml});
 		return html;
 	};
 	
 	var registerEvents=function() {
 		$('#tree li[data-type="dir"]').on("click",function(e) {
-			toggleDir(e);
+			var el=null;
+			if (e.target.nodeName.toLowerCase()=="li") {
+				el=$(e.target);
+			} else {
+				el=$(e.target).parent("li");
+			}
+			toggleDir(el);
 			return false;
 		});
 		$('#tree li[data-type="file"]').on("click",function(e) {
+			var el=null;
+			if (e.target.nodeName.toLowerCase()=="li") {
+				el=$(e.target);
+			} else {
+				el=$(e.target).parent("li");
+			}
+			editFile(el);
 			return false;
 		});
 		$('#tree li').on("contextmenu",function(e) {
@@ -635,18 +650,23 @@ function Tree() {
 			if (el.attr("data-type")=="dir") {
 				openOption=new ContextMenuItem({id:"opendir",name:"Open folder",callback:toggleDir});
 			} else if (el.attr("data-type")=="file") {
-				openOption=new ContextMenuItem({id:"openfile",name:"Open file",callback:function() {
-						//Also double code, once we implement it
-				}});
+				openOption=new ContextMenuItem({id:"openfile",name:"Open file",callback:editFile});
 			}
 			var buttons=new Array(openOption); //later also rename, delete. can be done in same call
-			new ContextMenu({buttons:buttons,pos:{x:e.pageX,y:e.pageY}});
+			new ContextMenu({buttons:buttons,pos:{x:e.pageX,y:e.pageY},origEl:el});
 			return false;
 		});
 	};
 	
-	var toggleDir=function(e) {
-		$(e.target).next("ul").toggle();
+	//We could do this cleaner: make sure we always pass the correct li.
+	var toggleDir=function(li) {
+		li.children("ul").toggle();
+	}
+	
+	var editFile=function(li) {
+		var path=li.attr("data-path");
+		var name=li.attr("data-name");
+		ecoder_files('main','edit',path,name,'text'); //TODO real type
 	}
 	
 	this.init();

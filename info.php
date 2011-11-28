@@ -21,6 +21,7 @@ function getInfo(){
 	$upload_max_filesize=return_bytes(ini_get("upload_max_filesize"));
 	
 	Output::add("maxUploadSize",$upload_max_filesize);
+	Output::add("dirSep",DIRECTORY_SEPARATOR);
 }
 getInfo();
 Output::send();

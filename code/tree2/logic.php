@@ -12,7 +12,7 @@ class TreeNode {
 	const TYPE_DIR="dir";
 	const TYPE_FILE="file";
 	
-	public $name,$type;
+	public $name,$type,$path,$ext="",$subtype="unknown";
 	public $children;
 	
 	public function __construct($pathname) {
@@ -32,8 +32,24 @@ class TreeNode {
 	}
 	
 	private function _getPropertiesFromSfi(SplFileInfo $sfi) {
+		//Dirty solution for the subtypes for now
+		//TODO / TOFIX when we introduce better actions
+		$extToSubtype=array("html"=>"html","script"=>"js","css"=>"css","text"=>array("txt","htaccess","ini"),"php"=>"php");
+		
 		$this->name=$sfi->getFilename();
 		$this->type=$sfi->getType();
+		$this->path=$sfi->getPath();
+		//Could use $sfi->getExtension() but that's only
+		//available from php 5.3.6
+		$this->ext=pathinfo($sfi->getPathname(),PATHINFO_EXTENSION);
+		foreach ($extToSubtype as $k=>$v) {
+			if (is_array($v)) {
+				if (!in_array($this->ext,$v)) { continue; }
+			} else if ($this->ext!=$v) {
+				continue;
+			}
+			$this->subtype=$k;
+		}
 	}
 	
 	private function _sortMyChildrenCallback(TreeNode $a,TreeNode $b) {
