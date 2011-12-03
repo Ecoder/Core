@@ -8,12 +8,8 @@ include "code.php"; // single included settings file ##
 include "code/base/header.php"; // html header, branding ##
 
     // build main structure ##
-    echo '
-    </head>
-    <body>
-		<div id="dialogoverlay"></div> <!--Also used for compatability-->
-	<div id="dialog"><span id="closedialog">&nbsp;</span><div id="dialogcontent"></div></div>
-	';
+    echo '</head>
+    <body>';
 
     // test if javascript enabled ##
     include "code/base/loader.php";
@@ -28,9 +24,5 @@ include "code/base/header.php"; // html header, branding ##
 
         echo '
         </div>';
-
-    // notes and messages ##
-     echo '<div id="note">no messages from ecoder.</div>';
-
 echo '</body>
 </html>';

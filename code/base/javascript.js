@@ -35,7 +35,6 @@ function callAction(controller,action,data,fn) {
 		}
 	});
 }
-
 function setLiveEvents() {
 	dialog.init();
 	rename_v2.setLiveEvents();
@@ -98,7 +97,7 @@ var rename_v2={
 		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##
 		if (parent_id!=ecoder_tab) { // It isn't the current tab
 			top.ecoder_tabs_focus(this.file,cleanPathName,parent_id);
-			top.ecoder_note('note',ecoder.translations.rename.alreadyEditing.format({name:this.file}),'5','block');
+			ecoder.infodialog(ecoder.translations.rename.alreadyEditing.format({name:this.file}));
 			ecoder_html_title(this.file);
 			return true;
 		}
@@ -200,7 +199,7 @@ var del={
 		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##
 		if (parent_id!=ecoder_tab) { // It isn't the current tab
 			top.ecoder_tabs_focus(this.file,cleanPathName,parent_id);
-			top.ecoder_note('note',ecoder.translations.del.alreadyEditing.format({name:this.file}),'5','block');
+			ecoder.infodialog(ecoder.translations.del.alreadyEditing.format({name:this.file}));
 			ecoder_html_title(this.file);
 			return true;
 		}
@@ -492,13 +491,13 @@ function ecoder_files ( frame, mode, path, file, type, changed ) {
 
                 // note ##
                 var e_note = "<p>you already have <strong>"+ ecoder_tabs_max +"</strong> tabs open which is the maximum allowed in the configuration.</p>";
-                top.ecoder_note ( 'note', e_note, '5', 'block' );
+                ecoder.infodialog(e_note);
 
             } else { // ok to add tab ##
 
                 if ( ecoder_mode == "read" ) { // read only notice ##
                     var e_note = "<p><strong>"+ file +"</strong> is read-only, so you can view but not edit this document.</p>";
-                    top.ecoder_note ( 'note', e_note, '5', 'block' );
+                    ecoder.infodialog(e_note);
                 }
 
                 top.ecoder_tabs_add ( ecoder_file_clean, file, ecoder_file, path ); // add new tab -- iframe name/id ,label, iframe url, path ##
@@ -753,97 +752,6 @@ function Tree(options) {
 
 // ----------------------------------------------------------------------------------------------------------
 
-// notes, errors and messages ##
-var ecoder_count_time = 0; // set to zero ##
-var ecoder_note_open = 0; // timeout ID ##
-//var ecoder_note_fade = 1; // timeout ID ##
-function ecoder_note ( n_div, n_msg, n_delay, n_display ) {
-
-    clearTimeout ( ecoder_note_open ); // clear all open note timeouts ##
-
-    // set time if not passed ##
-    if ( typeof ( n_delay ) == "undefined" || n_delay < 5 ) n_delay = 5;
-
-    // convert n_delay to miliseconds ##
-    note_delay = ( n_delay * 1000 );
-
-    // show hide ##
-    var elem = document.getElementById( n_div );
-    if ( n_display == "none" ) {
-        elem.style.display = "none";
-    } else {
-        elem.style.display = "block";
-    }
-
-    // add close and clock ##
-    var n_close = '<div id="note_close"><div id="note_x"><a href="#" onclick="ecoder_note_reset( \'note\', \'none\' )" title="close note"><img src="skin/one/design/icon_close.png" alt="close note" border="0" /></a></div><div id="note_clock">'+n_delay+'</div></div>';
-
-    // alter content ##
-    if ( n_msg ) { // change innerHTML of save div ##
-        elem.innerHTML = n_close + n_msg; // change message ##
-    }
-
-    // start clock and set hide timeout ##
-    ecoder_note_open = setTimeout( "ecoder_note_reset ( '"+ n_div +"', 'none' )", note_delay ); // hide after a delay ##
-    var note_clock = setTimeout( "ecoder_count ( 'note_clock', '"+ n_delay +"' )", 0 ); // count it ##
-
-    // swallow return ##
-    return false;
-}
-
-// hide note ##
-function ecoder_note_reset ( r_div, r_display ) {
-    document.getElementById( r_div ).style.display = r_display; // just hide ##
-}
-
-// ----------------------------------------------------------------------------------------------------------
-
-// countdown ( div, seconds )
-function ecoder_count ( c_div, c_time ){
-     if ( typeof ( note_clock ) != "undefined" ) {clearTimeout ( note_clock );} // clear if counting already ##
-     document.getElementById( c_div ).innerHTML = c_time; // return value to div ##
-     if ( c_time > 0 ){ // continue ##
-        ecoder_count_time = c_time; // update ##
-        note_clock = setTimeout ( "top.ecoder_count( '"+c_div+"', '"+( c_time - 1 )+"' )", 1000 ); // each second ##
-     }
-}
-
-// ----------------------------------------------------------------------------------------------------------
-
-// fade out boxes ##
-function ecoder_fade ( id, opacStart, opacEnd, millisec ) {
-
-    var speed = Math.round(millisec / 100); //speed for each frame
-    var timer = 0;
-
-    //determine the direction for the blending, if start and end are the same nothing happens
-    if(opacStart > opacEnd) {
-        for(i = opacStart; i >= opacEnd; i--) {
-            setTimeout("ecoder_fade_do(" + i + ",'" + id + "')",(timer * speed));
-            timer++;
-        }
-    } else if(opacStart < opacEnd) {
-        for(i = opacStart; i <= opacEnd; i++)
-            {
-            setTimeout("ecoder_fade_do(" + i + ",'" + id + "')",(timer * speed));
-            timer++;
-        }
-    }
-}
-
-// change the opacity for different browsers
-function ecoder_fade_do(opacity, id) {
-
-    var object = document.getElementById(id).style;
-    object.opacity = (opacity / 100);
-    object.MozOpacity = (opacity / 100);
-    object.KhtmlOpacity = (opacity / 100);
-    object.filter = "alpha(opacity=" + opacity + ")";
-
-}
-
-// ----------------------------------------------------------------------------------------------------------
-
 // html title function ## remove mode ##
 function ecoder_html_title ( file ) {
 
@@ -948,6 +856,7 @@ function addLoadEvent( func ) {
 function Ecoder() {
 	var _self=this;
 	this.translations=null; //var later
+	this.templates=null;
 	this.info=null;
 	this.tree=null;
 
@@ -957,13 +866,73 @@ function Ecoder() {
 			alert("Sorry, your browser does not support some of the features needed for ecoder. Please update your browser");
 		}
 
+		getTemplates();
 		getInfo();
 
 		return _self;
 	}
 
+	this.dialog=function(typeClass,titleTranslation,content) {
+		this.init=function() {
+			$("body").append(_self.getTemplate("dialog",{title:titleTranslation,content:content}));
+			$("#dialog").center().addClass(typeClass);
+			setEvents();
+		};
+
+		this.close=function() {
+			closeDialog();
+		}
+
+		var setEvents=function() {
+			$("#dialogoverlay").on("click",closeDialog);
+			$("#dialog #closedialog").on("click",closeDialog);
+		}
+
+		var closeDialog=function() {
+			$("#dialogcontainer").remove();
+			$("#dialog").removeClass(typeClass);
+			return false;
+		}
+
+		this.init();
+	};
+
+	this.infodialog=function(content,timeout) {
+		if (typeof timeout == "undefined" || timeout < 5) {
+			timeout=5;
+		}
+		var dialog=ecoder.dialog("info","infodialog.info",content);
+		setTimeout(function(){
+			dialog.close();
+		},timeout*1000);
+	};
+
+	this.getTemplate=function(name,params) {
+		return formatTransTempl(ecoder.templates[name],params);
+	}
+
+	this.getTranslation=function(name,params) {
+		console.log(ecoder.translations);
+		return formatTransTempl(ecoder.translations[name],params);
+	}
+
 	var testCompat=function() {
 		return !(typeof FileReader == "undefined");
+	}
+
+	var formatTransTempl=function(str,params) {
+		var datare=new RegExp("{{=([A-Za-z0-9.-_]+)}}","g");
+		str=str.replace(datare,function(matched,wantedval) {
+			return params[wantedval];
+		});
+		console.log(str);
+		var langre=new RegExp("{{&([A-Za-z0-9.-_]+)}}","g");
+		console.log(langre);
+		str=str.replace(langre,function(matched,wantedval) {
+			console.log(wantedval);
+			return ecoder.getTranslation(wantedval,params);
+		});
+		return str;
 	}
 
 	var getTranslations=function() {
@@ -971,8 +940,20 @@ function Ecoder() {
 			url:"translations.json",
 			datatype:'json',
 			success:function(msg) {
-				_self.translations=msg[_self.info.lang];
-				translations=_self.translations; //temp TODO remove use
+				ecoder.translations=msg[ecoder.info.lang];
+				translations=ecoder.translations; //temp TODO remove use
+				//Shouldn't be here, no cleaner way found yet
+				$(document).trigger("ecoder-ready");
+			}
+		});
+	}
+
+	var getTemplates=function() {
+		$.ajax({
+			url:"templates.json",
+			datatype:'json',
+			success:function(msg) {
+				_self.templates=msg;
 			}
 		});
 	}
@@ -982,19 +963,10 @@ function Ecoder() {
 			url:"info.php",
 			datatype:'json',
 			success:function(json) {
-				_self.info=JSON.parse(json);
-
-				//getInfo is the last call, for now... TODO should be cleaner. Fire custom event?
-				afterEcoderReady();
+				_self.info=(JSON.parse(json)).info;
+				getTranslations(); //Shouldn't be here, but still searching for a cleaner way
 			}
 		})
-	}
-
-	var afterEcoderReady=function() {
-		getTranslations();
-		_self.tree=new Tree({showHidden:_self.info.showHidden});
-		setLiveEvents();
-		$("body").on("contextmenu",false);
 	}
 
 	this.init();
@@ -1004,3 +976,9 @@ function Ecoder() {
 $(document).ready(function() {
 	ecoder=new Ecoder();
 });
+$(document).on("ecoder-ready",function() {
+	ecoder.tree=new Tree({showHidden:ecoder.info.showHidden});
+	setLiveEvents();
+	$("body").on("contextmenu",false);
+	ecoder.infodialog("<p>testing</p>");
+})

@@ -3,10 +3,10 @@
 <head>
 	<title>e<?php echo $file->name; ?></title>
 	<script src="http://code.jquery.com/jquery-<?php echo $code['jQuery']; ?>.min.js"></script>
-	
+
 	<!--<link rel="stylesheet" href="plug/codemirror-<?php echo $code['codemirror']; ?>.min.css" />
 	<script src="plug/codemirror-<?php echo $code['codemirror']; ?>.min.js"></script>-->
-	
+
 	<link rel="stylesheet" href="plug/codemirror/lib/codemirror.css" />
 	<link rel="stylesheet" href="plug/codemirror/theme/default.css" />
 	<script src="plug/codemirror/lib/codemirror.js"></script>
@@ -21,12 +21,12 @@
 	<script src="plug/codemirror/mode/xml/xml.js"></script>
 	<script src="plug/codemirror/mode/xmlpure/xmlpure.js"></script>
 	<script src="plug/codemirror/mode/yaml/yaml.js"></script>
-	
+
 	<script src="code/base/shortcuts.js"></script>
 	<script src="code/editor/js.js"></script>
 	<link href="code/editor/css.css" rel="stylesheet" />
 	<script type="text/javascript">
-		var ecoder_iframe = "<?php echo $main['frame_clean']; ?>"; // iframe name ## 
+		var ecoder_iframe = "<?php echo $main['frame_clean']; ?>"; // iframe name ##
 		var autosave_interval="<?php echo $code['autosave_time']*1000; ?>";
 		top.ecoder_save_type = "<?php echo $main['mode']; ?>"; // declare ##
 	</script>
@@ -35,7 +35,7 @@
 	<div id="load_edit"><div class="spin">
 		<img src="skin/one/design/loading.gif" width="45" height="45" alt="ecoder loading, please wait..." border="0" />
 	</div></div>
-	
+
 	<ul class="nav">
 		<li id="save" data-status="<?php echo (int)(!$isReadOnly); ?>" title="<?php echo ($isReadOnly ? "file can't be saved": "save file"); ?>"></li>
 		<li id="autosave" data-status="<?php echo $editor->stAutosave->i(); ?>" title="turn <?php echo $editor->stAutosave->not()->s(); ?> autosave feature"></li>
@@ -61,18 +61,18 @@
 			<div id="save_changes"></div>
 		</div>
 	</div>-->
-	
+
 	<div class="content_wrapper">
 		<div class="edit_area">
 			<textarea id="editarea" name="content" style="width: 100%; height: 100%; padding: 0px; margin: 0px;"><?php echo $file->content; ?></textarea>
 		</div>
 	</div>
-	
+
 	<?php if ($main['report']) { ?>
 		<script type="text/javascript">
 			<?php if ($main['report_code']==1) { ?>
 				top.ecoder_tree('tree','reload'); // refresh tree ##
-        top.ecoder_note('note','<?php echo $main['report']; ?>','5','block'); // show report ##
+        top.ecoder.infodialog('<?php echo $main['report']; ?>'); // show report ##
 			<?php } elseif ($main['report_code']==0) { ?>
 				ecoder_display('save','block','<?php echo $main['report']; ?>','0');
 			<?php } ?>

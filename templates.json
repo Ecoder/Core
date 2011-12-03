@@ -1,0 +1,1 @@
+{"test":"<p>{{=error}}<\/p>","dialog":"<div id=\"dialogcontainer\"><div id=\"dialogoverlay\"><\/div><div id=\"dialog\"><span id=\"closedialog\">&nbsp;<\/span><div id=\"dialogcontent\"><div class=\"dialogcontentwrapper\"><h2>{{&{{=title}}}}<\/h2><div id='innercontent'>{{=content}}<\/div><\/div><\/div><\/div><\/div>","infodialog.content":"<p>{{=content}}<\/p>"}

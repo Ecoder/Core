@@ -10,10 +10,10 @@ html {
 	background: #f2f2f2; /*color background - only works in IE */
 	font-size: 76%; /*set default font size */
 	font-family: verdana, helvetica, sans-serif; /* set default font */
-	/* hide overflow:hidden from IE5/Mac */ 
-	/* \*/ 
+	/* hide overflow:hidden from IE5/Mac */
+	/* \*/
 	overflow:hidden; /*get rid of scroll bars in IE */
-	/* */ 
+	/* */
 }
 
 body {
@@ -135,8 +135,8 @@ iframe { display:block; width:100%; border:none; }
 #iframe_main { width: 100%; border: 0px solid #dddddd; background: #f2f2f2; padding: 0px; margin: 0; }
 
 /* javascript test & loader */
-#load_base { position: absolute; top: 0; bottom: 0%; left: 0; right: 0%; background: url(design/bg_white_90.png); z-index: 100; text-align: center; width: 100%; height: 100%; } 
-#load_base a { color: #342F2F; } 
+#load_base { position: absolute; top: 0; bottom: 0%; left: 0; right: 0%; background: url(design/bg_white_90.png); z-index: 100; text-align: center; width: 100%; height: 100%; }
+#load_base a { color: #342F2F; }
 #load_base h1 { padding: 2px 0 0 0; font-size: 14pt; font-weight: bold; margin: 0px; color: #01622E; }
 #load_base p { margin: 0px; padding: 0px; line-height: 1.3em; }
 #load_base .loading { height: 350px; background-color: transparent; color: #7D7D7D; width: 700px; margin: 0 auto; padding-top: 10px; }
@@ -162,68 +162,9 @@ iframe { display:block; width:100%; border:none; }
 #note_x { width: 20px; height: 18px; text-align: center; }
 #note_clock { width: 19px; height: 18px; text-align: center; color: #CFB8B8; }
 
-#dialogoverlay {
-	height:auto;
-	position:absolute;
-	top:0;
-	bottom:0;
-	left:0;
-	right:0;
-	background:#FFFFFF;
-	opacity:.7;
-	display:none;
-	z-index:1000;
-}
-#dialog {
-	height:auto;
-	display:none;
-	background:#FFFFFF;
-	position:absolute;
-	min-width:300px;
-	min-height:200px;
-	opacity:1;
-	border:5px solid #58792A;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	z-index:1001;
-}
-#dialog h2 {
-	background:#58792A;
-	text-transform:uppercase;
-	color:#FFFFFF;
-	margin:0;
-	padding:2px 2px 2px 5px;
-	height:20px;
-	font-size:0.9em;
-}
-#dialog #closedialog {
-	background-image: url(design/icon_close.png);
-	width:18px;
-	height:18px;
-	position:absolute;
-	right:0;
-	top:0;
-	display:block;
-}
-#dialog #innercontent {
-	padding:5px 5px 5px 5px;
-	height:auto;
-}
-#dialog #innercontent p:first-child {
-	padding:0;
-	margin:0;
-}
-#dialog footer {
-	background:#58792A;
-	position:absolute;
-	bottom:0;
-	width:100%;
-}
-
 /** DIALOG.RENAME **/
 div.dialogcontentwrapper.rename {
-	
+
 }
 	div.dialogcontentwrapper.rename #feedback {
 		display:none;
@@ -245,9 +186,9 @@ div.dialogcontentwrapper.rename {
 		text-transform: uppercase;
 		display: block;
 	}
-	
-	
-	
+
+
+
 /** DIALOG.UPLOAD **/
 div.dialogcontentwrapper.upload {
     font: 0.8em/1em "trebuchet MS", arial, sans-serif;
@@ -373,7 +314,7 @@ div.dialogcontentwrapper.upload .loadingIndicator {
 
 /***************************** CONTEXTMENU ***********************/
 #ctxtmenucontainer {
-	
+
 }
 	#ctxtmenucontainer #ctxtmenuoverlay {
 		position:absolute;
@@ -410,3 +351,64 @@ div.dialogcontentwrapper.upload .loadingIndicator {
 			#ctxtmenucontainer ul#ctxtmenu li:hover {
 				background-color:#deeecd;
 			}
+
+/*************** DIALOG ***************/
+#dialogcontainer {
+
+}
+#dialogoverlay {
+	height:auto;
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:0;
+	right:0;
+	background:#FFFFFF;
+	opacity:.7;
+	z-index:1000;
+}
+#dialog {
+	height:auto;
+	background:#FFFFFF;
+	position:absolute;
+	min-width:300px;
+	min-height:200px;
+	opacity:1;
+	border:5px solid #58792A;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	z-index:1001;
+}
+#dialog h2 {
+	background:#58792A;
+	text-transform:uppercase;
+	color:#FFFFFF;
+	margin:0;
+	padding:2px 2px 2px 5px;
+	height:20px;
+	font-size:0.9em;
+}
+#dialog #closedialog {
+	background-image: url(design/icon_close.png);
+	width:18px;
+	height:18px;
+	position:absolute;
+	right:0;
+	top:0;
+	display:block;
+}
+#dialog #innercontent {
+	padding:5px 5px 5px 5px;
+	height:auto;
+}
+#dialog #innercontent p:first-child {
+	padding:0;
+	margin:0;
+}
+#dialog footer {
+	background:#58792A;
+	position:absolute;
+	bottom:0;
+	width:100%;
+}
