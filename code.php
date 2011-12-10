@@ -6,8 +6,8 @@ include "code/base/server.php";
 // MOST IMPORTANT SETTING -- path to editable files ##
 $code['root'] = 'D:/dev/ecoder/testingdata/'; // full path, with trailing slash ##
 if ( $_SESSION['live'] == 0 ) { // running locally ##
-    $code['root'] = 'D:/dev/ecoder/testingdata/'; // local path -- for testing ##     
-} 
+    $code['root'] = 'D:/dev/ecoder/testingdata/'; // local path -- for testing ##
+}
 $code['domain_cookie'] = ".gmeditor.com"; // domain name ##
 
 /* other advanced settings ## */
@@ -28,8 +28,8 @@ $code['codemirror']="2.16";
 
 // security settings ##
 $code['secure'] = 0; // 0 = not secured || 1 = secured, uses settings below ##
-$code['secure_variable'] = 'login_security'; // if isset indicates login active ## 
-$code['secure_url'] = 'http://www.gmeditor.com/user/login/?pass=ecoder'; // full url to login area -- ecoder variable allows return link ## 
+$code['secure_variable'] = 'login_security'; // if isset indicates login active ##
+$code['secure_url'] = 'http://www.gmeditor.com/user/login/?pass=ecoder'; // full url to login area -- ecoder variable allows return link ##
 $code['secure_logouturl']='http://example.com/logout/'; //Full url to logout page
 if ( $_SESSION['live'] == 0 ) { $code['secure_url'] = '/loveunit/greenmedia.es/go/1/user/login/?pass=ecoder'; } // local path -- for testing ##
 $code['secure_root'] = 1; // 1 || 0 - use varible root - passed in session variable $_SESSION['tree_root'] ##
@@ -58,14 +58,15 @@ $dbug['error_email'] = 'log@website.com'; // email log errors ##
 $cnf['showHidden']=false; //Temp.. tree: show hidden files?
 
 include "code/base/logic.php"; // apply settings ##
-include "code/base/functions.php"; // php functions ## 
+include "code/base/functions.php"; // php functions ##
 include "code/base/secure.php"; // secure system ##
-include "code/base/editor.php"; // editor hot swapper ## 
+include "code/base/editor.php"; // editor hot swapper ##
 include "code/base/controller.php";
 include "code/base/io.php";
 
 $i=Input::_get();
-$x=json_decode(file_get_contents("translations.json"));
+$fgc=file_get_contents("translations.json");
+$x=json_decode($fgc);
 $y=$code["lang"];
 $translations=$x->$y;
 unset($x,$y);

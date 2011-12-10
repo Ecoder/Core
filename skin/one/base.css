@@ -1,6 +1,6 @@
 /* ecoder main stylesheet */
 
-html, body, div, iframe { margin:0; padding:0; height: 100%; font-size: 9pt; font-family: arial, helvetica, sans-serif; }
+html, body { margin:0; padding:0; height: 100%; font-size: 9pt; font-family: arial, helvetica, sans-serif; }
 
 html {
 	max-height:100%; /* fix height for other browsers */
@@ -129,13 +129,11 @@ body {
 /* links */
 a:link, a:hover, a:visited { text-decoration: none; color: #525252; }
 
-/* iframes */
-iframe { display:block; width:100%; border:none; }
-#iframe_tree { width: 251px; height: 100%; border: 0px solid #dddddd; border-right: 0px solid #f2f2f2; background: #f2f2f2; padding: 0px; margin: 0px 0 20px 0; }
-#iframe_main { width: 100%; border: 0px solid #dddddd; background: #f2f2f2; padding: 0px; margin: 0; }
-
 /* javascript test & loader */
-#load_base { position: absolute; top: 0; bottom: 0%; left: 0; right: 0%; background: url(design/bg_white_90.png); z-index: 100; text-align: center; width: 100%; height: 100%; }
+#splash {
+	margin:5px;
+}
+/*#load_base { position: absolute; top: 0; bottom: 0%; left: 0; right: 0%; background: url(design/bg_white_90.png); z-index: 100; text-align: center; width: 100%; height: 100%; }
 #load_base a { color: #342F2F; }
 #load_base h1 { padding: 2px 0 0 0; font-size: 14pt; font-weight: bold; margin: 0px; color: #01622E; }
 #load_base p { margin: 0px; padding: 0px; line-height: 1.3em; }
@@ -154,7 +152,7 @@ iframe { display:block; width:100%; border:none; }
 #load_base .loading .two .shortcuts .one, #load_base .loading .two .shortcuts .two { float: left; background-color: transparent; padding: 8px 10px 0 0px; width: 180px; height: 160px; }
 #load_base .loading .two .requires { background-color: transparent; padding: 0px 0 0 0px; height: 75px; }
 #load_base .loading .two .how p, #load_base .loading .shortcuts .requires p, #load_base .loading .two .requires p { margin: 0px; padding: 4px 0 0 1px; }
-
+*/
 /* advice and warnings */
 #note { background: url(design/note.png); display: none; position: fixed; top: 200px; bottom: 0%; left: 40%; right: 40%; z-index: 101; width: 290px; height: 100px; padding: 30px 24px 30px 36px; font-size: 10.5pt; line-height: 1.3em; }
 #note p { padding: 0px 0 6px 0; margin: 0px; }
@@ -411,4 +409,76 @@ div.dialogcontentwrapper.upload .loadingIndicator {
 	position:absolute;
 	bottom:0;
 	width:100%;
+}
+
+/********** TABS REWRITE **************/
+#tabs {
+	position:absolute;
+	top:0;
+	bottom:0;
+	left:256px;
+	right:0;
+	border-left:1px solid #58792A;
+}
+#tabs #panels {
+	clear:both;
+	position:absolute;
+	top:23px;
+	right:0;
+	bottom:0;
+	left:0;
+}
+#tabs #panels div.panel {
+	position:absolute;
+	top:0;
+	bottom:0;
+	right:0;
+	left:0;
+	overflow:scroll;
+	display:none;
+}
+#tabs #panels div.panel[data-status="active"] {
+	display:block;
+}
+#tabs #panels div.panel iframe {
+	position:relative;
+	top:0;
+	bottom:0;
+	right:0;
+	left:0;
+}
+
+#tabs ul {
+	list-style:none;
+	padding:0;
+	margin:0;
+	height:22px;
+	width:100%;
+	border-bottom:1px solid #58792A;
+}
+#tabs ul li.tab {
+	cursor:pointer;
+	margin:0;
+	padding:1px 2px 1px 8px;
+	border-right:1px solid #dddddd;
+	background:#F2F2F2;
+	height:20px;
+	line-height:20px;
+	float:left;
+}
+#tabs ul li.tab[data-status="inactive"]:hover {
+	background:#C0B66E;
+	color:#FFFFFF;
+}
+#tabs ul li.tab[data-status="active"] {
+	background:#5A7C2D;
+	color:#FFFFFF;
+}
+#tabs ul li.tab span.close {
+	float:right;
+	display:block;
+	width:18px;
+	height:18px;
+	background:url(design/icon_close.png);
+	margin-left:2px;
 }

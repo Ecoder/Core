@@ -13,7 +13,7 @@ echo '<!DOCTYPE html>
         <meta http-equiv="content-Type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="noindex,nofollow" />
         <link rel="stylesheet" type="text/css" media="screen" href="'.$code['skin_path'].'base.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="'.$code['skin_path'].'tabs.css" />
+        <!--<link rel="stylesheet" type="text/css" media="screen" href="'.$code['skin_path'].'tabs.css" />-->
         <script src="code/tabs/javascript.js" type="text/javascript"></script>';
         include "code/base/javascript.php"; // pass required variables from javascript to php ##
         echo '

@@ -1,6 +1,7 @@
 // main ecoder javascript ##
 var translations, ecoder;
 
+//Deprecated
 var dialog={
 	init:function() {
 		$("#dialogoverlay").live("click",function() {
@@ -87,21 +88,21 @@ var rename_v2={
 		var cleanPath=ecoder_replace_all(this.path,[["/","_"]]);
 		var cleanName=ecoder_replace_all(this.name,[[".","_"]]);
 		var cleanPathName=cleanPath+cleanName;
-		return ecoder_check_object(cleanPathName);
+		return ($("#"+cleanPathName).length!=0);
 	},
 	_IsNotCurrentOpenThenSwitch:function() {
-		var cleanPath=ecoder_replace_all(this.path,[["/","_"]]);
-		var cleanName=ecoder_replace_all(this.name,[[".","_"]]);
+		if (ec_isCurrentTab(this.path,this.name)) {
+			return false;
+		}
+		var cleanPath=ecoder_replace_all(path,[["/","_"]]);
+		var cleanName=ecoder_replace_all(name,[[".","_"]]);
 		var cleanPathName=cleanPath+cleanName;
 		var parent_id=document.getElementById(cleanPathName).parentNode.id; // get id from parent ##
 		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##
-		if (parent_id!=ecoder_tab) { // It isn't the current tab
-			top.ecoder_tabs_focus(this.file,cleanPathName,parent_id);
-			ecoder.infodialog(ecoder.translations.rename.alreadyEditing.format({name:this.file}));
-			ecoder_html_title(this.file);
-			return true;
-		}
-		return false
+		top.ecoder_tabs_focus(this.file,0,parent_id);
+		ecoder.infodialog(ecoder.translations.rename.alreadyEditing.format({name:this.file}));
+		ecoder_html_title(this.file);
+		return true;
 	},
 	IsCurrentOpenThenAskIfClose:function(changed) {
 		var close_do=false; // false ##
@@ -877,6 +878,7 @@ function Ecoder() {
 			$("body").append(_self.getTemplate("dialog",{title:titleTranslation,content:content}));
 			$("#dialog").center().addClass(typeClass);
 			setEvents();
+			return this;
 		};
 
 		this.close=function() {
@@ -894,7 +896,7 @@ function Ecoder() {
 			return false;
 		}
 
-		this.init();
+		return this.init();
 	};
 
 	this.infodialog=function(content,timeout) {
@@ -909,27 +911,23 @@ function Ecoder() {
 
 	this.getTemplate=function(name,params) {
 		return formatTransTempl(ecoder.templates[name],params);
-	}
+	};
 
 	this.getTranslation=function(name,params) {
-		console.log(ecoder.translations);
 		return formatTransTempl(ecoder.translations[name],params);
-	}
+	};
 
 	var testCompat=function() {
 		return !(typeof FileReader == "undefined");
-	}
+	};
 
 	var formatTransTempl=function(str,params) {
 		var datare=new RegExp("{{=([A-Za-z0-9.-_]+)}}","g");
 		str=str.replace(datare,function(matched,wantedval) {
 			return params[wantedval];
 		});
-		console.log(str);
 		var langre=new RegExp("{{&([A-Za-z0-9.-_]+)}}","g");
-		console.log(langre);
 		str=str.replace(langre,function(matched,wantedval) {
-			console.log(wantedval);
 			return ecoder.getTranslation(wantedval,params);
 		});
 		return str;
@@ -969,7 +967,43 @@ function Ecoder() {
 		})
 	}
 
-	this.init();
+	this.tabs={
+		currentTabs:{},
+		init:function() {
+			//Open splash tab
+			console.log("initing tabs");
+			$.ajax({
+				url:"code/base/loader.php",
+				success:function(msg) {
+					console.log("splash init");
+					var splashTab=ecoder.tabs.createTab("splash",{},msg,"Home");
+					console.log(splashTab);
+					splashTab.add();
+				}
+			})
+		},
+		createTab:function(id,data,content,name) {
+			return {
+				id:id,
+				data:data,
+				content:content,
+				name:name,
+
+				add:function() {
+					ecoder.tabs.currentTabs[id]=this;
+					$("#tabs ul").append(ecoder.getTemplate("tabs.tabheader",{tabid:this.id,tabname:this.name}));
+					$("#tabs").append(ecoder.getTemplate("tabs.tabbody",{tabid:this.id,content:this.content}));
+				},
+				remove:function() {
+					$('#tabs div[data-id="'+this.id+'"]').remove();
+					$('#tabs ul li[data-id="'+this.id+'"]').remove();
+					delete ecoder.tabs.currentTabs[id];
+				}
+			};
+		}
+	};
+
+	return this.init();
 }
 
 // ----------------------------------------------------------------------------------------------------------
@@ -980,5 +1014,6 @@ $(document).on("ecoder-ready",function() {
 	ecoder.tree=new Tree({showHidden:ecoder.info.showHidden});
 	setLiveEvents();
 	$("body").on("contextmenu",false);
-	ecoder.infodialog("<p>testing</p>");
+	//ecoder.infodialog("<p>testing</p>");
+	//ecoder.tabs.init();
 })
