@@ -61,4 +61,39 @@ class FileManipulation {
 		}
 		return ($c<=2);
 	}
+
+	public static function rename($file,$newname) {
+		if (empty($newname)) {
+			Output::add("error","emptynewname");
+			return;
+		}
+		if (!file_exists($file)) {
+			Output::add("error","originalnotexist");
+			return;
+		}
+		$sfi=new SplFileInfo($file);
+		if (file_exists($sfi->getPath()."/".$newname)) {
+			Output::add("error","newalreadyexist");
+			return;
+		}
+		if ($sfi->getBaseName()==$newname) {
+			Output::add("error","origandnewequal");
+			return;
+		}
+		if (!$sfi->isWritable()) {
+			Output::add("error","notwritable");
+			return;
+		}
+
+		$newname=preg_replace('/[^0-9A-Za-z.-_]/', '_',$newname);
+		$result=@rename($file,$sfi->getPath()."/".$newname);
+
+		if ($result) {
+			Output::add("result","success");
+			return;
+		} else {
+			Output::add("error","unknown");
+			return;
+		}
+	}
 }

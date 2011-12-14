@@ -9,6 +9,9 @@ switch ($controller) {
 			case "remove":
 				FileManipulation::remove($i->file,$i->allowedRecursive);
 				break;
+			case "rename":
+				FileManipulation::rename($i->file,$i->newname);
+				break;
 			default:
 				//error
 				break;

@@ -5,29 +5,6 @@ var translations, ecoder;
 var ecoder_tab = 0; // current tab ##
 var ecoder_iframe = "home_txt"; // start at home ##
 
-//Deprecated
-var dialog={
-	init:function() {
-		$("#dialogoverlay").live("click",function() {
-			dialog.hide();
-		});
-		$("#dialog #closedialog").live("click",function() {
-			dialog.hide();
-		});
-	},
-	show:function(content) {
-		$("#dialog #dialogcontent").html(content);
-		$("#dialogoverlay").show();
-		$("#dialog").center().show();
-		$("#dialog #innercontent").css("padding-bottom",""+($("#dialog footer").outerHeight() + 5)+"px");
-	},
-	hide:function() {
-		$("#dialogoverlay").hide();
-		$("#dialog").hide();
-		$("#dialog #dialogcontent").html("");
-	}
-};
-
 function callAction(controller,action,data,fn) {
 	$.ajax({
 		data:{json:JSON.stringify(data)},
@@ -41,116 +18,8 @@ function callAction(controller,action,data,fn) {
 	});
 }
 function setLiveEvents() {
-	dialog.init();
-	rename_v2.setLiveEvents();
-	del.setLiveEvents();
 	add.setLiveEvents();
 }
-/*
- * TODO
- *  - Replace path, name, type, ext variables by file object.
- */
-var rename_v2={
-	path:null,
-	name:null,
-	type:null,
-	ext:null,
-	setLiveEvents:function() {
-		$('.rename .submit').live("click",function() {rename_v2.save();});
-	},
-	setFeedback:function(msg,type) {
-		$(".rename #feedback").html(msg).removeClass("success error info").addClass(type);
-	},
-	init:function(path,name,type,changed) {
-		this.path=path;
-		this.name=name;
-		this.type=type;
-		this.ext=name.split('.').lastVal();
-
-		//Very dirty code for now, thanks to tabs api.
-		if (this._IsOpenEdit()) {
-			if (this._IsNotCurrentOpenThenSwitch()) {
-				return
-			}
-			if (!this.IsCurrentOpenThenAskIfClose(changed)) {
-				return;
-			}
-
-		}
-		callAction("rename","dialog",{
-				path:this.path,
-				file:this.name,
-				type:this.type,
-				ext:this.ext
-			},function(json) {
-				dialog.show(json.html);
-			}
-		);
-	},
-	//TODO: Refactor tabs engine -_-
-	_IsOpenEdit:function() {
-		var cleanPath=ecoder_replace_all(this.path,[["/","_"]]);
-		var cleanName=ecoder_replace_all(this.name,[[".","_"]]);
-		var cleanPathName=cleanPath+cleanName;
-		return ($("#"+cleanPathName).length!=0);
-	},
-	_IsNotCurrentOpenThenSwitch:function() {
-		if (ec_isCurrentTab(this.path,this.name)) {
-			return false;
-		}
-		var cleanPath=ecoder_replace_all(path,[["/","_"]]);
-		var cleanName=ecoder_replace_all(name,[[".","_"]]);
-		var cleanPathName=cleanPath+cleanName;
-		var parent_id=document.getElementById(cleanPathName).parentNode.id; // get id from parent ##
-		parent_id=parent_id.replace(/tabber_panel_/,"");// remove 'tabber_panel_' ##
-		top.ecoder_tabs_focus(this.file,0,parent_id);
-		ecoder.infodialog(ecoder.translations.rename.alreadyEditing.format({name:this.file}));
-		ecoder_html_title(this.file);
-		return true;
-	},
-	IsCurrentOpenThenAskIfClose:function(changed) {
-		var close_do=false; // false ##
-		//Checking for changes won't work with old change api so disabling for now
-		//if (changed>1) { // changes made -- was > 1 TODO ##
-			if (confirm(ecoder.translations.rename.closeConfirm.format({name:this.name}))) { // confirm ## + changed
-				close_do=true; // ok ##
-			}
-		/*} else { // no changes made ##
-			close_do=true; // ok ##
-		}*/
-
-		if (close_do) { // closed confirmed and not home tab ##
-			if (top.ecoder_tab>0) { // close if not focused on home ##
-				top.ecoder_tabs_close();
-			}
-
-			return true;
-		}
-		return false;
-	},
-	save:function() {
-		var i=rename_v2;
-		var newname=$("#filenewname").val();
-		if (newname=="") {
-			i.setFeedback(ecoder.translations.rename.noNameEntered.format({name:i.name}),"error");
-		}
-		callAction("rename","save",{
-				path:i.path,
-				file:i.name,
-				type:i.type,
-				ext:i.ext,
-				file_new:newname
-			},function(json) {
-				if (json.code!=1) {
-					i.setFeedback(json.msg,"error");
-					return;
-				}
-				i.setFeedback(json.msg,"success");
-				ecoder_tree('tree','reload');
-			}
-		);
-	}
-};
 
 var add={
 	path:null,
@@ -607,8 +476,7 @@ function Tree(options) {
 	var rename=function(li) {
 		var path=li.attr("data-path");
 		var name=li.attr("data-name");
-		var type=li.attr("data-type");
-		ecoder_files('main','rename',path,name,type);
+		ecoder.actions.rename(path+'/'+name);
 	}
 
 	var del=function(li) {
@@ -992,6 +860,38 @@ function Ecoder() {
 			var removeRecursiveConfirm=function() {
 				callAction("filemanipulation","remove",{file:file,allowedRecursive:true},handleResponse);
 			};
+
+			init();
+		},
+		rename:function(file) {
+
+			var init=function() {
+				var path,name;
+				var pieces=file.split("/");
+				name=pieces.pop();
+				path=pieces.join();
+				var dialog=_ecoder.dialog("rename",_ecoder.getTranslation("actions.rename.rename",{}),_ecoder.getTemplate("dialog.rename",{path:path,name:name}));
+				$("#dialog.rename #ren_save").on("click",function(e) {
+					clickedSave();
+					dialog.close();
+				});
+				$("#dialog.rename #ren_cancel").on("click",function(e) {
+					dialog.close();
+				});
+			};
+
+			var clickedSave=function() {
+				var newname=$("#dialog.rename #newname").val(); //TODO get actual new name
+				callAction("filemanipulation","rename",{file:file,newname:newname},function(out) {
+					if (typeof out.error != "undefined") {
+						_ecoder.infodialog(_ecoder.getTranslation("actions.rename.error."+out.error),-1);
+					} else {
+						ecoder.tree=new Tree({showHidden:_ecoder.info.showHidden});
+						//TODO is this the correct way to refresh the tree?
+						_ecoder.infodialog(_ecoder.getTranslation("actions.rename."+out.result));
+					}
+				});
+			}
 
 			init();
 		}
