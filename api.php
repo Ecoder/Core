@@ -1,0 +1,21 @@
+<?php
+include "code.php";
+
+$controller=(isset($_GET['controller']) ? $_GET['controller'] : "");
+$action=(isset($_GET['action']) ? $_GET['action'] : "");
+switch ($controller) {
+	case "filemanipulation":
+		switch ($action) {
+			case "remove":
+				FileManipulation::remove($i->file,$i->allowedRecursive);
+				break;
+			default:
+				//error
+				break;
+		}
+		break;
+	default:
+		//error
+		break;
+}
+Output::send();

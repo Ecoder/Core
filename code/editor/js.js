@@ -13,16 +13,18 @@ CmEditor.prototype={
 	changed:false,
 	filename:null,
 	path:null,
-	
+	canWrite:false,
+
 	init:function() {
 		var self=this;
 		this.options={
 			tArea:$("body.editor #editarea")[0],
 			mime:$("body.editor").attr("data-mime"),
-			readOnly:($("body.editor").attr("data-ro")=="1" ? true : false)
+			readOnly:($("body.editor").attr("data-canWrite")=="1" ? false : true)
 		};
 		this.filename=$("body.editor").attr("data-filename");
 		this.path=$("body.editor").attr("data-path");
+		this.canWrite=$("body.editor").attr("data-canWrite");
 		this.codemirror=CodeMirror.fromTextArea(
 			this.options.tArea,
 			{
@@ -33,17 +35,19 @@ CmEditor.prototype={
 				onChange:function() { editor.editorChange(); }
 			}
 		);
-		
-		self._addButtonEvent('#save[data-status="1"]',self.save);
+
+		if (this.canWrite) {
+			self._addButtonEvent('#save',self.save);
+			self._addButtonEvent('#delete',self.del);
+			self._addButtonEvent('#rename',self.rename);
+		}
+
+
 		self._addButtonEvent('#autosave[data-status="0"]',self.autosaveEnable);
 		self._addButtonEvent('#autosave[data-status="1"]',self.autosaveDisable);
 		self._addButtonEvent('#reload',self.reload);
-		self._addButtonEvent('#close[data-status="1"]',self.close);
-		self._addButtonEvent('#info',self.info);
 		self._addButtonEvent('#synhl[data-status="0"]',self.synhlEnable);
 		self._addButtonEvent('#synhl[data-status="1"]',self.synhlDisable);
-		self._addButtonEvent('#delete[data-status="1"]',self.del);
-		self._addButtonEvent('#rename[data-status="1"]',self.rename);
 		//Search later
 		self._addButtonEvent('#undo[data-status="1"]',self.undo);
 		self._addButtonEvent('#redo[data-status="1"]',self.redo);
@@ -63,7 +67,7 @@ CmEditor.prototype={
 		$('body.editor ul.nav '+selector).live("click",function() {fn(self);});
 	},
 	search:function(self) {
-		
+
 	},
 	undo:function(self) {
 		self.codemirror.undo();
@@ -109,14 +113,9 @@ CmEditor.prototype={
 		self.codemirror.setOption("mode","text/plain");
 		$(".editor ul.nav #synhl").attr("data-status","0");
 	},
-	info:function(self) {
-		top.ecoder_loaded_base('block');
-	},
-	close:function(self) {
-		top.ecoder_files(ecoder_iframe,'close',self.path,self.filename,'',Integer(self.changed)+1);
-	},
 	reload:function(self) {
-		top.ecoder_files(ecoder_iframe,'reload',self.path,self.filename,'',Integer(self.changed)+1);
+		//TODO fix again. First parameter is iframe
+		top.ecoder_files('','reload',self.path,self.filename,'',Integer(self.changed)+1);
 	},
 	autosaveEnable:function(self) {
 		$('body.editor ul.nav #autosave[data-status="0"]')
@@ -132,7 +131,7 @@ CmEditor.prototype={
 	},
 	save:function(self) {
 		self.codemirror.save();
-		
+
 		//ecoder_display('save','block','saving',1);
 
 		$.ajax({
@@ -141,7 +140,7 @@ CmEditor.prototype={
 				ecoder_file:self.filename,
 				ecoder_content:($(self.options.tArea).val())
 			},
-			url:"code/save/edit.php",
+			url:"code/editor/save.php",
 			type:'POST',
 			success:function() {
 				//TODO Should give better feedback (like filename in bold when not saved)
@@ -154,11 +153,9 @@ CmEditor.prototype={
 
 var editor=null;
 $(document).ready(function() {
-	$(".editor #load_edit").css("display","none");
-	
 	editor=new CmEditor({
 		tArea:$("body.editor #editarea")[0],
 		mime:$("body.editor").attr("data-mime"),
-		readOnly:($("body.editor").attr("data-ro")=="1" ? true : false)
+		readOnly:($("body.editor").attr("data-canWrite")=="1" ? false : true)
 	});
 });

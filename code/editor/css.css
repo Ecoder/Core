@@ -7,17 +7,6 @@ html, body {
 	font-family:verdana, helvetica, sans-serif;
 }
 
-
-/* javascript test & loader */
-#load_edit { position: absolute; top: 0; bottom: 0%; left: 0; right: 0%; background: url(../../skin/one/design/bg_white_80.png); z-index: 100; text-align: center; width: 100%; height: 100%; margin: 0 auto; } 
-#load_edit .spin { background-color: transparent; float: left; width: 100%; padding-top: 250px; }
-
-.edit_nav .file { height: 18px; padding: 3px 10px 2px 8px; background: #58792A; color: #fff; }
-.edit_nav .file .name { float: left; }
-.edit_nav .file .brand { float: right; width: 150px; text-align: right; }
-.edit_nav .file .brand a { color: #fff; }
-.edit_nav .details { float: left; padding: 5px 12px 3px 10px; height: 10px; }
-
 /* edit area */
 .content_wrapper {
 	position:absolute;
@@ -27,13 +16,13 @@ html, body {
 	right:0;
 }
 
-.edit_area { 
+.edit_area {
 	height:100%;
 	overflow:scroll;
 }
 
 .editor {
-	
+
 }
 	.editor ul.nav {
 		position: fixed;
@@ -42,8 +31,8 @@ html, body {
 		right:0;
 		height:26px;
 		background:#F2F2F2;
-		border-bottom: 1px solid #dddddd; 
-		border-top: 1px solid #dddddd; 
+		border-bottom: 1px solid #dddddd;
+		border-top: 1px solid #dddddd;
 		margin:0;
 		padding:0;
 		list-style:none;
@@ -75,12 +64,6 @@ html, body {
 		.editor ul.nav li#reload {
 			background-image: url(../../skin/one/design/icon_reload.png);
 		}
-		.editor ul.nav li#close {
-			background-image: url(../../skin/one/design/icon_close.png);
-		}
-		.editor ul.nav li#info {
-			background-image: url(../../skin/one/design/icon_info.png);
-		}
 		.editor ul.nav li#synhl[data-status="0"] {
 			background-image: url(../../skin/one/design/icon_editor_basic.png);
 		}
@@ -111,10 +94,10 @@ html, body {
 		.editor ul.nav li#reinddoc {
 			background-image: url(../../plug/codemirror-ui/images/silk/page_refresh.png);
 		}
-		
-		.editor ul.nav [data-status="0"],.editor ul.nav [data-status="-1"] {
-			zoom: 1;
-			filter: alpha(opacity=30);
+
+		.editor[data-canWrite="0"] ul.nav li.subToPerm,
+		.editor ul.nav [data-status="0"],
+		.editor ul.nav [data-status="-1"] {
 			opacity: 0.3;
 		}
 		.editor ul.nav [data-status="0"] {
@@ -124,29 +107,17 @@ html, body {
 			background-color:#aaaaaa;
 		}
 
-/* save report */
-/*#save { float: left; display: none; background: #E94400; color: #fff; padding: 5px 10px 0px 10px; }
-*/#save_report { float: left; background: #E94400; color: #fff; padding: 5px 10px 0px 10px; }
-#save_confirm { background: #168ECA; color: #fff; float:left; margin:3px 0pt 10px 0px; padding:5px 10px; text-align:center; }
-#save_changes { float: left; display: none; background: #dddddd; padding: 5px 10px 0px 10px; }
-
-/* edit pages ## */
-.edit_form { float: left; padding: 0px 0px 0px 8px }
-.edit_form h1 { color: #8A8A8A; padding: 0 0 2px 0px; font-size: 17pt; }
-.edit_form p { color: #505050; padding: 0 0px 12px 0px; }
-.edit_form .filename { float: left; padding: 0px 10px 0 0; margin: 0 0 10px 0; clear: both; }
-.edit_form .edit { width: 270px; font-size: 15pt; padding: 3px; }
-.edit_form .dot { float: left; font-size: 20pt; line-height: 0.5em; padding: 2px 5px 0 5px; }
-.edit_form .text { width: 350px; font-size: 15pt; padding: 3px; }
-.edit_form .type { float: left; padding: 4px 0 0 3px; }
-.edit_form .type_rename { float: left; padding: 4px 0 0 3px; font-size: 16pt; }
-.edit_form .select { width: 80px; }
-
-
 .CodeMirror {
 	height:auto;
 	background:#FFFFFF;
 }
 .CodeMirror-scroll {
 	height:100%;
+}
+
+#editarea {
+	width: 100%;
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
 }

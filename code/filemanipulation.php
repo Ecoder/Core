@@ -1,0 +1,64 @@
+<?php
+class FileManipulation {
+
+	public static function remove($file,$allowedRecursive=false) {
+		if (!file_exists($file)) {
+			Output::add("error","notexist");
+			return;
+		}
+		if (!is_writable($file)) {
+			Output::add("error","notwritable");
+			return;
+		}
+
+		$result=false;
+		if (is_dir($file)) {
+			if (!self::_dirIsEmpty($file)) {
+				if (!$allowedRecursive) {
+					Output::add("error","dirnotempty");
+					return;
+				} else {
+					$result=@self::recursiveDirRemove($file);
+				}
+			} else {
+				$result=@rmdir($file);
+			}
+		} else {
+			$result=@unlink($file);
+		}
+
+		if ($result) {
+			Output::add("result","success");
+			return;
+		} else {
+			Output::add("error","unknown");
+			return;
+		}
+	}
+
+	public static function recursiveDirRemove($dir) {
+		$result=true;
+		$objects=scandir($dir);
+		foreach ($objects as $object) {
+			if ($object != "." && $object != "..") {
+				if (filetype($dir."/".$object) == "dir") {
+					$result=(self::recursiveDirRemove($dir."/".$object) ? $result : false);
+				} else {
+					$result=(@unlink($dir."/".$object) ? $result : false);
+				}
+			}
+		}
+		unset($objects);
+		$result=(@rmdir($dir) ? $result : false);
+		return $result;
+	}
+
+	private static function _dirIsEmpty($file) {
+		$files=opendir($file);
+		$c=0;
+		while (readdir($files)) {
+			$c++;
+		}
+		return ($c<=2);
+	}
+}

@@ -1,17 +1,4 @@
 <?php
-
-/* 
-included functions ##
-*/
-
-
-
-/* usage
-$ecoder_tree_file = GM_tree( $code['root'].$path, 0, 0 );
-*/
-
-#######################################
-
 // clean frame name made from path & file with dots and /'s replaced ##
 function ecoder_iframe_clean ( $iframe ) {
     $iframe_clean = str_replace ( "/", "_", $iframe );
@@ -30,11 +17,11 @@ $variable = ecoder_iframe_clean( $s );
 function ecoder_short ( $text, $numb ) {
 	$text = html_entity_decode($text, ENT_QUOTES); // take #
 	if (strlen($text) > $numb) {
-		$half = round(($numb/2)-1); #echo $half; 
+		$half = round(($numb/2)-1); #echo $half;
 		$start = trim(substr($text, 0, $half)); #echo $part_1;
 		$end = trim(substr($text, -$half)); #echo $part_2;
-		$text = trim($start.'...'.$end);	
-	} 
+		$text = trim($start.'...'.$end);
+	}
 	$text = htmlentities($text, ENT_QUOTES); // return ##
     return $text;
 }
@@ -45,26 +32,10 @@ ecoder_short( $text, 75 );
 
 ##################################################
 
-// search for files within a directory ##
-function ecoder_check_dir ( $folder ) {
-    $c = 0;
-    if ( is_dir ( $folder ) ){
-        $files = opendir ( $folder );
-        while ( $file = readdir ( $files ) ) { $c++; }
-        if ( $c > 2 ) {
-            return false;
-        } else {
-            return true;
-        }
-    }       
-}
-
-##################################################
-
 // get directory size ##
 function ecoder_dirsize ( $dirname ) {
     if (!is_dir($dirname) || !is_readable($dirname)) {
-        return false;        
+        return false;
     }
     $dirname_stack[] = $dirname;
     $size = 0;
@@ -141,46 +112,13 @@ function ecoder_mkdir ( $path, $mode, $way = '' ) {
     ecoder_echo ( '', '', 'directory '.$path.' created | permissions:'. $mode.'' );
 }
 
-##################################################
-
-// delete file, avoiding permission issues ##
-function ecoder_delete_file ( $path ) {
-	if ( file_exists ( $path ) ) {
-		@unlink ( $path );
-		ecoder_echo( '', '', $path.' ~ file deleted.' );
-	} else {
-		ecoder_echo( '', '', $path.' ~ does not exist.' );
-	}	
-}
-
-/* usage - 
-ecoder_empty ( $path );
-*/
-
-##################################################
-
-// delete contents and then directory ##
-function ecoder_delete_dir ( $dir ) {
-   if( !$dh = @opendir( $dir ) ) return;
-   while ( false !== ( $obj = readdir( $dh ) ) ) {
-       if( $obj == '.' || $obj == '..' ) continue;
-       if ( !@unlink( $dir.'/'.$obj ) ) ecoder_delete_dir ( $dir.'/'.$obj );
-   }
-   rmdir( $dir );
-   ecoder_echo ('', '', $dir.' ~ deleted.' );
-}
-
-/* usage - 
-ecoder_empty ( $path );
-*/
-
 #######################################
 
 // remove special characters ## TODO - white list, include ' -, _, space' ##
 function ecoder_special_chars ( $GM_chars_in ) {
 	if ( $GM_chars_in ) {
 		$GM_chars_out = preg_replace('/[^\x30-\x39\x41-\x5a\x61-\x7a\xc0-\xf6]/', '_', $GM_chars_in);
-	}		
+	}
 	return $GM_chars_out;
 }
 
@@ -215,7 +153,7 @@ function ecoder_split_right ( $pattern, $input, $len=0 ) {
 function ecoder_echo ( $GM_e, $GM_e_name, $GM_e_comment='' ) {
 	if ($GM_e) {
 		$GM_e_output = "$GM_e_name = <strong>$GM_e</strong>; ";
-	} else { $GM_e_output = '';	
+	} else { $GM_e_output = '';
 	}
 	if ($GM_e_comment) {
 		$GM_e_output_comment = $GM_e_comment;
@@ -238,7 +176,7 @@ function translation_format($str,$args) {
 }
 
 //////////////////////////////////////
-http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions/860509#860509
+//http://stackoverflow.com/questions/834303/php-startswith-and-endswith-functions/860509#860509
 function strStartsWith($haystack,$needle,$case=true)
 {
    if($case)

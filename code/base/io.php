@@ -3,7 +3,7 @@ class Input {
 	private static $_instance;
 	private $data;
 	private $raw;
-	
+
 	public function __set($name, $value) {
 		$this->data[$name] = $value;
 	}
@@ -19,7 +19,7 @@ class Input {
 	public function __unset($name) {
 		unset($this->data[$name]);
 	}
-	
+
 	private function __construct() {
 		$this->data=array();
 		if (isset($_POST['json'])) {
@@ -30,14 +30,14 @@ class Input {
 			}
 		}
 	}
-	
+
 	public static function _get() {
 		if (self::$_instance==null) {
 			self::$_instance=new Input();
 		}
 		return self::$_instance;
 	}
-	
+
 	public static function raw() {
 		return self::_get()->raw;
 	}
@@ -45,11 +45,11 @@ class Input {
 
 class Output {
 	private static $data;
-	
+
 	public static function add($k,$v) {
 		self::$data[$k]=$v;
 	}
-	
+
 	public static function send() {
 		echo json_encode(self::$data);
 		exit;

@@ -96,7 +96,4 @@ $(document).ready(function() {
 			tabber.add("{{splash}}","Welcome").html(html);
 		}
 	});
-
-	home=tabber.add("home.txt","home");
-	home.html('<iframe src="editor.php?mode=edit&path=&file=home.txt&type=text&shut=0" id="home_txt" name="home_txt" frameborder="0"></iframe>');
 });

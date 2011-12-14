@@ -5,17 +5,14 @@ include_once "file.php";
 
 class Editor {
 	//Statuses
-	private $stClose, $stDelete, $stRename, $stSytxHl, $stAutosave;
-	
+	private $stSytxHl, $stAutosave;
+
 	public function __construct() {
-		global $main,$isReadOnly,$code;
-		$this->stClose=Status::boolean(($main['shut']!=0));
-		$this->stDelete=Status::boolean(($main['mode'] == 'edit' && $main['shut'] == 1));
-		$this->stRename=Status::boolean(($main['mode'] == 'edit' && $main['shut'] == 1));
+		global $main,$f,$code;
 		$this->stSytxHl=Status::boolean(($_SESSION['editor'] == 'delux'));
-		$this->stAutosave=Status::doubleBoolean($isReadOnly, ($code['autosave']==1));
+		$this->stAutosave=Status::doubleBoolean(!$f->isWritable(), ($code['autosave']==1));
 	}
-	
+
 	public function __get($name) {
 		if (isset($this->$name)) {
 			return $this->$name;
