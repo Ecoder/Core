@@ -57,13 +57,20 @@ $dbug['error_email'] = 'log@website.com'; // email log errors ##
 
 $cnf['showHidden']=false; //Temp.. tree: show hidden files?
 
-include "code/base/logic.php"; // apply settings ##
+// skin settings ##
+$code['skin_path'] = 'skin/'.$code['skin'].'/'; // put it all together ##
+// declare ##
+$main['mode'] = '';
+$main['path'] = '';
+$main['file'] = '';
+
 include "code/base/functions.php"; // php functions ##
 include "code/base/secure.php"; // secure system ##
 include "code/base/editor.php"; // editor hot swapper ##
 include "code/base/controller.php";
 include "code/base/io.php";
 include "code/filemanipulation.php";
+include "code/tree.php";
 
 $i=Input::_get();
 $fgc=file_get_contents("translations.json");

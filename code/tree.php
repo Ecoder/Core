@@ -8,17 +8,17 @@
  */
 class TreeNode {
 	const HIDDEN='.';
-	
+
 	const TYPE_DIR="dir";
 	const TYPE_FILE="file";
-	
+
 	public $name,$type,$path,$ext="",$subtype="unknown";
 	public $children;
-	
+
 	public function __construct($pathname,$showHidden=true) {
 		$sfi=new SplFileInfo($pathname);
 		$this->_getPropertiesFromSfi($sfi);
-		
+
 		if ($sfi->isDir()) {
 			$this->children=array();
 			$di=new DirectoryIterator($pathname);
@@ -32,12 +32,20 @@ class TreeNode {
 			$this->children=null;
 		}
 	}
-	
+
+	public static function init() {
+		global $cnf,$code;
+		$i=Input::_get();
+		$showHidden=($i->showHidden ?: $cnf["showHidden"]);
+		$node=new TreeNode(realpath($code['root']),$showHidden);
+		Output::add("tree",$node);
+	}
+
 	private function _getPropertiesFromSfi(SplFileInfo $sfi) {
 		//Dirty solution for the subtypes for now
 		//TODO / TOFIX when we introduce better actions
 		$extToSubtype=array("html"=>"html","script"=>"js","css"=>"css","text"=>array("txt","htaccess","ini"),"php"=>"php");
-		
+
 		$this->name=$sfi->getFilename();
 		$this->type=$sfi->getType();
 		$this->path=$sfi->getPath();
@@ -53,7 +61,7 @@ class TreeNode {
 			$this->subtype=$k;
 		}
 	}
-	
+
 	private function _sortMyChildrenCallback(TreeNode $a,TreeNode $b) {
 		//First DIR, FILE
 		$firstCmp=0;
@@ -62,9 +70,9 @@ class TreeNode {
 		} else if ($a->isFile() && $b->isDir()) {
 			$firstCmp=1;
 		}
-		
+
 		if ($firstCmp!=0) { return $firstCmp; }
-		
+
 		//Then HIDDEN, NOT HIDDEN
 		if ($a->isHidden() && $b->isHidden()) {
 			return 0;
@@ -73,18 +81,18 @@ class TreeNode {
 		} else if ((!$a->isHidden()) && $b->isHidden()) {
 			return 1;
 		}
-		
+
 		//Then alphabetical
 		return strcasecmp($a->name,$b->name);
 	}
-	
+
 	public function isDir() {
 		return $this->type==self::TYPE_DIR;
 	}
 	public function isFile() {
 		return $this->type==self::TYPE_FILE;
 	}
-	
+
 	public function isHidden() {
 		return $this->name[0]==self::HIDDEN;
 	}

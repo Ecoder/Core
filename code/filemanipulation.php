@@ -96,4 +96,62 @@ class FileManipulation {
 			return;
 		}
 	}
+
+	public static function addFolder($path,$name) {
+		global $code;
+		if (empty($path)) {
+			Output::add("error","nopathspecified");
+			return;
+		}
+		if (empty($name)) {
+			Output::add("error","nonamespecified");
+			return;
+		}
+		if (file_exists($path."/".$name)) {
+			Output::add("error","alreadyexists");
+			return;
+		}
+		if (!is_writable($path)) {
+			Output::add("error","notwritable");
+			return;
+		}
+		$name=preg_replace('/[^0-9A-Za-z.-_]/','_',$name);
+		$result=@mkdir($path."/".$name,$code['permissions_dir']);
+		if ($result) {
+			Output::add("result","success");
+			return;
+		} else {
+			Output::add("error","unknown");
+			return;
+		}
+	}
+
+	public static function addFile($path,$name) {
+		global $code;
+		if (empty($path)) {
+			Output::add("error","nopathspecified");
+			return;
+		}
+		if (empty($name)) {
+			Output::add("error","nonamespecified");
+			return;
+		}
+		if (file_exists($path."/".$name)) {
+			Output::add("error","alreadyexists");
+			return;
+		}
+		if (!is_writable($path)) {
+			Output::add("error","notwritable");
+			return;
+		}
+		$name=preg_replace('/[^0-9A-Za-z.-_]/','_',$name);
+		$result=@mkdir($path."/".$name,$code['permissions_dir']);
+		if ($result) {
+			Output::add("result","success");
+			return;
+		} else {
+			Output::add("error","unknown");
+			return;
+		}
+	}
 }

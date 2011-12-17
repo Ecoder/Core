@@ -99,19 +99,6 @@ function ecoder_copy ( $from, $to, $mode ) {
 	}
 }
 
-##################################################
-
-// function to make recursive directories ##
-function ecoder_mkdir ( $path, $mode, $way = '' ) {
-	umask(0);
-	$exp = explode( "/", $path );
-	foreach( $exp as $n ) {
-		$way .= $n.'/';
-		if( !file_exists( $way ) ) mkdir( $way, octdec($mode) );
-	}
-    ecoder_echo ( '', '', 'directory '.$path.' created | permissions:'. $mode.'' );
-}
-
 #######################################
 
 // remove special characters ## TODO - white list, include ' -, _, space' ##

@@ -176,8 +176,6 @@ function upload(p) {
 function ecoder_files ( frame, mode, path, file, type, changed ) {
 
 		switch (mode) {
-			case "rename":
-				return rename_v2.init(path,file,type,changed);
 			case "add":
 				return add.init(path,type);
 			case "upload":
@@ -361,7 +359,7 @@ function Tree(options) {
 		$.extend(this.options,options);
 
 		$.ajax({
-			url:"tree2.php",
+			url:"api.php?controller=tree",
 			data:{json:JSON.stringify({showHidden:this.options.showHidden})},
 			type:"POST",
 			datatype:"json",
@@ -464,7 +462,7 @@ function Tree(options) {
 	///////////// TREE ACTION CALLBACKS
 	var toggleDir=function(li) {
 		li.children("ul").toggle();
-	}
+	};
 
 	var editFile=function(li) {
 		var path=li.attr("data-path");
@@ -492,7 +490,8 @@ function Tree(options) {
 
 	var addFolderHere=function(li) {
 		var path=li.attr("data-path");
-		ecoder_files('main','add',path,'','folder');
+		var name=li.attr("data-name");
+		ecoder.actions.addFolder(path+'/'+name);
 	}
 
 	var uploadHere=function(li) {
@@ -870,7 +869,7 @@ function Ecoder() {
 				var pieces=file.split("/");
 				name=pieces.pop();
 				path=pieces.join();
-				var dialog=_ecoder.dialog("rename",_ecoder.getTranslation("actions.rename.rename",{}),_ecoder.getTemplate("dialog.rename",{path:path,name:name}));
+				var dialog=_ecoder.dialog("rename",_ecoder.getTranslation("actions.rename.rename",{}),_ecoder.getTemplate("dialog.rename",{path:path+"/",name:name}));
 				$("#dialog.rename #ren_save").on("click",function(e) {
 					clickedSave();
 					dialog.close();
@@ -881,7 +880,7 @@ function Ecoder() {
 			};
 
 			var clickedSave=function() {
-				var newname=$("#dialog.rename #newname").val(); //TODO get actual new name
+				var newname=$("#dialog.rename #newname").val();
 				callAction("filemanipulation","rename",{file:file,newname:newname},function(out) {
 					if (typeof out.error != "undefined") {
 						_ecoder.infodialog(_ecoder.getTranslation("actions.rename.error."+out.error),-1);
@@ -889,6 +888,34 @@ function Ecoder() {
 						ecoder.tree=new Tree({showHidden:_ecoder.info.showHidden});
 						//TODO is this the correct way to refresh the tree?
 						_ecoder.infodialog(_ecoder.getTranslation("actions.rename."+out.result));
+					}
+				});
+			}
+
+			init();
+		},
+		addFolder:function(path) {
+
+			var init=function() {
+				var dialog=_ecoder.dialog("addfolder",_ecoder.getTranslation("actions.addfolder.addfolder",{}),_ecoder.getTemplate("dialog.addfolder",{path:path+'/'}));
+				$("#dialog.addfolder #ren_save").on("click",function(e) {
+					clickedSave();
+					dialog.close();
+				});
+				$("#dialog.addfolder #ren_cancel").on("click",function(e) {
+					dialog.close();
+				});
+			}
+
+			var clickedSave=function() {
+				var name=$("#dialog.addfolder #name").val();
+				callAction("filemanipulation","addFolder",{path:path,name:name},function(out) {
+					if (typeof out.error != "undefined") {
+						_ecoder.infodialog(_ecoder.getTranslation("actions.addfolder.error."+out.error),-1);
+					} else {
+						ecoder.tree=new Tree({showHidden:_ecoder.info.showHidden});
+						//TODO is this the correct way to refresh the tree?
+						_ecoder.infodialog(_ecoder.getTranslation("actions.addfolder."+out.result));
 					}
 				});
 			}

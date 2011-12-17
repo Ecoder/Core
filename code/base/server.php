@@ -24,8 +24,8 @@ if ( strstr ( $gm_server_http_host, "localhost" ) == TRUE ) { // localhost setti
     $_SESSION['debug_functions'] = 0; // debug php functions ## TODO
 
     // permissions for file and folder creation ##
-    $code['permissions_file'] = '0777'; // file ##
-    $code['permissions_dir'] = '0777'; // dir ##
+    $code['permissions_file'] = 0777; // file ##
+    $code['permissions_dir'] = 0777; // dir ##
 
     // show all errors ##
     #if ( $code['debug'] == 1 ) {
@@ -41,8 +41,8 @@ if ( strstr ( $gm_server_http_host, "localhost" ) == TRUE ) { // localhost setti
     $_SESSION['debug_functions'] = 0; // debug php functions ## TODO
 
     // permissions for file and folder creation ##
-    $code['permissions_file'] = '0744'; // file ##
-    $code['permissions_dir'] = '0755'; // dir ##
+    $code['permissions_file'] = 0744; // file ##
+    $code['permissions_dir'] = 0755; // dir ##
 
     // show all errors ##
     if ( $_SESSION['debug'] == 1 ) {

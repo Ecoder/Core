@@ -12,10 +12,16 @@ switch ($controller) {
 			case "rename":
 				FileManipulation::rename($i->file,$i->newname);
 				break;
+			case "addFolder":
+				FileManipulation::addFolder($i->path,$i->name);
+				break;
 			default:
 				//error
 				break;
 		}
+		break;
+	case "tree":
+		TreeNode::init();
 		break;
 	default:
 		//error
