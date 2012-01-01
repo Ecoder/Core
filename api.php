@@ -15,6 +15,9 @@ switch ($controller) {
 			case "addFolder":
 				FileManipulation::addFolder($i->path,$i->name);
 				break;
+			case "addFile":
+				FileManipulation::addFile($i->path,$i->name);
+				break;
 			default:
 				//error
 				break;

@@ -17,49 +17,6 @@ function callAction(controller,action,data,fn) {
 		}
 	});
 }
-function setLiveEvents() {
-	add.setLiveEvents();
-}
-
-var add={
-	path:null,
-	type:null,
-	setLiveEvents:function() {
-		$('.add .submit').live("click",function() {add.save();});
-	},
-	setFeedback:function(msg,type) {
-		$(".add #feedback").html(msg).removeClass("success error info").addClass(type);
-	},
-	init:function(path,type) {
-		this.path=path;
-		this.type=type;
-		callAction("add","dialog",{
-				path:this.path,
-				type:this.type
-			},function(json) {
-				dialog.show(json.html);
-			}
-		);
-	},
-
-	save:function() {
-		var i=add;
-		callAction("add","save",{
-				path:i.path,
-				file:$(".dialogcontentwrapper.add #nodename").val(),
-				ext:$(".dialogcontentwrapper.add #ext").val(),
-				type:i.type
-			},function(json) {
-				if (json.code!=1) {
-					i.setFeedback(json.msg,"error");
-					return;
-				}
-				i.setFeedback(json.msg,"success");
-				ecoder_tree('tree','reload');
-			}
-		);
-	}
-}
 
 function upload(p) {
 	var path=p;
@@ -176,8 +133,6 @@ function upload(p) {
 function ecoder_files ( frame, mode, path, file, type, changed ) {
 
 		switch (mode) {
-			case "add":
-				return add.init(path,type);
 			case "upload":
 				return new upload(path);
 		}
@@ -381,7 +336,7 @@ function Tree(options) {
 	};
 
 	var parseNodeToHtml=function(node) {
-		var htmlTmpl='<li data-type="{type}" data-name="{name}" data-path="{path}" data-ext="{ext}" data-subtype="{subtype}"><span>{name}</span>{children}</li>';
+		var htmlTmpl='<li data-type="{type}" data-pathname="{pathname}" data-name="{name}" data-path="{path}" data-ext="{ext}" data-subtype="{subtype}"><span>{name}</span>{children}</li>';
 		var html="";
 		var subTreeHtml="";
 		if (node.children != null) {
@@ -394,7 +349,7 @@ function Tree(options) {
 			});
 			subTreeHtml+="</ul>";
 		}
-		html+=htmlTmpl.format({type:node.type,name:node.name,path:node.path,ext:node.ext,subtype:node.subtype,children:subTreeHtml});
+		html+=htmlTmpl.format({type:node.type,name:node.name,path:node.path,pathname:node.pathname,ext:node.ext,subtype:node.subtype,children:subTreeHtml});
 		return html;
 	};
 
@@ -472,26 +427,19 @@ function Tree(options) {
 	}
 
 	var rename=function(li) {
-		var path=li.attr("data-path");
-		var name=li.attr("data-name");
-		ecoder.actions.rename(path+'/'+name);
+		ecoder.actions.rename(li.attr("data-pathname"));
 	}
 
 	var del=function(li) {
-		var path=li.attr("data-path");
-		var name=li.attr("data-name");
-		ecoder.actions.remove(path+'/'+name);
+		ecoder.actions.remove(li.attr("data-pathname"));
 	}
 
 	var addFileHere=function(li) {
-		var path=li.attr("data-path");
-		ecoder_files('main','add',path,'','file');
+		ecoder.actions.addFile(li.attr("data-pathname"));
 	}
 
 	var addFolderHere=function(li) {
-		var path=li.attr("data-path");
-		var name=li.attr("data-name");
-		ecoder.actions.addFolder(path+'/'+name);
+		ecoder.actions.addFolder(li.attr("data-pathname"));
 	}
 
 	var uploadHere=function(li) {
@@ -866,10 +814,10 @@ function Ecoder() {
 
 			var init=function() {
 				var path,name;
-				var pieces=file.split("/");
+				var pieces=file.split(ecoder.info.dirSep);
 				name=pieces.pop();
-				path=pieces.join();
-				var dialog=_ecoder.dialog("rename",_ecoder.getTranslation("actions.rename.rename",{}),_ecoder.getTemplate("dialog.rename",{path:path+"/",name:name}));
+				path=pieces.join(ecoder.info.dirSep);
+				var dialog=_ecoder.dialog("rename",_ecoder.getTranslation("actions.rename.rename",{}),_ecoder.getTemplate("dialog.rename",{path:path+ecoder.info.dirSep,name:name}));
 				$("#dialog.rename #ren_save").on("click",function(e) {
 					clickedSave();
 					dialog.close();
@@ -921,6 +869,34 @@ function Ecoder() {
 			}
 
 			init();
+		},
+		addFile:function(path) {
+
+			var init=function() {
+				var dialog=_ecoder.dialog("addfile",_ecoder.getTranslation("actions.addfile.addfile",{}),_ecoder.getTemplate("dialog.addfile",{path:path+'/'}));
+				$("#dialog.addfile #ren_save").on("click",function(e) {
+					clickedSave();
+					dialog.close();
+				});
+				$("#dialog.addfile #ren_cancel").on("click",function(e) {
+					dialog.close();
+				});
+			}
+
+			var clickedSave=function() {
+				var name=$("#dialog.addfile #name").val();
+				callAction("filemanipulation","addFile",{path:path,name:name},function(out) {
+					if (typeof out.error != "undefined") {
+						_ecoder.infodialog(_ecoder.getTranslation("actions.addfile.error."+out.error),-1);
+					} else {
+						ecoder.tree=new Tree({showHidden:_ecoder.info.showHidden});
+						//TODO is this the correct way to refresh the tree?
+						_ecoder.infodialog(_ecoder.getTranslation("actions.addfile."+out.result));
+					}
+				});
+			}
+
+			init();
 		}
 	};
 
@@ -933,7 +909,6 @@ $(document).ready(function() {
 });
 $(document).on("ecoder-ready",function() {
 	ecoder.tree=new Tree({showHidden:ecoder.info.showHidden});
-	setLiveEvents();
 	$("body").on("contextmenu",false);
 	//ecoder.infodialog("<p>testing</p>");
 	//ecoder.tabs.init();

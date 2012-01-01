@@ -12,7 +12,7 @@ class TreeNode {
 	const TYPE_DIR="dir";
 	const TYPE_FILE="file";
 
-	public $name,$type,$path,$ext="",$subtype="unknown";
+	public $name,$type,$path,$pathname,$ext="",$subtype="unknown";
 	public $children;
 
 	public function __construct($pathname,$showHidden=true) {
@@ -49,6 +49,7 @@ class TreeNode {
 		$this->name=$sfi->getFilename();
 		$this->type=$sfi->getType();
 		$this->path=$sfi->getPath();
+		$this->pathname=$sfi->getPathname();
 		//Could use $sfi->getExtension() but that's only
 		//available from php 5.3.6
 		$this->ext=pathinfo($sfi->getPathname(),PATHINFO_EXTENSION);

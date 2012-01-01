@@ -144,14 +144,35 @@ class FileManipulation {
 			Output::add("error","notwritable");
 			return;
 		}
+
 		$name=preg_replace('/[^0-9A-Za-z.-_]/','_',$name);
-		$result=@mkdir($path."/".$name,$code['permissions_dir']);
+		$template="template.txt";
+		if (self::_strEndsWith($name, ".css")) {
+			$template="template.css";
+		} else if (self::_strEndsWith($name, ".html")) {
+			$template="template.html";
+		} else if (self::_strEndsWith($name, ".js")) {
+			$template="template.js";
+		} else if (self::_strEndsWith($name, ".php")) {
+			$template="template.php";
+		}
+
+		$result=@copy("code/save/".$template,$path."/".$name);
 		if ($result) {
+			chmod($path."/".$name,$code['permissions_file']);
 			Output::add("result","success");
 			return;
 		} else {
 			Output::add("error","unknown");
 			return;
 		}
+	}
+
+	//http://stackoverflow.com/a/619725
+	private static function _strEndsWith($string, $test) {
+		$strlen = strlen($string);
+		$testlen = strlen($test);
+		if ($testlen > $strlen) return false;
+		return substr_compare($string, $test, -$testlen) === 0;
 	}
 }
