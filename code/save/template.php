@@ -3,6 +3,3 @@
 /*
 new php file
 */
-
-
-?>
