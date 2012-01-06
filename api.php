@@ -18,6 +18,8 @@ switch ($controller) {
 			case "addFile":
 				FileManipulation::addFile($i->path,$i->name);
 				break;
+			case "upload":
+				FileManipulation::upload();
 			default:
 				//error
 				break;

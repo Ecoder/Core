@@ -175,4 +175,50 @@ class FileManipulation {
 		if ($testlen > $strlen) return false;
 		return substr_compare($string, $test, -$testlen) === 0;
 	}
+
+	private static function _strEndsWithAnyOf($string,$testarr) {
+		$res=false;
+		foreach ($testarr as $test) {
+			$res+=self::_strEndsWith($string, $test);
+		}
+		return $res;
+	}
+
+	public static function upload() {
+		$path=(isset($_SERVER['HTTP_X_FILE_PATH']) ? $_SERVER['HTTP_X_FILE_PATH'] : '');
+		$filename=(isset($_SERVER['HTTP_X_FILE_NAME']) ? $_SERVER['HTTP_X_FILE_NAME'] : '');
+		$contentlength=(isset($_SERVER['CONTENT_LENGTH']) ? $_SERVER['CONTENT_LENGTH'] : '');
+
+		if (empty($filename) || empty($contentlength)) {
+			Output::add("error","nouploadselected");
+			return;
+		}
+
+		if ((!is_dir($path)) || (!is_writable($path))) {
+			Output::add("error","pathnotwritable");
+			return;
+		}
+
+		$whitelist=$_SESSION['tree_file_types'];
+		if(!self::_strEndsWithAnyOf($filename, $whitelist)) {
+			Output::add("error","invalidextension");
+			return;
+		}
+
+		if (file_exists($path.'/'.$filename)) {
+			Output::add("error","alreadyexists");
+			return;
+		}
+
+		$arr=explode(",",file_get_contents("php://input"));
+		$in=base64_decode($arr[1]);
+		$res=file_put_contents($path.'/'.$filename,$in);
+		if ($res) {
+			Output::add("result","success");
+			return;
+		} else {
+			Output::add("error","unknown");
+			return;
+		}
+	}
 }

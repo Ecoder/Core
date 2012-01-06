@@ -18,116 +18,6 @@ function callAction(controller,action,data,fn) {
 	});
 }
 
-function upload(p) {
-	var path=p;
-	var MAXSIZE=ecoder.info.maxUploadSize;
-
-	var init=function() {
-		callAction("upload","dialog",{
-			path:path
-		},function(json) {
-			dialog.show(json.html);
-			$(".dialogcontentwrapper.upload #file").change(handleUploaderChange);
-			$(".dialogcontentwrapper.upload #reset").click(clearList);
-			$(".dialogcontentwrapper.upload #upload").click(uploadQueue);
-		});
-	}
-
-	var handleUploaderChange=function() {
-		addToFileList(this.files);
-	};
-
-	var clearList=function(ev) {
-		ev.preventDefault();
-		$(".dialogcontentwrapper.upload #fileList").html("");
-	};
-
-	var uploadQueue=function(ev) {
-		ev.preventDefault();
-		$('.dialogcontentwrapper.upload #fileList li[data-status="0"]').each(function(k,v) {
-			var el=$(v);
-			var loader="<p class='loader'>Uploading...</p>";
-			el.html(el.html()+loader);
-			if (el.attr("data-rsize") < MAXSIZE) {
-				uploadFile(el);
-			} else {
-				el.children(".loader").html("File to large").css("color","red");
-			}
-			el.attr("data-status","1");
-		});
-	};
-
-	var addToFileList=function(files) {
-		for (var i=0; i<files.length; i++) {
-			new FileObject(files[i]);
-		}
-	};
-
-	var nodeToHtml=function(fileObject) {
-		var htmlTpl="<li data-status='0' data-name='{name}' data-type='{type}' data-rsize='{rsize}'><h3>{name}</h3><p>File type: ({type}) - {fsize} KB</p><div class='loadingIndicator'></div></li>";
-		return htmlTpl.format({name:fileObject.name,type:fileObject.type,rsize:fileObject.rsize,fsize:fileObject.fsize});
-	};
-
-	var FileObject=function(file) {
-		var fr = new FileReader();
-		this.name=file.name;
-		this.type=file.type;
-		this.rsize=file.size;
-		this.fsize=Math.round(this.rsize/1024);
-		this.dataurl=null;
-		var self=this;
-		fr.file = file;
-		fr.onloadend = function(e) {self.dataurl=e.target.result;showFileInList(self);};
-		fr.readAsDataURL(file);
-	}
-
-	var showFileInList=function(fileObject) {
-		if (fileObject) {
-				$("#fileList").html($("#fileList").html()+nodeToHtml(fileObject));
-				$.data($("#fileList li:last-child")[0],"file",fileObject);
-			}
-	};
-
-	var uploadFile=function(el) {
-		if (!el) {
-			return;
-		}
-		var xhr=new XMLHttpRequest();
-		var upload=xhr.upload;
-		var file=$.data(el[0],"file");
-
-		xhr.addEventListener("readystatechange",function (ev) {
-			if (xhr.readyState != 4)  {return;}
-			if (xhr.status == 200) {
-				var json=JSON.parse(xhr.responseText);
-				var x=null;
-				if (json.error) {
-					x="err_"+json.error;
-				} else {
-					x="err_uplsuccess";
-					el.children(".loadingIndicator").css("width","100%").css("background-color","#0f0");
-					el.children(".loader").html("Upload complete").css("color","#3DD13F");
-				}
-
-				$("#feedback").html(ecoder.translations.upload[x]).addClass("error");
-			}
-		},false);
-
-		upload.addEventListener("error",function (ev) {
-			console.log(ev);
-		},false);
-
-		xhr.open("POST","upload.php?controller=upload&action=save");
-		xhr.setRequestHeader("Cache-Control", "no-cache");
-		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-		xhr.setRequestHeader("X-File-Name", file.name);
-		xhr.setRequestHeader("X-File-Path", p);
-		xhr.send(file.dataurl);
-	};
-
-	init();
-}
-
 // file functions ##
 // frame target, action || mode, file path, file name, file extension || file/folder, change tracker ##
 function ecoder_files ( frame, mode, path, file, type, changed ) {
@@ -443,8 +333,7 @@ function Tree(options) {
 	}
 
 	var uploadHere=function(li) {
-		var path=li.attr("data-path");
-		ecoder_files('main','upload',path,'','file');
+		ecoder.actions.upload(li.attr("data-pathname"));
 	}
 
 	var hideHidden=function() {
@@ -601,7 +490,7 @@ function Ecoder() {
 	};
 
 	var testCompat=function() {
-		return !(typeof FileReader == "undefined");
+		return (window.File && window.FileReader && window.FileList && window.Blob);
 	};
 
 	/******************* DIALOG *********************/
@@ -895,6 +784,93 @@ function Ecoder() {
 					}
 				});
 			}
+
+			init();
+		},
+		//TODO needs some work to fit guidelines
+		upload:function(path) {
+			var id=1;
+
+			var init=function() {
+				var dialog=_ecoder.dialog("upload",_ecoder.getTranslation("actions.upload.upload",{}),_ecoder.getTemplate("dialog.upload",{}));
+				$("#dialog_upl_files").on("change",change);
+				$("#dialog.upload #upl_save").on("click",function(e) {
+					clickedSave();
+					dialog.close();
+				});
+				$("#dialog.upload #upl_cancel").on("click",function(e) {
+					dialog.close();
+				});
+			};
+
+			var change=function(e) {
+				for (var i=0; i<this.files.length; i++) {
+					new FileObject(this.files[i]);
+				}
+			};
+
+			var FileObject=function(file) {
+				var fr=new FileReader();
+				var _fileObject=this;
+				this.name=file.name;
+				this.type=file.type;
+				this.rsize=file.size;
+				this.fsize=(this.rsize/1024).toFixed(3);
+				this.dataurl=null;
+
+				var processMe=function() {
+					if (_fileObject) {
+						_fileObject.id=id;
+						$("#dialog_upl_list").append(_ecoder.getTemplate("upload.listitem",_fileObject));
+						$("#dialog_upl_list #item_"+_fileObject.id).data("fileObject",_fileObject);
+						id++;
+					}
+				};
+
+				fr.file=file;
+				fr.onloadend=function(e) {
+					_fileObject.dataurl=e.target.result;
+					processMe();
+				}
+				fr.readAsDataURL(file);
+			};
+
+			var clickedSave=function() {
+				var feedback="";
+				var uploadedTotal=0;
+				$("#dialog_upl_list li").each(function() {
+					var fo=$(this).data("fileObject");
+					var xhr=new XMLHttpRequest();
+					var upload=xhr.upload;
+
+					xhr.addEventListener("readystatechange",function() {
+						if (xhr.readyState != 4)  {return;}
+						if (xhr.status != 200) { return; }
+						uploadedTotal++;
+						var json=JSON.parse(xhr.responseText);
+						if (typeof json.error != "undefined") {
+							feedback+="<p>"+fo.name+" : "+_ecoder.getTranslation("actions.upload.error."+json.error);
+						} else {
+							ecoder.tree=new Tree({showHidden:_ecoder.info.showHidden});
+							//TODO is this the correct way to refresh the tree?
+							feedback+="<p>"+fo.name+" : "+_ecoder.getTranslation("actions.upload."+json.result);
+						}
+
+						if (uploadedTotal==id+1) {
+							_ecoder.infodialog(feedback,-1);
+							ecoder.tree=new Tree({showHidden:_ecoder.info.showHidden});
+						}
+					});
+
+					xhr.open("POST","api.php?controller=filemanipulation&action=upload");
+					xhr.setRequestHeader("Cache-Control", "no-cache");
+					xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+					xhr.setRequestHeader("X-File-Name", fo.name);
+					xhr.setRequestHeader("X-File-Path", path);
+					xhr.send(fo.dataurl);
+					console.log(feedback);
+				});
+			};
 
 			init();
 		}
