@@ -15,18 +15,21 @@ include_once "code/editor/filetype.php";
 //		Pass pathname, get json of relevant data
 //		In JS, editor gets built (w/ template)
 $newfile="";
-@ecoder_request($_GET['file'],$newfile,'');
-$f=EditorFile($newfile);
+@ecoder_request($_GET['pathname'],$newfile,'');
+$f=new EditorFile($newfile);
 
 class EditorFile extends SplFileInfo {
 	private $cmMime;
 
 	public function __construct($filename) {
 		parent::__construct($filename);
-		$this->setCodemirrorMime();
+		$this->setCmMime();
 	}
 
 	public function getCmMime() { return $this->cmMime; }
+	public function getContent() {
+		return trim(htmlspecialchars(file_get_contents($this->getRealPath())));
+	}
 
 	private function setCmMime() {
 		$ext=parent::getExtension();

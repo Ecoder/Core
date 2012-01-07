@@ -47,7 +47,7 @@
 
 	<div class="content_wrapper">
 		<div class="edit_area">
-			<textarea id="editarea" name="content"><?php echo $file->content; ?></textarea>
+			<textarea id="editarea" name="content"><?php echo $f->getContent(); ?></textarea>
 		</div>
 	</div>
 
