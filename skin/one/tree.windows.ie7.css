@@ -1,6 +1,0 @@
-.tree_nav { z-index: 1; position: relative; width: 230px; height: 55px; padding: 0px; background: #f2f2f2; border-bottom: 1px solid #dddddd; }
-.tree_nav .trail { width: 223px; }
-.tree ul.ul_tree { margin: 0px 0 0 0; }
-.tree ul li { width: 230px; }
-.tree ul li:hover { width: 230px; }
-.tree ul li .file { width: 205px; }

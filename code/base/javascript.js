@@ -1,10 +1,6 @@
 // main ecoder javascript ##
 var translations, ecoder;
 
-//DEPRECATED
-var ecoder_tab = 0; // current tab ##
-var ecoder_iframe = "home_txt"; // start at home ##
-
 function callAction(controller,action,data,fn) {
 	$.ajax({
 		data:{json:JSON.stringify(data)},
@@ -14,66 +10,8 @@ function callAction(controller,action,data,fn) {
 		success:function(json) {
 			json=JSON.parse(json);
 			fn(json);
-		}
+			}
 	});
-}
-
-// file functions ##
-// frame target, action || mode, file path, file name, file extension || file/folder, change tracker ##
-function ecoder_files ( frame, mode, path, file, type, changed ) {
-    // make uniquish iframe id ##
-    var ecoder_changed_min = 1; // number of changes to warn on ##
-    var ecoder_mode = mode; // get mode ##
-    var ecoder_type = type; // get frame ##
-
-    if ( ecoder_mode == 'close' ) { // close file ##
-        var close_do = 0; // false ##
-        var close_confirm = 'if you close '+ file +' unsaved changes may be lost.\npress OK to close or CANCEL to stop.'; // message ##
-        if ( changed > ecoder_changed_min ) { // delux and changes made -- was > 1 ##
-            if ( confirm ( close_confirm ) ) { // confirm ## + changed
-                close_do = 1; // ok ##
-            }
-        } else { // delux and no changes made ##
-            close_do = 1; // ok ##
-        }
-
-        if ( close_do == 1 && top.ecoder_tab > 0 ) {
-            top.ecoder_tabs_close(); // close ##
-            ecoder_html_title ( 'home' ); // set title ##
-        }
-
-    } else if ( ecoder_mode == 'editor' ) { // swap code editor ##
-        var swap_do = 0; // false ##
-        var swap_confirm = 'swap to '+ ecoder_type +' editor? unsaved changes to '+ file +' will be lost.\npress OK to close or CANCEL to stop.'; // message ##
-        if ( changed > ecoder_changed_min ) { // delux and changes made -- was > 1 ##
-            if ( confirm( swap_confirm ) ) { // confirm ##
-                swap_do = 1; // ok ##
-            }
-        } else { // delux and no changes made ##
-            swap_do = 1; // ok ##
-        }
-
-        if ( swap_do == 1 ) {
-            top.frames[frame].location='editor.php?'+ path +'&editor='+ type; // call ##
-            ecoder_editor = ecoder_type; // update ecoder_editor variable if swapped ##
-        }
-
-    } else if ( ecoder_mode == 'reload' ) { // reload ##
-        var reload_do = 0; // false ##
-        var reload_confirm = 'if you reload '+ file +' unsaved changes will be lost.\npress OK to close or CANCEL to stop.'; // message ##
-        if ( changed > ecoder_changed_min ) { // delux and changes made -- was > 1  ##
-            if ( confirm( reload_confirm ) ) { // confirm ## + changed
-                reload_do = 1; // ok ##
-            }
-        } else { // delux and no changes made ##
-            reload_do = 1; // ok ##
-        }
-        if ( reload_do == 1 ) {
-            top.frames[frame].location.reload(true); // call ##
-        }
-
-    }
-    return false; // no return ##
 }
 
 function ContextMenu(options) {
@@ -302,111 +240,6 @@ function Tree(options) {
 	this.init(options);
 }
 
-// ----------------------------------------------------------------------------------------------------------
-
-// html title function ## remove mode ##
-function ecoder_html_title ( file ) {
-
-    var ecoder_title = 'home'; // declare default ##
-    var ecoder_file = file; // file name from function ##
-    if ( ecoder_file ) ecoder_title = ecoder_file; // add file if set ##
-    top.document.title = ecoder_name + ' | '+ ecoder_title; // apply title ##
-    return false; // no return ##
-
-}
-
-// ----------------------------------------------------------------------------------------------------------
-
-// track changes to editarea ##
-var content_changed = 0; // swallow first change ( focus ) to editarea ##
-function ecoder_changed () {
-    content_changed ++; // iterate to count changes ##
-}
-
-// ----------------------------------------------------------------------------------------------------------
-
-// check if a variable is defined ##
-function ecoder_var_defined ( variable ) {
-    return (!(!(document.getElementById(variable))))
-}
-
-// ----------------------------------------------------------------------------------------------------------
-
-// track id of top tab ##
-//DEPRECATED
-function ecoder_track ( what, reference ) {
-
-    // track tab ##
-    if ( what == 'tab' ) {
-        ecoder_tab = reference; // update variable ##
-    }
-    // track tab ##
-    if ( what == 'iframe' ) {
-        ecoder_iframe = reference; // update iframe reference ## -- document.getElementById ( reference )
-    }
-}
-
-// ----------------------------------------------------------------------------------------------------------
-
-// recursive replace ##
-function ecoder_replace_all ( str, replacements ) {
-
-    for ( i = 0; i < replacements.length; i++ ) {
-        var idx = str.indexOf( replacements[i][0] );
-        while ( idx > -1 ) {
-            str = str.replace( replacements[i][0], replacements[i][1] );
-            idx = str.indexOf( replacements[i][0] );
-        }
-    }
-    return str;
-}
-
-// ----------------------------------------------------------------------------------------------------------
-
-// object checker ##
-//DEPRECATED
-function ecoder_check_object(Id, Tag) {
-
-  var o = document.getElementById(Id);
-  if (o) { //alert ( '1 > found '+ o.id );
-    if (Tag) { //alert ( '2 > found '+ o.id );
-      if (o.tagName.toLowerCase() == Tag.toLowerCase()) { //alert ( '3 > found '+ o.id );
-        return o;
-      }
-    } else {
-      return o;
-    }
-  }
-  return null;
-}
-
-// ----------------------------------------------------------------------------------------------------------
-
-// loader & script test ##
-function ecoder_loaded_base( mode ) {
-
-    b_div = 'load_base';
-    var elem = document.getElementById( b_div );
-    elem.style.display = ( elem.style.display == "none" ) ? "" : "none";
-
-}
-
-// ----------------------------------------------------------------------------------------------------------
-
-// onload events ##
-function addLoadEvent( func ) {
-
-  var oldonload = window.onload;
-  if (typeof window.onload != 'function') {
-    window.onload = func;
-  } else {
-    window.onload = function() {
-      oldonload();
-      func();
-    }
-  }
-}
-
 function Ecoder() {
 	var _self=this;
 	var _ecoder=this;
@@ -442,10 +275,10 @@ function Ecoder() {
 
 	var getInfo=function() {
 		$.ajax({
-			url:"info.php",
+			url:"api.php?controller=env",
 			datatype:'json',
 			success:function(json) {
-				_ecoder.info=(JSON.parse(json)).info;
+				_ecoder.info=(JSON.parse(json));
 				getTranslations(); //Shouldn't be here, but still searching for a cleaner way
 			}
 		})
@@ -566,7 +399,7 @@ function Ecoder() {
 
 		function init() {
 			if (typeof openTabs[file] !== "undefined") {
-				var t=$("#tabs ul #tab_"+openTabs[file]);
+				var t=$("#tabs ul#tablist #tab_"+openTabs[file]);
 				t.focus();
 				return t;
 			}
@@ -574,8 +407,8 @@ function Ecoder() {
 			var panel='<div class="panel" id="panel_'+tabId+'" data-status="active">'+tabContent+'</div>';
 			var tab='<li class="tab" id="tab_'+tabId+'" data-status="active">'+title+'<span class="close"></span></li>';
 			$("#tabs #panels").append(panel);
-			$("#tabs ul").append(tab);
-			$("#tabs ul #tab_"+myId).data("tab",_tab);
+			$("#tabs ul#tablist").append(tab);
+			$("#tabs ul#tablist #tab_"+myId).data("tab",_tab);
 			openTabs[file]=myId;
 			tabId++;
 			return _tab;
@@ -584,15 +417,15 @@ function Ecoder() {
 		this.focus=function() {
 			defocusAllTabs();
 			$("#tabs #panels #panel_"+myId).attr("data-status","active");
-			$("#tabs ul #tab_"+myId).attr("data-status","active");
+			$("#tabs ul#tablist #tab_"+myId).attr("data-status","active");
 		}
 
 		this.close=function() {
 			defocusAllTabs();
 			$('div#panel_'+myId).remove();
 			$('li#tab_'+myId).remove();
-			if ($("#tabs ul li.tab").length!=0) {
-				$("#tabs ul li.tab").last().data("tab").focus();
+			if ($("#tabs ul#tablist li.tab").length!=0) {
+				$("#tabs ul#tablist li.tab").last().data("tab").focus();
 			}
 		}
 
@@ -640,7 +473,7 @@ function Ecoder() {
 			};
 
 			var handleResponse=function(out) {
-				if (typeof out.error != "undefined") {
+					if (typeof out.error != "undefined") {
 					if (out.error=="dirnotempty") {
 						_ecoder.confirmdialog(
 							_ecoder.getTranslation("actions.remove.title",{}),
@@ -689,7 +522,7 @@ function Ecoder() {
 						ecoder.tree=new Tree({showHidden:_ecoder.info.showHidden});
 						//TODO is this the correct way to refresh the tree?
 						_ecoder.infodialog(_ecoder.getTranslation("actions.rename."+out.result));
-					}
+			}
 				});
 			}
 
@@ -706,7 +539,7 @@ function Ecoder() {
 				$("#dialog.addfolder #ren_cancel").on("click",function(e) {
 					dialog.close();
 				});
-			}
+		}
 
 			var clickedSave=function() {
 				var name=$("#dialog.addfolder #name").val();
@@ -765,7 +598,7 @@ function Ecoder() {
 				$("#dialog.upload #upl_cancel").on("click",function(e) {
 					dialog.close();
 				});
-			};
+	};
 
 			var change=function(e) {
 				for (var i=0; i<this.files.length; i++) {
@@ -839,16 +672,105 @@ function Ecoder() {
 			init();
 		},
 		edit:function(file) {
-			var name="tab";
-			var html='<iframe src="editor.php?pathname='+file+'" frameborder="0"></iframe>';
-			new Tab(file,name,html);
+			var codemirror=null;
+			var editorTab=null;
+			var navselector=null;
+
+			function init() {
+				var name=file.split(_ecoder.info.dirSep).lastVal();
+				//var html='<iframe src="editor.php?pathname='+file+'" frameborder="0"></iframe>';
+
+				callAction("filemanipulation","getFileEditingInfo",{file:file},function(out) {
+					var doAutosave=(_ecoder.info.autosave!=0 ? (out.isWritable) : false);
+					var saveStatus=(out.isWritable ? "enabled" : "disabled");
+					var html='<ul class="editornav">';
+					html+='<li class="save" data-status="'+saveStatus+'"></li>';
+					//TODO Search
+					html+='<li class="undo" data-status="0" title="Undo"></li>';
+					html+='<li class="redo" data-status="0" title="Redo"></li>';
+					html+='<li class="jump" title="Jump to line"></li>';
+					html+='<li class="reindsel" title="Reformat selection"></li>';
+					html+='<li class="reinddoc" title="Reformat whole document"></li>';
+					html+='</ul>';
+					html+='<div class="editorwrapper"><textarea class="editor">'+out.content+'</textarea></div>';
+					editorTab=new Tab(file,name,html);
+					var textarea=$("#tabs #panel_"+editorTab.getId()+" .editor")[0];
+					codemirror=CodeMirror.fromTextArea(textarea,{
+						mode:out.cmMime,
+						indentWithTabs:true,
+						lineNumbers:true,
+						readOnly:!out.isWritable,
+						onChange:onChange
+					});
+					navselector="#tabs #panel_"+editorTab.getId()+" .editornav";
+					$(navselector+' li.save[data-status="enabled"]').on("click",clickSave);
+					$(navselector+' li.undo[data-status="1"]').on("click",undo);
+					$(navselector+' li.redo[data-status="1"]').on("click",redo);
+					$(navselector+' li.jump').on("click",jump);
+					$(navselector+' li.reindsel').on("click",reindsel);
+					$(navselector+' li.reinddoc').on("click",reinddoc);
+				});
+			}
+
+			function onChange() {
+				var history=codemirror.historySize();
+				$(navselector+' .undo').attr("data-status",(history['undo'] > 0 ? "1" : "0"));
+				$(navselector+' .redo').attr("data-status",(history['redo'] > 0 ? "1" : "0"));
+			}
+
+			function reinddoc() {
+				var lineCount = codemirror.lineCount();
+				for(var line = 0; line < lineCount; line++) {
+					codemirror.indentLine(line);
+				}
+			}
+
+			function reindsel() {
+				//From codemirror-ui
+				var start = codemirror.getCursor(true)["line"];
+				var end = codemirror.getCursor(false)["line"];
+				for(var line = start; line <= end; line++) {
+					codemirror.indentLine(line);
+				}
+			}
+
+			function jump() {
+				//From codemirror-ui
+				var line = prompt("Jump to line:", "");
+				if (line && !isNaN(Number(line))) {
+					codemirror.setCursor(Number(line),0);
+					codemirror.setSelection({line:Number(line),ch:0},{line:Number(line)+1,ch:0});
+					codemirror.focus();
+				}
+			}
+
+			function redo() {
+				codemirror.redo();
+			}
+
+			function undo() {
+				codemirror.undo();
+			}
+
+			function clickSave() {
+				codemirror.save(); //Transfers content back to textarea
+				var content=$("#tabs #panel_"+editorTab.getId()+" .editor").val();
+				callAction("filemanipulation","editSave",{file:file,content:content},function(out) {
+					if (typeof out.error != "undefined") {
+						_ecoder.infodialog(_ecoder.getTranslation("actions.edit.error."+out.error),-1);
+					} else {
+						_ecoder.infodialog(_ecoder.getTranslation("actions.edit."+out.result));
+					}
+				});
+			}
+
+			init();
 		}
 	};
 
 	init();
 }
 
-// ----------------------------------------------------------------------------------------------------------
 $(document).ready(function() {
 	ecoder=new Ecoder();
 });

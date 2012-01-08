@@ -13,8 +13,8 @@ $code['domain_cookie'] = ".gmeditor.com"; // domain name ##
 /* other advanced settings ## */
 $code['editor'] = 'delux'; // basic ( no colours ) || delux ( highlight + plugins ) ##
 $code['skin'] = 'one'; // design ##
-$code['autosave'] = 0; // disabled on load, can be switched on in each doc. ##
-$code['autosave_time'] = 10; // delay in seconds ##
+$code['autosave']=0; // 0 for disabled, otherwise time in seconds
+$code['autosave_time'] = 10; // delay in seconds ## DEPRECATED
 $code['backup'] = 1; // 1 = on || 0 = off -- create backup copy of files opened ( see code/edit/file.backup.php ) ##
 
 /* system settings, changeable, but will not change how the system works */
@@ -71,10 +71,6 @@ include "code/base/controller.php";
 include "code/base/io.php";
 include "code/filemanipulation.php";
 include "code/tree.php";
+include "code/env.php";
 
 $i=Input::_get();
-$fgc=file_get_contents("translations.json");
-$x=json_decode($fgc);
-$y=$code["lang"];
-$translations=$x->$y;
-unset($x,$y);

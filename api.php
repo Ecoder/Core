@@ -20,6 +20,13 @@ switch ($controller) {
 				break;
 			case "upload":
 				FileManipulation::upload();
+				break;
+			case "getFileEditingInfo":
+				FileManipulation::getFileEditingInfo($i->file);
+				break;
+			case "editSave":
+				FileManipulation::editSave($i->file,$i->content);
+				break;
 			default:
 				//error
 				break;
@@ -27,6 +34,9 @@ switch ($controller) {
 		break;
 	case "tree":
 		TreeNode::init();
+		break;
+	case "env":
+		Env::get();
 		break;
 	default:
 		//error

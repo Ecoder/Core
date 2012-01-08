@@ -434,7 +434,6 @@ div.dialogcontentwrapper.upload .loadingIndicator {
 	bottom:0;
 	right:0;
 	left:0;
-	overflow:scroll;
 	display:block;
 }
 #tabs #panels div.panel[data-status="inactive"] {
@@ -448,7 +447,7 @@ div.dialogcontentwrapper.upload .loadingIndicator {
 	left:0;
 }
 
-#tabs ul {
+#tabs ul#tablist {
 	list-style:none;
 	padding:0;
 	margin:0;
@@ -456,7 +455,7 @@ div.dialogcontentwrapper.upload .loadingIndicator {
 	width:100%;
 	border-bottom:1px solid #58792A;
 }
-#tabs ul li.tab {
+#tabs ul#tablist li.tab {
 	cursor:pointer;
 	margin:0;
 	padding:1px 2px 1px 8px;
@@ -468,19 +467,94 @@ div.dialogcontentwrapper.upload .loadingIndicator {
 	background:#5A7C2D;
 	color:#FFFFFF;
 }
-#tabs ul li.tab[data-status="inactive"]:hover {
+#tabs ul#tablist li.tab[data-status="inactive"]:hover {
 	background:#C0B66E;
 	color:#FFFFFF;
 }
-#tabs ul li.tab[data-status="inactive"] {
+#tabs ul#tablist li.tab[data-status="inactive"] {
 	background:#F2F2F2;
 	color:#000000;
 }
-#tabs ul li.tab span.close {
+#tabs ul#tablist li.tab span.close {
 	float:right;
 	display:block;
 	width:18px;
 	height:18px;
 	background:url(design/icon_close.png);
 	margin-left:2px;
+}
+
+/*********** EDITOR *************/
+.CodeMirror {
+	height:auto;
+	background:#FFFFFF;
+}
+.CodeMirror-scroll {
+	height:100%;
+}
+.editornav {
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	height:26px;
+	background:#F2F2F2;
+	border-bottom: 1px solid #dddddd;
+	border-top: 1px solid #dddddd;
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+.editornav li {
+	padding:4px 4px 4px 3px;
+	background:no-repeat transparent 3px 4px;
+	border-left:1px solid #dddddd;
+	height:18px;
+	width:18px;
+	float:left;
+}
+.editornav li:first-child {
+	border-left:0px;
+}
+.editornav li:hover {
+	background-color:#CDDEEE;
+}
+.editornav li.save {
+	background-image: url(design/icon_save.png);
+}
+.editornav li.search {
+	background-image: url(../../plug/codemirror-ui/images/silk/find.png);
+}
+.editornav li.undo {
+	background-image: url(../../plug/codemirror-ui/images/silk/arrow_undo.png);
+}
+.editornav li.redo {
+	background-image: url(../../plug/codemirror-ui/images/silk/arrow_redo.png);
+}
+.editornav li.jump {
+	background-image: url(../../plug/codemirror-ui/images/silk/page_go.png);
+}
+.editornav li.reindsel {
+	background-image: url(../../plug/codemirror-ui/images/silk/text_indent.png);
+}
+.editornav li.reinddoc {
+	background-image: url(../../plug/codemirror-ui/images/silk/page_refresh.png);
+}
+.editornav li[data-status="0"],
+.editornav li[data-status="-1"] {
+	opacity: 0.3;
+}
+.editornav li[data-status="0"] {
+	background-color:#dddddd;
+}
+.editornav li[data-status="-1"] {
+	background-color:#aaaaaa;
+}
+.editorwrapper {
+	position: absolute;
+	top: 28px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	overflow: scroll;
 }

@@ -1,9 +1,6 @@
 <?php
-include "code.php";
-
-//Public properties because we have to json_encode it -_-
-class Info {
-	public $maxUploadSize,$dirSep,$tree_showHidden,$lang;
+class Env {
+	private $maxUploadSize,$dirSep,$tree_showHidden,$lang,$autosave;
 
 	public function __construct() {
 		global $cnf,$code;
@@ -11,6 +8,20 @@ class Info {
 		$this->dirSep=DIRECTORY_SEPARATOR;
 		$this->tree_showHidden=$cnf['showHidden'];
 		$this->lang=$code['lang'];
+		$this->autosave=$code['autosave'];
+	}
+
+	public static function get() {
+		$env=new Env();
+		$env->__toOutput();
+	}
+
+	public function __toOutput() {
+		Output::add("maxUploadSize",$this->maxUploadSize);
+		Output::add("dirSep",$this->dirSep);
+		Output::add("tree_showHidden",$this->tree_showHidden);
+		Output::add("lang",$this->lang);
+		Output::add("autosave",$this->autosave);
 	}
 
 	private function phpIniSizeToBytes($val) {
@@ -29,6 +40,3 @@ class Info {
 		return $val;
 	}
 }
-
-Output::add("info",new Info());
-Output::send();

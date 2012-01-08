@@ -221,4 +221,47 @@ class FileManipulation {
 			return;
 		}
 	}
+
+	public static function getFileEditingInfo($file) {
+		$sfi=new SplFileInfo($file);
+		$content=trim(htmlspecialchars(file_get_contents($sfi->getRealPath())));
+		$ext=$sfi->getExtension();
+		$mimes=array("php"=>"application/x-httpd-php-open","js"=>"text/javascript","html"=>"text/html","css"=>"text/css","text"=>"text/plain");
+		$cmMime=$mimes[$ext];
+		Output::add("content",$content);
+		Output::add("cmMime",$cmMime);
+		Output::add("isWritable",$sfi->isWritable());
+	}
+
+	public static function editSave($file,$newcontent) {
+		if (get_magic_quotes_gpc()) {
+			$newcontent=stripslashes($newcontent);
+		}
+
+		if (!file_exists($file)) {
+			Output::add("error","filenotexist");
+			return;
+		}
+
+		if (!is_file($file)) {
+			Output::add("error","notafile");
+			return;
+		}
+
+		if (!is_writable($file)) {
+			Output::add("error","notwritable");
+			return;
+		}
+
+		$handler=fopen($file,'w');
+		$res=fwrite($handler,$newcontent);
+		fclose($handler);
+		if ($res!==false) {
+			Output::add("result","success");
+			return;
+		} else {
+			Output::add("error","unknown");
+			return;
+		}
+	}
 }
