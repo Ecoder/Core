@@ -699,13 +699,21 @@ function Ecoder() {
 					html+='<div class="editorwrapper"><textarea class="editor">'+out.content+'</textarea></div>';
 					editorTab=new Tab(file,name,html);
 					var textarea=$("#tabs #panel_"+editorTab.getId()+" .editor")[0];
+					var hlLine=null;
+					var foldFunc = CodeMirror.newFoldFunction(CodeMirror.braceRangeFinder);
 					codemirror=CodeMirror.fromTextArea(textarea,{
 						mode:out.cmMime,
 						indentWithTabs:true,
 						lineNumbers:true,
 						readOnly:!out.isWritable,
-						onChange:onChange
+						onChange:onChange,
+						onCursorActivity: function() {
+							codemirror.setLineClass(hlLine, null);
+							hlLine=codemirror.setLineClass(codemirror.getCursor().line, "activeline");
+						},
+						onGutterClick: foldFunc
 					});
+					hlLine=codemirror.setLineClass(0, "activeline");
 					navselector="#tabs #panel_"+editorTab.getId()+" .editornav";
 					$(navselector+' li.save[data-status="enabled"]').on("click",clickSave);
 					$(navselector+' li.undo[data-status="1"]').on("click",undo);

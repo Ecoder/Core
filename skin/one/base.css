@@ -558,3 +558,5 @@ div.dialogcontentwrapper.upload .loadingIndicator {
 	right: 0;
 	overflow: scroll;
 }
+.CodeMirror .activeline {background: #f0fcff !important;}
+.CodeMirror-gutter {min-width: 2.6em; cursor: pointer;}
