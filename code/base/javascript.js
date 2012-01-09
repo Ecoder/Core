@@ -136,15 +136,14 @@ function Tree(options) {
 		$("#tree h2").on("contextmenu",function(e) {
 			e.stopPropagation();
 			var hiddenOption=null;
-			console.log("showhidden = "+_self.options.showHidden);
 			if (_self.options.showHidden) {
 				hiddenOption=new ContextMenuItem({id:"hidden_hide",name:"Hide hidden files",callback:hideHidden});
 			} else {
 				hiddenOption=new ContextMenuItem({id:"hidden_show",name:"Show hidden files",callback:showHidden});
 			}
-			//TODO hidden
 			var refreshOption=new ContextMenuItem({id:"refresh",name:"Refresh the tree",callback:refresh});
-			var buttons=new Array(hiddenOption,refreshOption);
+			var splashOption=new ContextMenuItem({id:"splash",name:"Open welcome tab",callback:ecoder.openSplash});
+			var buttons=new Array(hiddenOption,refreshOption,splashOption);
 			new ContextMenu({buttons:buttons,pos:{x:e.pageX,y:e.pageY},origEl:$(e.target)});
 			return false;
 		});
@@ -263,15 +262,19 @@ function Ecoder() {
 			$("body").on("contextmenu",false);
 			//ecoder.infodialog("<p>testing</p>");
 			//ecoder.tabs.init();
-			$.ajax({
-				url:"code/base/loader.php",
-				success:function(html) {
-					var welcomeTab=new Tab("{{splash}}","Welcome",html);
-					//ecoder.tabs.add("{{splash}}","Welcome",html);
-				}
-			});
+			_ecoder.openSplash();
 		});
 	};
+
+	this.openSplash=function() {
+		$.ajax({
+			url:"code/base/loader.php",
+			success:function(html) {
+				var welcomeTab=new Tab("{{splash}}","Welcome",html);
+				//ecoder.tabs.add("{{splash}}","Welcome",html);
+			}
+		});
+	}
 
 	var getInfo=function() {
 		$.ajax({
@@ -424,6 +427,7 @@ function Ecoder() {
 			defocusAllTabs();
 			$('div#panel_'+myId).remove();
 			$('li#tab_'+myId).remove();
+			delete openTabs[file];
 			if ($("#tabs ul#tablist li.tab").length!=0) {
 				$("#tabs ul#tablist li.tab").last().data("tab").focus();
 			}
