@@ -1,19 +1,6 @@
 // main ecoder javascript ##
 var translations, ecoder;
 
-function callAction(controller,action,data,fn) {
-	$.ajax({
-		data:{json:JSON.stringify(data)},
-		url:"api.php?controller="+controller+"&action="+action,
-		type:'POST',
-		datatype:'json',
-		success:function(json) {
-			json=JSON.parse(json);
-			fn(json);
-			}
-	});
-}
-
 function ContextMenu(options) {
 
 	this.init=function(options) {
@@ -289,6 +276,19 @@ function Ecoder() {
 
 	var testCompat=function() {
 		return (window.File && window.FileReader && window.FileList && window.Blob);
+	};
+
+	var callAction=function(controller,action,data,fn) {
+		$.ajax({
+			data:{json:JSON.stringify(data)},
+			url:"api.php?controller="+controller+"&action="+action,
+			type:'POST',
+			datatype:'json',
+			success:function(json) {
+				json=JSON.parse(json);
+				fn(json);
+				}
+		});
 	};
 
 	/******************* DIALOG *********************/
