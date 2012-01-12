@@ -9,7 +9,8 @@
 	<link rel="stylesheet" href="plug/codemirror/mode/diff/diff.css" />
 	<link rel="stylesheet" href="plug/codemirror/mode/rpm/spec/spec.css" />
 	<link rel="stylesheet" href="plug/codemirror/mode/tiddlywiki/tiddlywiki.css" />
-	<script src="plug/codemirror/lib/codemirror.js"></script>
+	<script src="plug/codemirror-2_2-min.js"></script>
+	<!--<script src="plug/codemirror/lib/codemirror.js"></script>
 	<script src="plug/codemirror/lib/util/foldcode.js"></script>
 	<script src="plug/codemirror/mode/clike/clike.js"></script>
 	<script src="plug/codemirror/mode/clojure/clojure.js"></script>
@@ -45,7 +46,7 @@
 	<script src="plug/codemirror/mode/velocity/velocity.js"></script>
 	<script src="plug/codemirror/mode/xml/xml.js"></script>
 	<script src="plug/codemirror/mode/xmlpure/xmlpure.js"></script>
-	<script src="plug/codemirror/mode/yaml/yaml.js"></script>
+	<script src="plug/codemirror/mode/yaml/yaml.js"></script>-->
 
 	<title>Ecoder</title>
 	<meta http-equiv="content-Type" content="text/html; charset=UTF-8" />
