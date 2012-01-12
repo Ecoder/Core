@@ -46,19 +46,8 @@
 	<script src="plug/codemirror/mode/xml/xml.js"></script>
 	<script src="plug/codemirror/mode/xmlpure/xmlpure.js"></script>
 	<script src="plug/codemirror/mode/yaml/yaml.js"></script>
-	<!--<script src="plug/codemirror/mode/clike/clike.js"></script>
-	<script src="plug/codemirror/mode/coffeescript/coffeescript.js"></script>
-	<script src="plug/codemirror/mode/css/css.js"></script>
-	<script src="plug/codemirror/mode/htmlmixed/htmlmixed.js"></script>
-	<script src="plug/codemirror/mode/javascript/javascript.js"></script>
-	<script src="plug/codemirror/mode/php/php.js"></script>
-	<script src="plug/codemirror/mode/python/python.js"></script>
-	<script src="plug/codemirror/mode/ruby/ruby.js"></script>
-	<script src="plug/codemirror/mode/xml/xml.js"></script>
-	<script src="plug/codemirror/mode/xmlpure/xmlpure.js"></script>
-	<script src="plug/codemirror/mode/yaml/yaml.js"></script>-->
 
-	<title><?php echo $code['name']; ?></title>
+	<title>Ecoder</title>
 	<meta http-equiv="content-Type" content="text/html; charset=UTF-8" />
 	<meta name="robots" content="noindex,nofollow" />
 	<link rel="stylesheet" href="skin/one/base.css" />

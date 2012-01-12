@@ -9,22 +9,12 @@ if ( $_SESSION['live'] == 0 ) { // running locally ##
     $code['root'] = 'D:/dev/ecoder/testingdata/'; // local path -- for testing ##
 }
 $code['domain_cookie'] = ".gmeditor.com"; // domain name ##
-
-/* other advanced settings ## */
-$code['editor'] = 'delux'; // basic ( no colours ) || delux ( highlight + plugins ) ##
-$code['skin'] = 'one'; // design ##
 $code['autosave']=0; // 0 for disabled, otherwise time in seconds
-$code['autosave_time'] = 10; // delay in seconds ## DEPRECATED
-$code['backup'] = 1; // 1 = on || 0 = off -- create backup copy of files opened ( see code/edit/file.backup.php ) ##
 
-/* system settings, changeable, but will not change how the system works */
-#$code['domain'] = "http://www.gmeditor.com/"; // domain name ##
-$code['name'] = "ecoder"; // system name ##
-$code['version'] = "v 0.5.0m1"; // system version ##
+$code['version'] = "v 0.5.0m1";
 $code['lang']="en";
-//Version keepers
 $code['jQuery']="1.7.1";
-$code['codemirror']="2.16";
+$code['codemirror']="2.2";
 
 // security settings ##
 $code['secure'] = 0; // 0 = not secured || 1 = secured, uses settings below ##
@@ -34,9 +24,14 @@ $code['secure_logouturl']='http://example.com/logout/'; //Full url to logout pag
 if ( $_SESSION['live'] == 0 ) { $code['secure_url'] = '/loveunit/greenmedia.es/go/1/user/login/?pass=ecoder'; } // local path -- for testing ##
 $code['secure_root'] = 1; // 1 || 0 - use varible root - passed in session variable $_SESSION['tree_root'] ##
 
-// home tab settings ##
-$tabs['home'] = 'home'; // title of home tab ##
-$tabs['home_content'] = 'you can make notes in this file & it also acts as the home page when you close other files.'; // text added to home page doc ##
+if ( $code['secure'] == 1 ) { // secured ##
+    if ( !isset( $_SESSION[$code['secure_variable']] ) || $_SESSION[$code['secure_variable']] == 0 ) { // check for login variable ##
+        echo '<script type="text/javascript">top.location.href = \''.$code['secure_url'].'\';</script>'; // kick-out ##
+    }
+    if ( $code['secure_root'] == 1 && isset( $_SESSION['tree_root'] ) ) { // assign session to root variable ##
+        $code['root'] = $_SESSION['tree_root']; // passed full path to editable root ##
+    }
+}
 
 // array of allowed file types in tree ##
 $_SESSION['tree_file_types'] = array( "php", "js", "html", "css", "txt", "htaccess", "ini" );
@@ -50,24 +45,8 @@ $_SESSION['tree_file_ignore'] = array ( ".ftpquota" );
 // array of directories to ignore in tree ##
 $_SESSION['tree_dir_ignore'] = array( ".", "..", ".files", ".snap", "logic", "cpanel", "ftp", "00", "01" );
 
-// error logging -- includes a php script that can be cronned ##
-// note you'll also need to update the path in the .htaccess file in the root directory ##
-$dbug['error_path'] = '/home/ecoder/code/logs/error.log'; // full path to error log file ##
-$dbug['error_email'] = 'log@website.com'; // email log errors ##
-
 $cnf['showHidden']=false; //Temp.. tree: show hidden files?
 
-// skin settings ##
-$code['skin_path'] = 'skin/'.$code['skin'].'/'; // put it all together ##
-// declare ##
-$main['mode'] = '';
-$main['path'] = '';
-$main['file'] = '';
-
-include "code/base/functions.php"; // php functions ##
-include "code/base/secure.php"; // secure system ##
-include "code/base/editor.php"; // editor hot swapper ##
-include "code/base/controller.php";
 include "code/base/io.php";
 include "code/filemanipulation.php";
 include "code/tree.php";
