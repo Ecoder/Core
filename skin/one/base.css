@@ -153,12 +153,6 @@ a:link, a:hover, a:visited { text-decoration: none; color: #525252; }
 #load_base .loading .two .requires { background-color: transparent; padding: 0px 0 0 0px; height: 75px; }
 #load_base .loading .two .how p, #load_base .loading .shortcuts .requires p, #load_base .loading .two .requires p { margin: 0px; padding: 4px 0 0 1px; }
 */
-/* advice and warnings */
-#note { background: url(design/note.png); display: none; position: fixed; top: 200px; bottom: 0%; left: 40%; right: 40%; z-index: 101; width: 290px; height: 100px; padding: 30px 24px 30px 36px; font-size: 10.5pt; line-height: 1.3em; }
-#note p { padding: 0px 0 6px 0; margin: 0px; }
-#note_close { float: right; height: 100px; width: 25px; padding: 0 0 0 8px; }
-#note_x { width: 20px; height: 18px; text-align: center; }
-#note_clock { width: 19px; height: 18px; text-align: center; color: #CFB8B8; }
 
 /** DIALOG.RENAME **/
 div.dialogcontentwrapper.rename {
@@ -523,22 +517,22 @@ div.dialogcontentwrapper.upload .loadingIndicator {
 	background-image: url(design/icon_save.png);
 }
 .editornav li.search {
-	background-image: url(../../plug/codemirror-ui/images/silk/find.png);
+	background-image: url(design/binocular.png);
 }
 .editornav li.undo {
-	background-image: url(../../plug/codemirror-ui/images/silk/arrow_undo.png);
+	background-image: url(design/arrow-return-180-left.png);
 }
 .editornav li.redo {
-	background-image: url(../../plug/codemirror-ui/images/silk/arrow_redo.png);
+	background-image: url(design/arrow-return.png);
 }
 .editornav li.jump {
-	background-image: url(../../plug/codemirror-ui/images/silk/page_go.png);
+	background-image: url(design/blue-document--arrow.png);
 }
 .editornav li.reindsel {
-	background-image: url(../../plug/codemirror-ui/images/silk/text_indent.png);
+	background-image: url(design/edit-indent.png);
 }
 .editornav li.reinddoc {
-	background-image: url(../../plug/codemirror-ui/images/silk/page_refresh.png);
+	background-image: url(design/document-node.png);
 }
 .editornav li[data-status="0"],
 .editornav li[data-status="-1"] {
