@@ -5,10 +5,11 @@
 	<script src="http://code.jquery.com/jquery-<?php echo $code['jQuery']; ?>.min.js"></script>
 	<script src="code/base/extensions.js" type="text/javascript"></script>
 
-	<link rel="stylesheet" href="plug/codemirror/lib/codemirror.css" />
+	<link rel="stylesheet" href="plug/codemirror-2_2-min.css" />
+	<!--<link rel="stylesheet" href="plug/codemirror/lib/codemirror.css" />
 	<link rel="stylesheet" href="plug/codemirror/mode/diff/diff.css" />
 	<link rel="stylesheet" href="plug/codemirror/mode/rpm/spec/spec.css" />
-	<link rel="stylesheet" href="plug/codemirror/mode/tiddlywiki/tiddlywiki.css" />
+	<link rel="stylesheet" href="plug/codemirror/mode/tiddlywiki/tiddlywiki.css" />-->
 	<script src="plug/codemirror-2_2-min.js"></script>
 	<!--<script src="plug/codemirror/lib/codemirror.js"></script>
 	<script src="plug/codemirror/lib/util/foldcode.js"></script>
