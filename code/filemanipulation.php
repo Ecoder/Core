@@ -185,6 +185,7 @@ class FileManipulation {
 	}
 
 	public static function upload() {
+		global $cnf;
 		$path=(isset($_SERVER['HTTP_X_FILE_PATH']) ? $_SERVER['HTTP_X_FILE_PATH'] : '');
 		$filename=(isset($_SERVER['HTTP_X_FILE_NAME']) ? $_SERVER['HTTP_X_FILE_NAME'] : '');
 		$contentlength=(isset($_SERVER['CONTENT_LENGTH']) ? $_SERVER['CONTENT_LENGTH'] : '');
@@ -199,7 +200,7 @@ class FileManipulation {
 			return;
 		}
 
-		$whitelist=$_SESSION['tree_file_types'];
+		$whitelist=$cnf['uploadWhitelist'];
 		if(!self::_strEndsWithAnyOf($filename, $whitelist)) {
 			Output::add("error","invalidextension");
 			return;

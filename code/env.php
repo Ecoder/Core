@@ -1,6 +1,6 @@
 <?php
 class Env {
-	private $maxUploadSize,$dirSep,$tree_showHidden,$lang,$autosave;
+	private $maxUploadSize,$dirSep,$tree_showHidden,$lang,$autosave,$version;
 
 	public function __construct() {
 		global $cnf,$code;
@@ -9,6 +9,7 @@ class Env {
 		$this->tree_showHidden=$cnf['showHidden'];
 		$this->lang=$code['lang'];
 		$this->autosave=$code['autosave'];
+		$this->version=$code['version'];
 	}
 
 	public static function get() {
@@ -22,6 +23,7 @@ class Env {
 		Output::add("tree_showHidden",$this->tree_showHidden);
 		Output::add("lang",$this->lang);
 		Output::add("autosave",$this->autosave);
+		Output::add("version",$this->version);
 	}
 
 	private function phpIniSizeToBytes($val) {

@@ -24,12 +24,8 @@ var ecoder=(function(){
 	}
 
 	function openSplash() {
-		$.ajax({
-			url:"code/base/loader.php",
-			success:function(html) {
-				var welcomeTab=new Tab("{{splash}}","Welcome",html);
-			}
-		});
+		var html=templ.get("splash",{version:info.version});
+		var welcomeTab=new Tab("{{splash}}",trans.get("splash.title"),html);
 	}
 
 	function testCompat() {
@@ -96,7 +92,7 @@ var ecoder=(function(){
 		if (typeof timeout == "undefined" || timeout < 5) {
 			timeout=5;
 		}
-		var dialog=new BaseDialog("info",trans.get("infodialog.info",{}),content);
+		var dialog=new BaseDialog("info",trans.get("infodialog.info"),content);
 		if (doTimeout) {
 			setTimeout(function() {dialog.close(); },timeout*1000);
 		}
@@ -204,10 +200,8 @@ var ecoder=(function(){
 				return t;
 			}
 			defocusAllTabs();
-			var panel='<div class="panel" id="panel_'+tabId+'" data-status="active">'+tabContent+'</div>';
-			var tab='<li class="tab" id="tab_'+tabId+'" data-status="active">'+title+'<span class="close"></span></li>';
-			$("#tabs #panels").append(panel);
-			$("#tabs ul#tablist").append(tab);
+			$("#tabs #panels").append(templ.get("tab.panel",{id:tabId,content:tabContent}));
+			$("#tabs ul#tablist").append(templ.get("tab.tab",{id:tabId,title:title}));
 			$("#tabs ul#tablist #tab_"+myId).data("tab",_tab);
 			openTabs[file]=myId;
 			tabId++;
@@ -489,17 +483,8 @@ var ecoder=(function(){
 				callAction("filemanipulation","getFileEditingInfo",{file:file},function(out) {
 					var doAutosave=(info.autosave!=0 ? (out.isWritable) : false);
 					var saveStatus=(out.isWritable ? "enabled" : "disabled");
-					var html='<ul class="editornav">';
-					html+='<li class="save" data-status="'+saveStatus+'"></li>';
 					//TODO Search
-					html+='<li class="undo" data-status="0" title="Undo"></li>';
-					html+='<li class="redo" data-status="0" title="Redo"></li>';
-					html+='<li class="jump" title="Jump to line"></li>';
-					html+='<li class="reindsel" title="Reformat selection"></li>';
-					html+='<li class="reinddoc" title="Reformat whole document"></li>';
-					html+='</ul>';
-					html+='<div class="editorwrapper"><textarea class="editor">'+out.content+'</textarea></div>';
-					editorTab=new Tab(file,name,html);
+					editorTab=new Tab(file,name,templ.get("tab.edit",{savestatus:saveStatus,content:out.content}));
 					var textarea=$("#tabs #panel_"+editorTab.getId()+" .editor")[0];
 					var hlLine=null;
 					var foldFunc = CodeMirror.newFoldFunction(CodeMirror.braceRangeFinder);
@@ -600,33 +585,28 @@ var ecoder=(function(){
 				$("#tree ul#toplevel").remove();
 				$("#tree p.error").remove();
 				if (out.error) {
-					$("#tree")
-						.append("<p class='error'>"+out.error+"</p>")
-						.css("background","#FF7373");
+					$("#tree").append(templ.get("tree.error",{error:out.error}));
 					return;
 				}
 				if (!out.tree) {return;} //Shouldn't happen
-				$("#tree").append('<ul id="toplevel">'+parseNodeToHtml(out.tree)+'</ul>');
+				$("#tree").append(templ.get("tree.toplevel",{nodes:parseNodeToHtml(out.tree)}));
 				registerEvents();
 			});
 		}
 
 		function parseNodeToHtml(node) {
-			var htmlTmpl='<li data-type="{type}" data-pathname="{pathname}" data-name="{name}" data-path="{path}" data-ext="{ext}" data-subtype="{subtype}"><span>{name}</span>{children}</li>';
-			var html="";
 			var subTreeHtml="";
 			if (node.children != null) {
-				subTreeHtml="<ul>";
+				var childrenHtml="";
 				if (node.children.length==0) {
-					subTreeHtml+='<li class="empty"><em>empty...</em></li>';
+					childrenHtml+=templ.get("tree.emptynode");
 				}
 				node.children.forEach(function(n,k,arr) {
-					subTreeHtml+=parseNodeToHtml(n);
+					childrenHtml+=parseNodeToHtml(n);
 				});
-				subTreeHtml+="</ul>";
+				subTreeHtml=templ.get("tree.subnodes",{nodes:childrenHtml});
 			}
-			html+=htmlTmpl.format({type:node.type,name:node.name,path:node.path,pathname:node.pathname,ext:node.ext,subtype:node.subtype,children:subTreeHtml});
-			return html;
+			return templ.get("tree.node",{type:node.type,name:node.name,path:node.path,pathname:node.pathname,ext:node.ext,subtype:node.subtype,children:subTreeHtml});
 		}
 
 		function registerHeaderEvent() {
@@ -759,16 +739,13 @@ var ecoder=(function(){
 		}
 
 		function setUpHtml(buttons) {
-			var htmlFormat='<div id="ctxtmenucontainer"><div id="ctxtmenuoverlay"></div><ul id="ctxtmenu">{items}</ul></div>';
-			var html="";
 			var itemsHtml="";
 			buttons.forEach(function(v) {
 				if (v!=null) {
 					itemsHtml+=v.toString();
 				}
 			});
-			html=htmlFormat.format({items:itemsHtml});
-			return html;
+			return templ.get("ctxtmenu",{items:itemsHtml});
 		}
 
 		function setUpEvents(buttons,origEl) {
@@ -801,9 +778,7 @@ var ecoder=(function(){
 		}
 
 		this.toString=function() {
-			var itemFormat='<li id="{id}" class="{xclass}">{name}</li>';
-			var res=itemFormat.format({id:this.id,name:this.name,xclass:(this.isSep ? "sep": "")});
-			return res;
+			return templ.get("ctxtmenu.item",{id:this.id,name:this.name,xclass:(this.isSep ? "sep": "")});
 		}
 
 		this.addEvent=function(origEl) {
