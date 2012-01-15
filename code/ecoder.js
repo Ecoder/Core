@@ -82,7 +82,7 @@ var ecoder=(function(){
 			$("#dialog").removeClass(typeClass);
 			return false;
 		}
-
+		init();
 		return {
 			close:close
 		};
@@ -119,7 +119,7 @@ var ecoder=(function(){
 
 	var trans,templ;
 	(function() {
-		var format=function(str,params) {
+		var formatfn=function(str,params) {
 			var datare=new RegExp("{{=([A-Za-z0-9.-_]+)}}","g");
 			str=str.replace(datare,function(matched,wantedval) {
 				return params[wantedval];
@@ -129,15 +129,15 @@ var ecoder=(function(){
 				return trans.get(wantedval,params);
 			});
 			return str;
-		}
+		};
 		trans=(function(){
 			var translations=null;
 
-			var format=format;
+			var format=formatfn;
 
 			function get(name,params) {
 				if (typeof params == "undefined") { params={}; }
-				format(translations[name],params);
+				return format(translations[name],params);
 			}
 
 			function load() {
@@ -162,11 +162,11 @@ var ecoder=(function(){
 		templ=(function(){
 			var templates=null;
 
-			var format=format;
+			var format=formatfn;
 
 			function get(name,params) {
 				if (typeof params == "undefined") { params={}; }
-				format(templates[name],params);
+				return format(templates[name],params);
 			}
 
 			function load() {
@@ -629,7 +629,7 @@ var ecoder=(function(){
 			return html;
 		}
 
-		function registerEvents() {
+		function registerHeaderEvent() {
 			$("#tree h2").on("contextmenu",function(e) {
 				e.stopPropagation();
 				var hiddenOption=null;
@@ -639,11 +639,14 @@ var ecoder=(function(){
 					hiddenOption=new ContextMenuItem({id:"hidden_show",name:"Show hidden files",callback:showHidden});
 				}
 				var refreshOption=new ContextMenuItem({id:"refresh",name:"Refresh the tree",callback:refresh});
-				var splashOption=new ContextMenuItem({id:"splash",name:"Open welcome tab",callback:ecoder.openSplash});
+				var splashOption=new ContextMenuItem({id:"splashmenu",name:"Open welcome tab",callback:ecoder.openSplash});
 				var buttons=new Array(hiddenOption,refreshOption,splashOption);
 				new ContextMenu({buttons:buttons,pos:{x:e.pageX,y:e.pageY},origEl:$(e.target)});
 				return false;
 			});
+		}
+
+		function registerEvents() {
 			$('#tree li[data-type="dir"] span').on("click",function(e) {
 				var el=null;
 				if (e.target.nodeName.toLowerCase()=="li") {
@@ -738,6 +741,7 @@ var ecoder=(function(){
 		$(document).on("ecoder.transtemplready",function() {
 			options={showHidden:info.showHidden};
 			init();
+			registerHeaderEvent();
 		});
 
 		return {
@@ -819,6 +823,7 @@ var ecoder=(function(){
 	$(document).on("ready",init);
 
 	return {
+		openSplash:openSplash,
 		callAction:callAction,
 		// DIALOG
 		BaseDialog:BaseDialog,

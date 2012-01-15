@@ -53,7 +53,6 @@
 	<meta http-equiv="content-Type" content="text/html; charset=UTF-8" />
 	<meta name="robots" content="noindex,nofollow" />
 	<link rel="stylesheet" href="skin/one/base.css" />
-	<script src="code/base/shortcuts.js"></script>
 	<script src="code/ecoder.js"></script>
 	<link href="skin/one/design/favicon.ico" rel="shortcut icon" type="image/ico" />
 </head>
