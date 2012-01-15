@@ -629,7 +629,7 @@ var ecoder=(function(){
 			return html;
 		}
 
-		function registerEvents() {
+		function registerHeaderEvent() {
 			$("#tree h2").on("contextmenu",function(e) {
 				e.stopPropagation();
 				var hiddenOption=null;
@@ -639,11 +639,14 @@ var ecoder=(function(){
 					hiddenOption=new ContextMenuItem({id:"hidden_show",name:"Show hidden files",callback:showHidden});
 				}
 				var refreshOption=new ContextMenuItem({id:"refresh",name:"Refresh the tree",callback:refresh});
-				var splashOption=new ContextMenuItem({id:"splash",name:"Open welcome tab",callback:ecoder.openSplash});
+				var splashOption=new ContextMenuItem({id:"splashmenu",name:"Open welcome tab",callback:ecoder.openSplash});
 				var buttons=new Array(hiddenOption,refreshOption,splashOption);
 				new ContextMenu({buttons:buttons,pos:{x:e.pageX,y:e.pageY},origEl:$(e.target)});
 				return false;
 			});
+		}
+
+		function registerEvents() {
 			$('#tree li[data-type="dir"] span').on("click",function(e) {
 				var el=null;
 				if (e.target.nodeName.toLowerCase()=="li") {
@@ -738,6 +741,7 @@ var ecoder=(function(){
 		$(document).on("ecoder.transtemplready",function() {
 			options={showHidden:info.showHidden};
 			init();
+			registerHeaderEvent();
 		});
 
 		return {
@@ -819,6 +823,7 @@ var ecoder=(function(){
 	$(document).on("ready",init);
 
 	return {
+		openSplash:openSplash,
 		callAction:callAction,
 		// DIALOG
 		BaseDialog:BaseDialog,
