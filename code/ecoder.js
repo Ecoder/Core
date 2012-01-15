@@ -82,7 +82,7 @@ var ecoder=(function(){
 			$("#dialog").removeClass(typeClass);
 			return false;
 		}
-
+		init();
 		return {
 			close:close
 		};
@@ -119,7 +119,7 @@ var ecoder=(function(){
 
 	var trans,templ;
 	(function() {
-		var format=function(str,params) {
+		var formatfn=function(str,params) {
 			var datare=new RegExp("{{=([A-Za-z0-9.-_]+)}}","g");
 			str=str.replace(datare,function(matched,wantedval) {
 				return params[wantedval];
@@ -129,15 +129,15 @@ var ecoder=(function(){
 				return trans.get(wantedval,params);
 			});
 			return str;
-		}
+		};
 		trans=(function(){
 			var translations=null;
 
-			var format=format;
+			var format=formatfn;
 
 			function get(name,params) {
 				if (typeof params == "undefined") { params={}; }
-				format(translations[name],params);
+				return format(translations[name],params);
 			}
 
 			function load() {
@@ -162,11 +162,11 @@ var ecoder=(function(){
 		templ=(function(){
 			var templates=null;
 
-			var format=format;
+			var format=formatfn;
 
 			function get(name,params) {
 				if (typeof params == "undefined") { params={}; }
-				format(templates[name],params);
+				return format(templates[name],params);
 			}
 
 			function load() {
