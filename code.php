@@ -11,7 +11,7 @@ if ( $_SESSION['live'] == 0 ) { // running locally ##
 $code['domain_cookie'] = ".gmeditor.com"; // domain name ##
 $code['autosave']=0; // 0 for disabled, otherwise time in seconds
 
-$code['version'] = "v 0.5.0m1";
+$code['version'] = "v0.5.0-dev";
 $code['lang']="en";
 $code['jQuery']="1.7.1";
 $code['codemirror']="2.2";
@@ -25,12 +25,12 @@ if ( $_SESSION['live'] == 0 ) { $code['secure_url'] = '/loveunit/greenmedia.es/g
 $code['secure_root'] = 1; // 1 || 0 - use varible root - passed in session variable $_SESSION['tree_root'] ##
 
 if ( $code['secure'] == 1 ) { // secured ##
-    if ( !isset( $_SESSION[$code['secure_variable']] ) || $_SESSION[$code['secure_variable']] == 0 ) { // check for login variable ##
-        echo '<script type="text/javascript">top.location.href = \''.$code['secure_url'].'\';</script>'; // kick-out ##
-    }
-    if ( $code['secure_root'] == 1 && isset( $_SESSION['tree_root'] ) ) { // assign session to root variable ##
-        $code['root'] = $_SESSION['tree_root']; // passed full path to editable root ##
-    }
+	if ( !isset( $_SESSION[$code['secure_variable']] ) || $_SESSION[$code['secure_variable']] == 0 ) { // check for login variable ##
+		echo '<script type="text/javascript">top.location.href = \''.$code['secure_url'].'\';</script>'; // kick-out ##
+	}
+	if ( $code['secure_root'] == 1 && isset( $_SESSION['tree_root'] ) ) { // assign session to root variable ##
+		$code['root'] = $_SESSION['tree_root']; // passed full path to editable root ##
+	}
 }
 
 // array of allowed file types in tree ##
