@@ -41,6 +41,9 @@ body {
 	padding:3px;
 	text-align:center;
 }
+#tree > .error{
+	background-color:#FF7373;
+}
 #tree .error {
 	width:100px;
 	margin:0 auto;
@@ -104,7 +107,6 @@ body {
 
 /*************************** OTHER STUFF AGAIN ****************/
 
-/* links */
 a:link, a:hover, a:visited { text-decoration: none; color: #525252; }
 
 /* javascript test & loader */
@@ -122,19 +124,14 @@ a:link, a:hover, a:visited { text-decoration: none; color: #525252; }
 #splash p { margin: 0px; padding: 0px; line-height: 1.3em; }
 #splash .loading { height: 350px; background-color: transparent; color: #7D7D7D; width: 700px; margin: 0 auto; padding-top: 10px; }
 #splash .loading a { font-weight: bold; color: orange; }
-#splash .loading .ads { float: left; height: 100px; background-color: transparent; color: #7D7D7D; width: 728px; margin: 0 0 10px 0; padding: 0; }
 #splash .loading .one { float: left; height: 350px; background-color: transparent; color: #7D7D7D; width: 300px; margin: 0; padding: 0; }
 #splash .loading .one .logo { background-color: transparent; height: 266px; margin: 8px 0 0 0; }
 #splash .loading .one .about { background-color: transparent; padding: 0px 0 0 0px; text-align: center; height: 42px; }
 #splash .loading .one .enter { font-size: 16pt; text-align: center; padding: 5px 0 0 15px; }
 #splash .loading .two { float: left; height: 350px; background-color: transparent; color: #7D7D7D; width: 400px; margin: 0; padding: 0; text-align: left; }
 #splash .loading .two .how { background-color: transparent; padding: 10px 0 0 0px; height: 108px; }
-#splash .loading .two .shortcuts { background-color: transparent; padding: 0px 0 0 0px; height: 160px; }
-#splash .loading .two .shortcuts h2 { background: #95BE0D; color: #fff; font-size: 12pt; padding: 2px 0 2px 4px; margin: 0px; }
-#splash .loading .two .shortcuts p { border-bottom: 1px solid #dddddd; padding: 2px 0 1px 4px; }
-#splash .loading .two .shortcuts .one, #splash .loading .two .shortcuts .two { float: left; background-color: transparent; padding: 8px 10px 0 0px; width: 180px; height: 160px; }
 #splash .loading .two .requires { background-color: transparent; padding: 0px 0 0 0px; height: 75px; }
-#splash .loading .two .how p, #splash .loading .shortcuts .requires p, #splash .loading .two .requires p { margin: 0px; padding: 4px 0 0 1px; }
+#splash .loading .two .how p, #splash .loading .two .requires p { margin: 0px; padding: 4px 0 0 1px; }
 
 
 /** DIALOG.RENAME **/
