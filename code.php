@@ -9,7 +9,7 @@ if (!$live) { // running locally ##
 $code['domain_cookie'] = ".gmeditor.com"; // domain name ##
 $code['autosave']=0; // 0 for disabled, otherwise time in seconds
 
-$code['version'] = "v0.5.0-dev";
+$code['version'] = "v0.5.0-b1";
 $code['lang']="en";
 $code['jQuery']="1.7.1";
 $code['codemirror']="2.2";
