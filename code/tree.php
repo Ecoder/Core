@@ -44,7 +44,7 @@ class TreeNode {
 	private function _getPropertiesFromSfi(SplFileInfo $sfi) {
 		//Dirty solution for the subtypes for now
 		//TODO / TOFIX when we introduce better actions
-		$extToSubtype=array("html"=>"html","script"=>"js","css"=>"css","text"=>array("txt","htaccess","ini"),"php"=>"php");
+		$extToSubtype=array("html"=>"html","script"=>"js","css"=>"css","text"=>array("txt","htaccess","ini"),"php"=>"php","cpp"=>"cpp","c"=>array("c","h"),"py"=>"py","pl"=>"pl");
 
 		$this->name=$sfi->getFilename();
 		$this->type=$sfi->getType();

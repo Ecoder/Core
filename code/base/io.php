@@ -24,7 +24,10 @@ class Input {
 		$this->data=array();
 		if (isset($_POST['json'])) {
 			$this->raw=$_POST['json'];
-			$arr=json_decode($_POST['json'],true);
+			if (get_magic_quotes_gpc()) {
+				$this->raw = stripslashes($this->raw);
+			}
+			$arr=json_decode($this->raw,true);
 			foreach ($arr as $k=>$v) {
 				$this->data[$k]=$v;
 			}
