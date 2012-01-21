@@ -227,7 +227,7 @@ class FileManipulation {
 		$sfi=new SplFileInfo($file);
 		$content=trim(htmlspecialchars(file_get_contents($sfi->getRealPath())));
 		$ext=$sfi->getExtension();
-		$mimes=array("php"=>"application/x-httpd-php-open","js"=>"text/javascript","html"=>"text/html","css"=>"text/css","text"=>"text/plain");
+		$mimes=array("php"=>"application/x-httpd-php-open","js"=>"text/javascript","html"=>"text/html","css"=>"text/css","text"=>"text/plain","cpp"=>"text/x-c++src", "c"=>"text/x-csrc","py"=>"text/x-python","pl"=>"text/x-perl");
 		$cmMime=$mimes[$ext];
 		Output::add("content",$content);
 		Output::add("cmMime",$cmMime);
