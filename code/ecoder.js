@@ -11,16 +11,14 @@ var ecoder=(function(){
 		$("body").on("contextmenu",false);
 		getInfo();
 		templ.load();
-		$(document).on("ecoder.infoloaded",function() {
-			trans.load();
-		});
+		trans.load();
 
 		$(document).on("ecoder.transtemplready",function() {
 			initTabs();
 			openSplash();
 		});
 
-		delete status;
+		//delete status;
 	}
 
 	function openSplash() {
@@ -33,15 +31,7 @@ var ecoder=(function(){
 	}
 
 	function getInfo() {
-		$.ajax({
-			url:"api.php?controller=env",
-			datatype:'json',
-			success:function(json) {
-				info=(JSON.parse(json));
-				status.info=true;
-				$(document).trigger("ecoder.infoloaded");
-			}
-		});
+		info=env;
 	}
 
 	function callAction(controller,action,data,fn) {

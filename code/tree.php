@@ -42,24 +42,18 @@ class TreeNode {
 	}
 
 	private function _getPropertiesFromSfi(SplFileInfo $sfi) {
-		//Dirty solution for the subtypes for now
-		//TODO / TOFIX when we introduce better actions
-		$extToSubtype=array("html"=>"html","script"=>"js","css"=>"css","text"=>array("txt","htaccess","ini"),"php"=>"php","cpp"=>"cpp","c"=>array("c","h"),"py"=>"py","pl"=>"pl");
-
 		$this->name=$sfi->getFilename();
 		$this->type=$sfi->getType();
 		$this->path=$sfi->getPath();
 		$this->pathname=$sfi->getPathname();
-		//Could use $sfi->getExtension() but that's only
-		//available from php 5.3.6
-		$this->ext=pathinfo($sfi->getPathname(),PATHINFO_EXTENSION);
-		foreach ($extToSubtype as $k=>$v) {
-			if (is_array($v)) {
-				if (!in_array($this->ext,$v)) { continue; }
-			} else if ($this->ext!=$v) {
-				continue;
-			}
-			$this->subtype=$k;
+		if ($sfi->isDir()) {
+			$this->ext=null;
+			$this->subtype=Filetype::getByName("folder");
+		} else {
+			//Could use $sfi->getExtension() but that's only
+			//available from php 5.3.6
+			$this->ext=pathinfo($sfi->getPathname(),PATHINFO_EXTENSION);
+			$this->subtype=Extension::findFileTypeByExtension($this->ext)->getName();
 		}
 	}
 

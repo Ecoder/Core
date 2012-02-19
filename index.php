@@ -1,9 +1,11 @@
-<?php include "code.php"; ?>
+<?php include "inc/ecoder.php"; ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<script src="http://code.jquery.com/jquery-<?php echo $code['jQuery']; ?>.min.js"></script>
 	<script src="code/base/extensions.js" type="text/javascript"></script>
+
+	<script>var env=<?php echo Env::getNoOutput(); ?>;</script>
 
 	<link rel="stylesheet" href="plug/codemirror-2_2-min.css" />
 	<!--<link rel="stylesheet" href="plug/codemirror/lib/codemirror.css" />

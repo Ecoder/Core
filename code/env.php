@@ -17,6 +17,22 @@ class Env {
 		$env->__toOutput();
 	}
 
+	public static function getNoOutput() {
+		$env=new Env();
+		return json_encode($env->__toStdObj());
+	}
+
+	public function __toStdObj() {
+		$s=new stdClass();
+		$s->maxUploadSize=$this->maxUploadSize;
+		$s->dirSep=$this->dirSep;
+		$s->tree_showHidden=$this->tree_showHidden;
+		$s->lang=$this->lang;
+		$s->autosave=$this->autosave;
+		$s->version=$this->version;
+		return $s;
+	}
+
 	public function __toOutput() {
 		Output::add("maxUploadSize",$this->maxUploadSize);
 		Output::add("dirSep",$this->dirSep);
