@@ -31,7 +31,7 @@ if ( $code['secure'] == 1 ) { // secured ##
 	}
 }
 
-$cnf['uploadWhitelist'] = array( "php", "js", "html", "css", "txt", "htaccess", "ini" );
+$cnf['uploadWhitelist'] = array( 'php', 'inc', 'js', 'html', 'css', 'txt', 'htaccess', 'ini' );
 $cnf['showHidden']=false; //Show hidden files in tree?
 
 include "code/base/io.php";
