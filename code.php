@@ -2,6 +2,7 @@
 include "code/base/server.php";
 
 // MOST IMPORTANT SETTING -- path to editable files ##
+// Read more at http://ecoder.quintalinda.com/docs/installation.html
 $code['root'] = 'D:/dev/ecoder/testingdata/'; // full path, with trailing slash ##
 if (!$live) { // running locally ##
     $code['root'] = 'D:/dev/ecoder/testingdata/'; // local path -- for testing ##
